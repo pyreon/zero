@@ -1,0 +1,20 @@
+{
+  "name": "zero-cli",
+  "version": "0.0.1",
+  "description": "CLI for Pyreon Zero — dev, build, preview",
+  "type": "module",
+  "bin": {
+    "zero": "./bin/zero.js"
+  },
+  "scripts": {
+    "build": "vl_rolldown_build",
+    "dev": "vl_rolldown_build-watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@pyreon/server": "workspace:*",
+    "@pyreon/zero": "workspace:*",
+    "cac": "^6.7.14",
+    "vite": "^7.0.0"
+  }
+}

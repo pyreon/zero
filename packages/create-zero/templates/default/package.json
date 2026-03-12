@@ -1,0 +1,27 @@
+{
+  "name": "my-zero-app",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "zero dev",
+    "build": "zero build",
+    "preview": "zero preview"
+  },
+  "dependencies": {
+    "@pyreon/core": "latest",
+    "@pyreon/reactivity": "latest",
+    "@pyreon/runtime-dom": "latest",
+    "@pyreon/runtime-server": "latest",
+    "@pyreon/router": "latest",
+    "@pyreon/head": "latest",
+    "@pyreon/server": "latest",
+    "@pyreon/zero": "latest"
+  },
+  "devDependencies": {
+    "@pyreon/vite-plugin": "latest",
+    "zero-cli": "latest",
+    "typescript": "^5.9.3",
+    "vite": "^7.0.0"
+  }
+}

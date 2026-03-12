@@ -1,0 +1,85 @@
+{
+  "name": "@pyreon/zero",
+  "version": "0.0.1",
+  "description": "Pyreon Zero — zero-config full-stack framework powered by Pyreon and Vite",
+  "type": "module",
+  "main": "./lib/index.js",
+  "module": "./lib/index.js",
+  "types": "./lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "bun": "./src/index.ts",
+      "import": "./lib/index.js",
+      "types": "./lib/types/index.d.ts"
+    },
+    "./client": {
+      "bun": "./src/client.ts",
+      "import": "./lib/client.js",
+      "types": "./lib/types/client.d.ts"
+    },
+    "./config": {
+      "bun": "./src/config.ts",
+      "import": "./lib/config.js",
+      "types": "./lib/types/config.d.ts"
+    },
+    "./image": {
+      "bun": "./src/image.tsx",
+      "import": "./lib/image.js",
+      "types": "./lib/types/image.d.ts"
+    },
+    "./link": {
+      "bun": "./src/link.tsx",
+      "import": "./lib/link.js",
+      "types": "./lib/types/link.d.ts"
+    },
+    "./script": {
+      "bun": "./src/script.tsx",
+      "import": "./lib/script.js",
+      "types": "./lib/types/script.d.ts"
+    },
+    "./font": {
+      "bun": "./src/font.ts",
+      "import": "./lib/font.js",
+      "types": "./lib/types/font.d.ts"
+    },
+    "./cache": {
+      "bun": "./src/cache.ts",
+      "import": "./lib/cache.js",
+      "types": "./lib/types/cache.d.ts"
+    },
+    "./seo": {
+      "bun": "./src/seo.ts",
+      "import": "./lib/seo.js",
+      "types": "./lib/types/seo.d.ts"
+    },
+    "./theme": {
+      "bun": "./src/theme.tsx",
+      "import": "./lib/theme.js",
+      "types": "./lib/types/theme.d.ts"
+    },
+    "./image-plugin": {
+      "bun": "./src/image-plugin.ts",
+      "import": "./lib/image-plugin.js",
+      "types": "./lib/types/image-plugin.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "vl_rolldown_build",
+    "dev": "vl_rolldown_build-watch",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@pyreon/core": "workspace:*",
+    "@pyreon/head": "workspace:*",
+    "@pyreon/router": "workspace:*",
+    "@pyreon/runtime-dom": "workspace:*",
+    "@pyreon/runtime-server": "workspace:*",
+    "@pyreon/server": "workspace:*",
+    "@pyreon/vite-plugin": "workspace:*",
+    "vite": "^7.0.0"
+  },
+  "peerDependencies": {
+    "@pyreon/reactivity": ">=0.0.1"
+  }
+}

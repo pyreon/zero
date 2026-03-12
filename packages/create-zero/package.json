@@ -1,0 +1,18 @@
+{
+  "name": "create-zero",
+  "version": "0.0.1",
+  "description": "Create a new Pyreon Zero project",
+  "type": "module",
+  "bin": {
+    "create-zero": "./bin/create-zero.js"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "templates"
+  ],
+  "scripts": {
+    "build": "vl_rolldown_build",
+    "typecheck": "tsc --noEmit"
+  }
+}
