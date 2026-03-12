@@ -80,6 +80,6 @@
     "vite": "^7.0.0"
   },
   "peerDependencies": {
-    "@pyreon/reactivity": ">=0.0.1"
+    "@pyreon/reactivity": "workspace:^"
   }
 }

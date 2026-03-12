@@ -1,5 +1,5 @@
-import { onMount, onCleanup } from "@pyreon/reactivity"
 import { useRouter } from "@pyreon/router"
+import { useIntersectionObserver } from "./utils/use-intersection-observer"
 
 // ─── Link component with prefetching ────────────────────────────────────────
 //
@@ -142,24 +142,12 @@ export function useLink(props: LinkProps): UseLinkReturn {
     }
   }
 
-  onMount(() => {
-    if (strategy !== "viewport" || !elementRef) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            doPrefetch(props.href)
-            observer.disconnect()
-          }
-        }
-      },
-      { rootMargin: "200px" },
+  if (strategy === "viewport") {
+    useIntersectionObserver(
+      () => elementRef,
+      () => doPrefetch(props.href),
     )
-
-    observer.observe(elementRef)
-    onCleanup(() => observer.disconnect())
-  })
+  }
 
   const isActive = () => {
     const currentPath = router.currentRoute()?.path

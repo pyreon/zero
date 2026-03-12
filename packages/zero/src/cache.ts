@@ -1,4 +1,5 @@
 import type { Middleware } from "@pyreon/server"
+import { withHeaders } from "./utils/with-headers"
 
 // ─── Cache control middleware ───────────────────────────────────────────────
 //
@@ -77,17 +78,10 @@ export function cacheMiddleware(config: CacheConfig = {}): Middleware {
       // Skip if Cache-Control is already set
       if (response.headers.has("Cache-Control")) return response
 
-      const headers = new Headers(response.headers)
-
       // Check custom rules first
       for (const rule of rules) {
         if (matchGlob(rule.match, path)) {
-          headers.set("Cache-Control", rule.control)
-          return new Response(response.body, {
-            status: response.status,
-            statusText: response.statusText,
-            headers,
-          })
+          return withHeaders(response, (h) => h.set("Cache-Control", rule.control))
         }
       }
 
@@ -116,13 +110,7 @@ export function cacheMiddleware(config: CacheConfig = {}): Middleware {
         cacheControl = `public, max-age=60, stale-while-revalidate=${swr}`
       }
 
-      headers.set("Cache-Control", cacheControl)
-
-      return new Response(response.body, {
-        status: response.status,
-        statusText: response.statusText,
-        headers,
-      })
+      return withHeaders(response, (h) => h.set("Cache-Control", cacheControl))
     })
   }
 }
@@ -133,24 +121,15 @@ export function cacheMiddleware(config: CacheConfig = {}): Middleware {
  */
 export function securityHeaders(): Middleware {
   return (request, next) => {
-    return next(request).then((response) => {
-      const headers = new Headers(response.headers)
-
-      headers.set("X-Content-Type-Options", "nosniff")
-      headers.set("X-Frame-Options", "DENY")
-      headers.set("X-XSS-Protection", "1; mode=block")
-      headers.set("Referrer-Policy", "strict-origin-when-cross-origin")
-      headers.set(
-        "Permissions-Policy",
-        "camera=(), microphone=(), geolocation=()",
-      )
-
-      return new Response(response.body, {
-        status: response.status,
-        statusText: response.statusText,
-        headers,
-      })
-    })
+    return next(request).then((response) =>
+      withHeaders(response, (h) => {
+        h.set("X-Content-Type-Options", "nosniff")
+        h.set("X-Frame-Options", "DENY")
+        h.set("X-XSS-Protection", "1; mode=block")
+        h.set("Referrer-Policy", "strict-origin-when-cross-origin")
+        h.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+      }),
+    )
   }
 }
 
@@ -161,20 +140,13 @@ export function securityHeaders(): Middleware {
  */
 export function varyEncoding(): Middleware {
   return (request, next) => {
-    return next(request).then((response) => {
-      const headers = new Headers(response.headers)
-      const existing = headers.get("Vary")
-      if (!existing?.includes("Accept-Encoding")) {
-        headers.set(
-          "Vary",
-          existing ? `${existing}, Accept-Encoding` : "Accept-Encoding",
-        )
-      }
-      return new Response(response.body, {
-        status: response.status,
-        statusText: response.statusText,
-        headers,
-      })
-    })
+    return next(request).then((response) =>
+      withHeaders(response, (h) => {
+        const existing = h.get("Vary")
+        if (!existing?.includes("Accept-Encoding")) {
+          h.set("Vary", existing ? `${existing}, Accept-Encoding` : "Accept-Encoding")
+        }
+      }),
+    )
   }
 }

@@ -1,4 +1,5 @@
-import { signal, computed, onMount, onCleanup } from "@pyreon/reactivity"
+import { signal, computed } from "@pyreon/reactivity"
+import { useIntersectionObserver } from "./utils/use-intersection-observer"
 
 // ─── Image optimization component ───────────────────────────────────────────
 //
@@ -91,25 +92,12 @@ export function Image(props: ImageProps) {
 
   const aspectRatio = `${props.width} / ${props.height}`
 
-  onMount(() => {
-    if (isEager || !imgRef) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            inView(true)
-            observer.disconnect()
-          }
-        }
-      },
-      { rootMargin: "200px" },
+  if (!isEager) {
+    useIntersectionObserver(
+      () => imgRef,
+      () => inView(true),
     )
-
-    observer.observe(imgRef)
-
-    onCleanup(() => observer.disconnect())
-  })
+  }
 
   function onLoad() {
     loaded(true)
