@@ -24,7 +24,7 @@ jobs:
 
       - run: bun install --frozen-lockfile
 
-      - name: Biome check
+      - name: Biome lint & format check
         run: bunx biome check .
 
   typecheck:
@@ -72,3 +72,11 @@ jobs:
 
       - name: Build all packages
         run: bun run build
+
+      - name: Check for uncommitted changes after build
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::Build produced uncommitted changes. Run 'bun run build' locally and commit."
+            git diff
+            exit 1
+          fi
