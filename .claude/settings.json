@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bun run build)",
+      "Bash(bun run test)",
+      "Bash(bun run typecheck)",
+      "Bash(bun run dev)",
+      "Bash(bunx biome check .)",
+      "Bash(bunx biome check --write .)",
+      "Bash(bunx changeset)",
+      "Bash(bunx changeset version)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git branch*)",
+      "Bash(git stash*)",
+      "Bash(wc *)",
+      "Bash(ls *)",
+      "Bash(mkdir *)",
+      "Bash(cat *)"
+    ],
+    "deny": [
+      "Bash(git push --force*)",
+      "Bash(git reset --hard*)",
+      "Bash(rm -rf *)",
+      "Bash(bun publish*)"
+    ]
+  }
+}
