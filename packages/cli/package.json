@@ -14,7 +14,7 @@
   "dependencies": {
     "@pyreon/server": "workspace:*",
     "@pyreon/zero": "workspace:*",
-    "cac": "^6.7.14",
+    "cac": "^7.0.0",
     "vite": "^7.0.0"
   }
 }
