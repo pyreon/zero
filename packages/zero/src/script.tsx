@@ -1,4 +1,5 @@
-import { onMount } from "@pyreon/reactivity"
+import { onMount, onCleanup } from "@pyreon/reactivity"
+import { useIntersectionObserver } from "./utils/use-intersection-observer"
 
 // ─── Script optimization component ─────────────────────────────────────────
 //
@@ -100,16 +101,31 @@ export function Script(props: ScriptProps) {
         for (const e of events) {
           document.addEventListener(e, handler, { once: true, passive: true })
         }
+        onCleanup(() => {
+          for (const e of events) document.removeEventListener(e, handler)
+        })
         break
       }
 
       case "onViewport":
-        // Uses a sentinel div to trigger loading when scrolled into view
-        loadScript()
+        // Handled below via useIntersectionObserver on the sentinel element
         break
     }
   })
 
-  // Render nothing — scripts are injected into <head>
+  let sentinelRef: HTMLElement | undefined
+  const strategy = props.strategy ?? "afterHydration"
+
+  if (strategy === "onViewport") {
+    useIntersectionObserver(
+      () => sentinelRef,
+      () => loadScript(),
+    )
+  }
+
+  if (strategy === "onViewport") {
+    return <div ref={(el: HTMLElement) => { sentinelRef = el }} style="width:0;height:0;overflow:hidden" />
+  }
+
   return null
 }

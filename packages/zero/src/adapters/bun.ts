@@ -30,6 +30,11 @@ Bun.serve({
     // Try static files first
     if (req.method === "GET") {
       const filePath = clientDir + (url.pathname === "/" ? "index.html" : url.pathname)
+      // Prevent path traversal — ensure resolved path stays within clientDir
+      const resolved = Bun.resolveSync(filePath, ".")
+      if (!resolved.startsWith(Bun.resolveSync(clientDir, "."))) {
+        return new Response("Forbidden", { status: 403 })
+      }
       const file = Bun.file(filePath)
       if (await file.exists()) {
         return new Response(file, {

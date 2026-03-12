@@ -1,4 +1,4 @@
-import { signal, effect, onMount } from "@pyreon/reactivity"
+import { signal, effect, onMount, onCleanup } from "@pyreon/reactivity"
 
 // ─── Theme system ───────────────────────────────────────────────────────────
 //
@@ -69,11 +69,13 @@ export function initTheme() {
       }
     }
     mq.addEventListener("change", onChange)
+    onCleanup(() => mq.removeEventListener("change", onChange))
 
     // Re-apply when theme signal changes
-    effect(() => {
+    const dispose = effect(() => {
       document.documentElement.dataset.theme = resolvedTheme()
     })
+    if (dispose) onCleanup(dispose)
   })
 }
 

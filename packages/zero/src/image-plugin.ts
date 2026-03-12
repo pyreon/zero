@@ -12,7 +12,7 @@ import { existsSync } from "node:fs"
 // - Outputs optimized images to the build directory
 //
 // Usage in code:
-//   import heroImg from "./hero.jpg?w=640;1024;1920&format=webp"
+//   import heroImg from "./hero.jpg?optimize"
 //   // → { src, srcset, width, height, placeholder }
 //
 // Or use the component helper:

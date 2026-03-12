@@ -90,14 +90,3 @@ export function createISRHandler(
   }
 }
 
-/**
- * Purge a path from the ISR cache (for on-demand revalidation).
- * Returns a middleware-compatible handler.
- */
-export function createPurgeHandler(
-  isrHandler: ReturnType<typeof createISRHandler>,
-) {
-  // The cache is captured in closure — this is a placeholder for
-  // on-demand revalidation API (e.g. POST /__zero/revalidate?path=/blog/123)
-  return isrHandler
-}

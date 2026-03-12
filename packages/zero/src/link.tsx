@@ -158,6 +158,7 @@ export function useLink(props: LinkProps): UseLinkReturn {
 
   const isExactActive = () => {
     const currentPath = router.currentRoute()?.path
+    if (!currentPath) return false
     return currentPath === props.href
   }
 

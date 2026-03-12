@@ -37,7 +37,9 @@ const STATIC_EXT = /\.(png|jpe?g|gif|svg|webp|avif|ico|woff2?|ttf|otf|eot|mp4|we
 const SCRIPT_EXT = /\.(js|css|mjs)$/i
 
 function matchGlob(pattern: string, path: string): boolean {
-  const regex = pattern
+  // Escape regex special chars, then convert glob wildcards
+  const escaped = pattern.replace(/[.+^${}()|[\]\\]/g, "\\$&")
+  const regex = escaped
     .replace(/\*/g, ".*")
     .replace(/\?/g, ".")
   return new RegExp(`^${regex}$`).test(path)

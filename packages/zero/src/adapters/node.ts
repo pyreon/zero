@@ -49,6 +49,14 @@ const server = createServer(async (req, res) => {
   if (req.method === "GET") {
     try {
       const filePath = join(clientDir, url.pathname === "/" ? "index.html" : url.pathname)
+      // Prevent path traversal — ensure resolved path stays within clientDir
+      const { resolve } = await import("node:path")
+      const resolved = resolve(filePath)
+      if (!resolved.startsWith(resolve(clientDir))) {
+        res.writeHead(403)
+        res.end("Forbidden")
+        return
+      }
       const ext = extname(filePath)
       if (ext && ext !== ".html") {
         const data = await readFile(filePath)
