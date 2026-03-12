@@ -51,7 +51,6 @@ interface ProcessedImage {
   sources: Array<{ src: string; width: number }>
 }
 
-const IMAGE_QUERY_RE = /[?&](?:w=|format=|placeholder)/
 const IMAGE_EXT_RE = /\.(jpe?g|png|webp|avif)$/i
 
 /**

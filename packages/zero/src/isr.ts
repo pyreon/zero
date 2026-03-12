@@ -35,8 +35,8 @@ export function createISRHandler(
       res.headers.forEach((v, k) => { headers[k] = v })
 
       cache.set(key, { html, headers, timestamp: Date.now() })
-    } catch {
-      // Revalidation failed — keep serving stale
+    } catch (err) {
+      console.warn("[zero-isr] Revalidation failed, serving stale:", err)
     } finally {
       revalidating.delete(key)
     }

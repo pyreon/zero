@@ -53,8 +53,8 @@ export async function build(root: string | undefined, options: BuildOptions) {
         zeroConfig = zeroPlugin._zeroConfig as Record<string, unknown>
       }
     }
-  } catch {
-    // Config loading failed — skip SSG
+  } catch (err) {
+    console.warn("  ⚠ Config loading failed, skipping SSG:", err)
   }
 
   const renderMode = (zeroConfig?.mode as string) ?? options.mode ?? "ssr"
@@ -98,7 +98,7 @@ export async function build(root: string | undefined, options: BuildOptions) {
 
   // Run adapter to produce deployable output
   const adapterName = (zeroConfig?.adapter as string) ?? "node"
-  if (adapterName !== "static" || renderMode !== "ssg") {
+  if (!(adapterName === "static" && renderMode === "ssg")) {
     try {
       const { resolveAdapter } = await import("@pyreon/zero")
       const adapter = resolveAdapter(zeroConfig ?? {})

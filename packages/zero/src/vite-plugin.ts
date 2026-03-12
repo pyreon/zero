@@ -45,8 +45,8 @@ export function zeroPlugin(userConfig: ZeroConfig = {}): Plugin {
         try {
           const files = await scanRouteFiles(routesDir)
           return generateRouteModule(files, routesDir)
-        } catch {
-          // Routes dir doesn't exist yet — return empty routes
+        } catch (err) {
+          console.warn("[zero] Routes directory not found, using empty routes:", err)
           return `export const routes = []`
         }
       }

@@ -229,8 +229,8 @@ export function seoPlugin(config: SeoPluginConfig = {}): Plugin {
             fileName: "sitemap.xml",
             source: sitemap,
           })
-        } catch {
-          // Routes directory not found — skip sitemap
+        } catch (err) {
+          console.warn("[zero-seo] Failed to generate sitemap:", err)
         }
       }
 
@@ -275,7 +275,8 @@ export function seoMiddleware(config: SeoPluginConfig = {}): Middleware {
         return new Response(sitemap, {
           headers: { "Content-Type": "application/xml" },
         })
-      } catch {
+      } catch (err) {
+        console.warn("[zero-seo] Failed to serve sitemap:", err)
         return next(request)
       }
     }
