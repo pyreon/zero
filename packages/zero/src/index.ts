@@ -1,94 +1,117 @@
 // ─── Core ─────────────────────────────────────────────────────────────────────
 
-export { createApp } from "./app"
-export type { CreateAppOptions } from "./app"
-
-export { createServer } from "./entry-server"
-export type { CreateServerOptions } from "./entry-server"
+export type { CreateAppOptions } from './app'
+export { createApp } from './app'
+export type { CreateServerOptions } from './entry-server'
+export { createServer } from './entry-server'
 
 // ─── Vite plugin ─────────────────────────────────────────────────────────────
 
-export { zeroPlugin as default } from "./vite-plugin"
+export { zeroPlugin as default } from './vite-plugin'
 
 // ─── File-system routing ─────────────────────────────────────────────────────
 
 export {
-  parseFileRoutes,
   filePathToUrlPath,
-  scanRouteFiles,
   generateRouteModule,
-} from "./fs-router"
+  parseFileRoutes,
+  scanRouteFiles,
+} from './fs-router'
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 
-export { defineConfig, resolveConfig } from "./config"
+export { defineConfig, resolveConfig } from './config'
 
 // ─── ISR ─────────────────────────────────────────────────────────────────────
 
-export { createISRHandler } from "./isr"
+export { createISRHandler } from './isr'
 
 // ─── Adapters ────────────────────────────────────────────────────────────────
 
-export { nodeAdapter, bunAdapter, staticAdapter, resolveAdapter } from "./adapters"
+export {
+  bunAdapter,
+  nodeAdapter,
+  resolveAdapter,
+  staticAdapter,
+} from './adapters'
 
 // ─── Components ─────────────────────────────────────────────────────────────
 
-export { Image } from "./image"
-export type { ImageProps, ImageSource } from "./image"
-
-export { Link, createLink, useLink } from "./link"
-export type { LinkProps, LinkRenderProps, UseLinkReturn } from "./link"
-
-export { Script } from "./script"
-export type { ScriptProps, ScriptStrategy } from "./script"
+export type { ImageProps, ImageSource } from './image'
+export { Image } from './image'
+export type { LinkProps, LinkRenderProps, UseLinkReturn } from './link'
+export { createLink, Link, useLink } from './link'
+export type { ScriptProps, ScriptStrategy } from './script'
+export { Script } from './script'
 
 // ─── Middleware ──────────────────────────────────────────────────────────────
 
-export { cacheMiddleware, securityHeaders, varyEncoding } from "./cache"
-export type { CacheConfig, CacheRule } from "./cache"
+export type { CacheConfig, CacheRule } from './cache'
+export { cacheMiddleware, securityHeaders, varyEncoding } from './cache'
 
 // ─── Font optimization ─────────────────────────────────────────────────────
 
-export { fontPlugin, fontVariables } from "./font"
-export type { FontConfig, GoogleFontInput, GoogleFontStatic, GoogleFontVariable, LocalFont, FontDisplay, FallbackMetrics } from "./font"
+export type {
+  FallbackMetrics,
+  FontConfig,
+  FontDisplay,
+  GoogleFontInput,
+  GoogleFontStatic,
+  GoogleFontVariable,
+  LocalFont,
+} from './font'
+export { fontPlugin, fontVariables } from './font'
 
 // ─── Image processing ──────────────────────────────────────────────────────
 
-export { imagePlugin } from "./image-plugin"
-export type { ImagePluginConfig, ImageFormat, ProcessedImage, FormatSource } from "./image-plugin"
+export type {
+  FormatSource,
+  ImageFormat,
+  ImagePluginConfig,
+  ProcessedImage,
+} from './image-plugin'
+export { imagePlugin } from './image-plugin'
 
 // ─── Theme ──────────────────────────────────────────────────────────────────
 
-export { ThemeToggle, theme, resolvedTheme, toggleTheme, setTheme, initTheme, themeScript } from "./theme"
-export type { Theme } from "./theme"
+export type { Theme } from './theme'
+export {
+  initTheme,
+  resolvedTheme,
+  setTheme,
+  ThemeToggle,
+  theme,
+  themeScript,
+  toggleTheme,
+} from './theme'
 
 // ─── SEO ────────────────────────────────────────────────────────────────────
 
-export {
-  generateSitemap,
-  generateRobots,
-  jsonLd,
-  seoPlugin,
-  seoMiddleware,
-} from "./seo"
 export type {
-  SitemapConfig,
-  SitemapEntry,
   RobotsConfig,
   RobotsRule,
   SeoPluginConfig,
-} from "./seo"
+  SitemapConfig,
+  SitemapEntry,
+} from './seo'
+export {
+  generateRobots,
+  generateSitemap,
+  jsonLd,
+  seoMiddleware,
+  seoPlugin,
+} from './seo'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 export type {
-  ZeroConfig,
-  RenderMode,
-  ISRConfig,
-  RouteModule,
-  LoaderContext,
-  RouteMeta,
-  FileRoute,
   Adapter,
   AdapterBuildOptions,
-} from "./types"
+  FileRoute,
+  ISRConfig,
+  LoaderContext,
+  RenderMode,
+  RouteMeta,
+  RouteModule,
+  ZeroConfig,
+} from './types'

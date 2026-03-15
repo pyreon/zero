@@ -1,4 +1,4 @@
-import { signal, effect, onMount, onCleanup } from "@pyreon/reactivity"
+import { effect, onCleanup, onMount, signal } from '@pyreon/reactivity'
 
 // ─── Theme system ───────────────────────────────────────────────────────────
 //
@@ -8,21 +8,21 @@ import { signal, effect, onMount, onCleanup } from "@pyreon/reactivity"
 // - No flash of wrong theme (inline script in HTML)
 // - Reactive theme signal for components
 
-export type Theme = "light" | "dark" | "system"
+export type Theme = 'light' | 'dark' | 'system'
 
-const STORAGE_KEY = "zero-theme"
+const STORAGE_KEY = 'zero-theme'
 
 /** Reactive theme signal. */
-export const theme = signal<Theme>("system")
+export const theme = signal<Theme>('system')
 
 /** Computed resolved theme (what's actually applied). */
-export function resolvedTheme(): "light" | "dark" {
+export function resolvedTheme(): 'light' | 'dark' {
   const t = theme()
-  if (t === "system") {
-    if (typeof window === "undefined") return "dark"
-    return window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light"
+  if (t === 'system') {
+    if (typeof window === 'undefined') return 'dark'
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light'
   }
   return t
 }
@@ -30,17 +30,19 @@ export function resolvedTheme(): "light" | "dark" {
 /** Toggle between light and dark. */
 export function toggleTheme() {
   const current = resolvedTheme()
-  setTheme(current === "dark" ? "light" : "dark")
+  setTheme(current === 'dark' ? 'light' : 'dark')
 }
 
 /** Set theme explicitly. */
 export function setTheme(t: Theme) {
   theme(t)
-  if (typeof document !== "undefined") {
+  if (typeof document !== 'undefined') {
     document.documentElement.dataset.theme = resolvedTheme()
     try {
       localStorage.setItem(STORAGE_KEY, t)
-    } catch {}
+    } catch {
+      // localStorage may not be available (SSR, private browsing)
+    }
   }
 }
 
@@ -53,23 +55,25 @@ export function initTheme() {
     // Read persisted preference
     try {
       const stored = localStorage.getItem(STORAGE_KEY) as Theme | null
-      if (stored === "light" || stored === "dark" || stored === "system") {
+      if (stored === 'light' || stored === 'dark' || stored === 'system') {
         theme(stored)
       }
-    } catch {}
+    } catch {
+      // localStorage may not be available
+    }
 
     // Apply to document
     document.documentElement.dataset.theme = resolvedTheme()
 
     // Watch for system preference changes
-    const mq = window.matchMedia("(prefers-color-scheme: dark)")
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
     function onChange() {
-      if (theme() === "system") {
+      if (theme() === 'system') {
         document.documentElement.dataset.theme = resolvedTheme()
       }
     }
-    mq.addEventListener("change", onChange)
-    onCleanup(() => mq.removeEventListener("change", onChange))
+    mq.addEventListener('change', onChange)
+    onCleanup(() => mq.removeEventListener('change', onChange))
 
     // Re-apply when theme signal changes
     const dispose = effect(() => {
@@ -99,8 +103,18 @@ export function ThemeToggle(props: { class?: string; style?: string }) {
       type="button"
     >
       {() =>
-        resolvedTheme() === "dark" ? (
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        resolvedTheme() === 'dark' ? (
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
             <circle cx="12" cy="12" r="5" />
             <line x1="12" y1="1" x2="12" y2="3" />
             <line x1="12" y1="21" x2="12" y2="23" />
@@ -112,7 +126,17 @@ export function ThemeToggle(props: { class?: string; style?: string }) {
             <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
           </svg>
         ) : (
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
           </svg>
         )

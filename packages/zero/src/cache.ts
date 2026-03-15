@@ -1,5 +1,5 @@
-import type { Middleware } from "@pyreon/server"
-import { withHeaders } from "./utils/with-headers"
+import type { Middleware } from '@pyreon/server'
+import { withHeaders } from './utils/with-headers'
 
 // ─── Cache control middleware ───────────────────────────────────────────────
 //
@@ -33,16 +33,15 @@ export interface CacheRule {
 }
 
 const HASHED_ASSET = /\.[a-f0-9]{8,}\.\w+$/
-const STATIC_EXT = /\.(png|jpe?g|gif|svg|webp|avif|ico|woff2?|ttf|otf|eot|mp4|webm|ogg|mp3|wav)$/i
+const STATIC_EXT =
+  /\.(png|jpe?g|gif|svg|webp|avif|ico|woff2?|ttf|otf|eot|mp4|webm|ogg|mp3|wav)$/i
 const SCRIPT_EXT = /\.(js|css|mjs)$/i
 
 /** @internal Exported for testing */
 export function matchGlob(pattern: string, path: string): boolean {
   // Escape regex special chars, then convert glob wildcards
-  const escaped = pattern.replace(/[.+^${}()|[\]\\]/g, "\\$&")
-  const regex = escaped
-    .replace(/\*/g, ".*")
-    .replace(/\?/g, ".")
+  const escaped = pattern.replace(/[.+^${}()|[\]\\]/g, '\\$&')
+  const regex = escaped.replace(/\*/g, '.*').replace(/\?/g, '.')
   return new RegExp(`^${regex}$`).test(path)
 }
 
@@ -79,12 +78,14 @@ export function cacheMiddleware(config: CacheConfig = {}): Middleware {
 
     return next(request).then((response) => {
       // Skip if Cache-Control is already set
-      if (response.headers.has("Cache-Control")) return response
+      if (response.headers.has('Cache-Control')) return response
 
       // Check custom rules first
       for (const rule of rules) {
         if (matchGlob(rule.match, path)) {
-          return withHeaders(response, (h) => h.set("Cache-Control", rule.control))
+          return withHeaders(response, (h) =>
+            h.set('Cache-Control', rule.control),
+          )
         }
       }
 
@@ -99,21 +100,19 @@ export function cacheMiddleware(config: CacheConfig = {}): Middleware {
       } else if (STATIC_EXT.test(path)) {
         // Static assets — long cache
         cacheControl = `public, max-age=${staticDuration}, stale-while-revalidate=${swr}`
-      } else if (
-        response.headers.get("content-type")?.includes("text/html")
-      ) {
+      } else if (response.headers.get('content-type')?.includes('text/html')) {
         // HTML pages
         if (pageDuration > 0) {
           cacheControl = `public, max-age=${pageDuration}, stale-while-revalidate=${swr}`
         } else {
-          cacheControl = "no-cache"
+          cacheControl = 'no-cache'
         }
       } else {
         // Default: short cache
         cacheControl = `public, max-age=60, stale-while-revalidate=${swr}`
       }
 
-      return withHeaders(response, (h) => h.set("Cache-Control", cacheControl))
+      return withHeaders(response, (h) => h.set('Cache-Control', cacheControl))
     })
   }
 }
@@ -126,11 +125,11 @@ export function securityHeaders(): Middleware {
   return (request, next) => {
     return next(request).then((response) =>
       withHeaders(response, (h) => {
-        h.set("X-Content-Type-Options", "nosniff")
-        h.set("X-Frame-Options", "DENY")
-        h.set("X-XSS-Protection", "1; mode=block")
-        h.set("Referrer-Policy", "strict-origin-when-cross-origin")
-        h.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+        h.set('X-Content-Type-Options', 'nosniff')
+        h.set('X-Frame-Options', 'DENY')
+        h.set('X-XSS-Protection', '1; mode=block')
+        h.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+        h.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
       }),
     )
   }
@@ -145,9 +144,12 @@ export function varyEncoding(): Middleware {
   return (request, next) => {
     return next(request).then((response) =>
       withHeaders(response, (h) => {
-        const existing = h.get("Vary")
-        if (!existing?.includes("Accept-Encoding")) {
-          h.set("Vary", existing ? `${existing}, Accept-Encoding` : "Accept-Encoding")
+        const existing = h.get('Vary')
+        if (!existing?.includes('Accept-Encoding')) {
+          h.set(
+            'Vary',
+            existing ? `${existing}, Accept-Encoding` : 'Accept-Encoding',
+          )
         }
       }),
     )

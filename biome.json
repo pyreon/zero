@@ -1,4 +1,47 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
-  "extends": ["@vitus-labs/tools-lint/biome"]
+  "extends": ["@vitus-labs/tools-lint/biome"],
+  "overrides": [
+    {
+      "includes": ["packages/cli/**"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["packages/create-zero/src/**"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["packages/zero/src/**/*.tsx"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "useHookAtTopLevel": "off",
+            "noChildrenProp": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["packages/zero/src/image-plugin.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noNonNullAssertion": "off"
+          }
+        }
+      }
+    }
+  ]
 }

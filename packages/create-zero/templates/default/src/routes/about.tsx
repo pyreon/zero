@@ -1,15 +1,15 @@
-import { useHead } from "@pyreon/head"
-import { Link } from "@pyreon/zero/link"
+import { useHead } from '@pyreon/head'
+import { Link } from '@pyreon/zero/link'
 
 export const meta = {
-  title: "About — Pyreon Zero",
-  description: "Learn about the Pyreon Zero meta-framework.",
+  title: 'About — Pyreon Zero',
+  description: 'Learn about the Pyreon Zero meta-framework.',
 }
 
 export default function About() {
   useHead({
     title: meta.title,
-    meta: [{ name: "description", content: meta.description }],
+    meta: [{ name: 'description', content: meta.description }],
   })
 
   return (
@@ -43,18 +43,20 @@ export default function About() {
         </h2>
         <div style="color: var(--c-text-secondary); line-height: 1.8; display: flex; flex-direction: column; gap: var(--space-lg);">
           <p>
-            Most frameworks make you choose between developer experience and runtime performance.
-            Zero doesn't. Pyreon's signal-based reactivity means your components compile to
-            surgical DOM updates — no diffing, no reconciliation, no wasted work.
+            Most frameworks make you choose between developer experience and
+            runtime performance. Zero doesn't. Pyreon's signal-based reactivity
+            means your components compile to surgical DOM updates — no diffing,
+            no reconciliation, no wasted work.
           </p>
           <p>
-            On top of that, Zero gives you file-based routing, server-side rendering,
-            static generation, incremental regeneration, font optimization, image optimization,
-            smart caching, link prefetching, and SEO utilities — all built in, all zero-config.
+            On top of that, Zero gives you file-based routing, server-side
+            rendering, static generation, incremental regeneration, font
+            optimization, image optimization, smart caching, link prefetching,
+            and SEO utilities — all built in, all zero-config.
           </p>
           <p>
-            Deploy to Node, Bun, Vercel, Cloudflare, Netlify, or export as a static site.
-            One codebase, any target.
+            Deploy to Node, Bun, Vercel, Cloudflare, Netlify, or export as a
+            static site. One codebase, any target.
           </p>
         </div>
       </section>
@@ -65,19 +67,41 @@ export default function About() {
         </h2>
         <div style="display: grid; gap: var(--space-sm);">
           {[
-            ["Pyreon", "Signal-based UI framework with JSX"],
-            ["Vite", "Lightning-fast dev server and optimized builds"],
-            ["File Router", "Drop a file, get a route — layouts, guards, loaders"],
-            ["SSR / SSG / ISR", "Every rendering strategy, per-route overrides"],
-            ["<Image>", "Lazy loading, responsive srcset, blur-up placeholders"],
-            ["<Link>", "Prefetch on hover or viewport entry for instant nav"],
-            ["Font Plugin", "Google Fonts optimization, preconnect, font-display:swap"],
-            ["Cache MW", "Immutable hashed assets, stale-while-revalidate pages"],
-            ["SEO Tools", "Sitemap, robots.txt, JSON-LD structured data"],
+            ['Pyreon', 'Signal-based UI framework with JSX'],
+            ['Vite', 'Lightning-fast dev server and optimized builds'],
+            [
+              'File Router',
+              'Drop a file, get a route — layouts, guards, loaders',
+            ],
+            [
+              'SSR / SSG / ISR',
+              'Every rendering strategy, per-route overrides',
+            ],
+            [
+              '<Image>',
+              'Lazy loading, responsive srcset, blur-up placeholders',
+            ],
+            ['<Link>', 'Prefetch on hover or viewport entry for instant nav'],
+            [
+              'Font Plugin',
+              'Google Fonts optimization, preconnect, font-display:swap',
+            ],
+            [
+              'Cache MW',
+              'Immutable hashed assets, stale-while-revalidate pages',
+            ],
+            ['SEO Tools', 'Sitemap, robots.txt, JSON-LD structured data'],
           ].map(([name, desc]) => (
-            <div class="card" style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-md) var(--space-lg);">
-              <code style="min-width: 130px; font-weight: 600; color: var(--c-accent);">{name}</code>
-              <span style="color: var(--c-text-secondary); font-size: 0.9rem;">{desc}</span>
+            <div
+              class="card"
+              style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-md) var(--space-lg);"
+            >
+              <code style="min-width: 130px; font-weight: 600; color: var(--c-accent);">
+                {name}
+              </code>
+              <span style="color: var(--c-text-secondary); font-size: 0.9rem;">
+                {desc}
+              </span>
             </div>
           ))}
         </div>
@@ -88,8 +112,12 @@ export default function About() {
           Ready to build something?
         </h2>
         <div style="display: flex; gap: var(--space-md); justify-content: center;">
-          <Link href="/" class="btn btn-primary">Get Started</Link>
-          <Link href="/counter" class="btn btn-secondary">Try the Demo</Link>
+          <Link href="/" class="btn btn-primary">
+            Get Started
+          </Link>
+          <Link href="/counter" class="btn btn-secondary">
+            Try the Demo
+          </Link>
         </div>
       </section>
     </>

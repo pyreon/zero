@@ -1,5 +1,5 @@
-import { useRouter } from "@pyreon/router"
-import { useIntersectionObserver } from "./utils/use-intersection-observer"
+import { useRouter } from '@pyreon/router'
+import { useIntersectionObserver } from './utils/use-intersection-observer'
 
 // ─── Link component with prefetching ────────────────────────────────────────
 //
@@ -22,13 +22,13 @@ export interface LinkProps {
   /** Class applied when this link exactly matches the current route. */
   exactActiveClass?: string
   /** Prefetch strategy. Default: "hover" */
-  prefetch?: "hover" | "viewport" | "none"
+  prefetch?: 'hover' | 'viewport' | 'none'
   /** Open in new tab. */
   external?: boolean
   /** Inline styles. */
   style?: string
   /** ARIA label. */
-  "aria-label"?: string
+  'aria-label'?: string
 }
 
 /** Props passed to a custom component via createLink. */
@@ -45,9 +45,9 @@ export interface LinkRenderProps {
   style?: string
   target?: string
   rel?: string
-  "aria-label"?: string
+  'aria-label'?: string
   /** Reactive aria-current — pass directly to element for auto-updates on route change. */
-  "aria-current": (() => "page" | undefined) | "page" | undefined
+  'aria-current': (() => 'page' | undefined) | 'page' | undefined
   children?: any
 }
 
@@ -75,15 +75,15 @@ function doPrefetch(href: string) {
   if (prefetched.has(href)) return
   prefetched.add(href)
 
-  const docLink = document.createElement("link")
-  docLink.rel = "prefetch"
+  const docLink = document.createElement('link')
+  docLink.rel = 'prefetch'
   docLink.href = href
-  docLink.as = "document"
+  docLink.as = 'document'
   document.head.appendChild(docLink)
 
   try {
-    const chunkHint = document.createElement("link")
-    chunkHint.rel = "modulepreload"
+    const chunkHint = document.createElement('link')
+    chunkHint.rel = 'modulepreload'
     chunkHint.href = href
     document.head.appendChild(chunkHint)
   } catch {
@@ -110,7 +110,7 @@ function doPrefetch(href: string) {
 export function useLink(props: LinkProps): UseLinkReturn {
   const router = useRouter()
   let elementRef: HTMLElement | undefined
-  const strategy = props.prefetch ?? "hover"
+  const strategy = props.prefetch ?? 'hover'
 
   function ref(el: HTMLElement) {
     elementRef = el
@@ -133,18 +133,18 @@ export function useLink(props: LinkProps): UseLinkReturn {
   }
 
   function handleMouseEnter() {
-    if (strategy === "hover") {
+    if (strategy === 'hover') {
       doPrefetch(props.href)
     }
   }
 
   function handleTouchStart() {
-    if (strategy === "hover" || strategy === "viewport") {
+    if (strategy === 'hover' || strategy === 'viewport') {
       doPrefetch(props.href)
     }
   }
 
-  if (strategy === "viewport") {
+  if (strategy === 'viewport') {
     useIntersectionObserver(
       () => elementRef,
       () => doPrefetch(props.href),
@@ -154,7 +154,7 @@ export function useLink(props: LinkProps): UseLinkReturn {
   const isActive = () => {
     const currentPath = router.currentRoute()?.path
     if (!currentPath || !props.href) return false
-    if (props.href === "/") return currentPath === "/"
+    if (props.href === '/') return currentPath === '/'
     return currentPath.startsWith(props.href)
   }
 
@@ -168,11 +168,20 @@ export function useLink(props: LinkProps): UseLinkReturn {
     const cls: string[] = []
     if (props.class) cls.push(props.class)
     if (props.activeClass && isActive()) cls.push(props.activeClass)
-    if (props.exactActiveClass && isExactActive()) cls.push(props.exactActiveClass)
-    return cls.join(" ") || undefined
+    if (props.exactActiveClass && isExactActive())
+      cls.push(props.exactActiveClass)
+    return cls.join(' ') || undefined
   }
 
-  return { ref, handleClick, handleMouseEnter, handleTouchStart, isActive, isExactActive, classes }
+  return {
+    ref,
+    handleClick,
+    handleMouseEnter,
+    handleTouchStart,
+    isActive,
+    isExactActive,
+    classes,
+  }
 }
 
 /**
@@ -227,10 +236,10 @@ export function createLink(
         isExactActive={link.isExactActive}
         class={() => link.classes()}
         style={props.style}
-        target={props.external ? "_blank" : undefined}
-        rel={props.external ? "noopener noreferrer" : undefined}
-        aria-label={props["aria-label"]}
-        aria-current={() => link.isExactActive() ? "page" : undefined}
+        target={props.external ? '_blank' : undefined}
+        rel={props.external ? 'noopener noreferrer' : undefined}
+        aria-label={props['aria-label']}
+        aria-current={() => (link.isExactActive() ? 'page' : undefined)}
         children={props.children}
       />
     )
@@ -252,8 +261,8 @@ export const Link = createLink((props: LinkRenderProps) => (
     style={props.style}
     target={props.target}
     rel={props.rel}
-    aria-label={props["aria-label"]}
-    aria-current={props["aria-current"]}
+    aria-label={props['aria-label']}
+    aria-current={props['aria-current']}
     onclick={props.onClick}
     onmouseenter={props.onMouseEnter}
     ontouchstart={props.onTouchStart}

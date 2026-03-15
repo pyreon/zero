@@ -1,4 +1,4 @@
-import { onMount, onCleanup } from "@pyreon/reactivity"
+import { onCleanup, onMount } from '@pyreon/reactivity'
 
 /**
  * Observes an element and calls `onIntersect` once it enters the viewport.
@@ -11,7 +11,7 @@ import { onMount, onCleanup } from "@pyreon/reactivity"
 export function useIntersectionObserver(
   getElement: () => HTMLElement | undefined,
   onIntersect: () => void,
-  rootMargin = "200px",
+  rootMargin = '200px',
 ) {
   onMount(() => {
     const el = getElement()

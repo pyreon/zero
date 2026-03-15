@@ -1,5 +1,5 @@
-import { onMount, onCleanup } from "@pyreon/reactivity"
-import { useIntersectionObserver } from "./utils/use-intersection-observer"
+import { onCleanup, onMount } from '@pyreon/reactivity'
+import { useIntersectionObserver } from './utils/use-intersection-observer'
 
 // ─── Script optimization component ─────────────────────────────────────────
 //
@@ -28,11 +28,11 @@ export interface ScriptProps {
 }
 
 export type ScriptStrategy =
-  | "beforeHydration"
-  | "afterHydration"
-  | "onIdle"
-  | "onInteraction"
-  | "onViewport"
+  | 'beforeHydration'
+  | 'afterHydration'
+  | 'onIdle'
+  | 'onInteraction'
+  | 'onViewport'
 
 /**
  * Optimized script loading component.
@@ -54,14 +54,15 @@ export function Script(props: ScriptProps) {
     // Deduplication
     if (props.id && document.getElementById(props.id)) return
 
-    const script = document.createElement("script")
+    const script = document.createElement('script')
     if (props.src) script.src = props.src
     if (props.id) script.id = props.id
     script.async = props.async !== false
 
     if (props.onLoad) script.onload = props.onLoad
     if (props.onError) {
-      script.onerror = () => props.onError!(new Error(`Failed to load: ${props.src}`))
+      script.onerror = () =>
+        props.onError?.(new Error(`Failed to load: ${props.src}`))
     }
 
     if (props.children && !props.src) {
@@ -72,28 +73,28 @@ export function Script(props: ScriptProps) {
   }
 
   onMount(() => {
-    const strategy = props.strategy ?? "afterHydration"
+    const strategy = props.strategy ?? 'afterHydration'
 
     switch (strategy) {
-      case "beforeHydration":
+      case 'beforeHydration':
         // Already in HTML — do nothing
         break
 
-      case "afterHydration":
+      case 'afterHydration':
         // Load immediately after mount (hydration is complete)
         loadScript()
         break
 
-      case "onIdle":
-        if ("requestIdleCallback" in window) {
+      case 'onIdle':
+        if ('requestIdleCallback' in window) {
           requestIdleCallback(() => loadScript(), { timeout: 5000 })
         } else {
           setTimeout(loadScript, 200)
         }
         break
 
-      case "onInteraction": {
-        const events = ["click", "scroll", "keydown", "touchstart"]
+      case 'onInteraction': {
+        const events = ['click', 'scroll', 'keydown', 'touchstart']
         function handler() {
           for (const e of events) document.removeEventListener(e, handler)
           loadScript()
@@ -107,24 +108,31 @@ export function Script(props: ScriptProps) {
         break
       }
 
-      case "onViewport":
+      case 'onViewport':
         // Handled below via useIntersectionObserver on the sentinel element
         break
     }
   })
 
   let sentinelRef: HTMLElement | undefined
-  const strategy = props.strategy ?? "afterHydration"
+  const strategy = props.strategy ?? 'afterHydration'
 
-  if (strategy === "onViewport") {
+  if (strategy === 'onViewport') {
     useIntersectionObserver(
       () => sentinelRef,
       () => loadScript(),
     )
   }
 
-  if (strategy === "onViewport") {
-    return <div ref={(el: HTMLElement) => { sentinelRef = el }} style="width:0;height:0;overflow:hidden" />
+  if (strategy === 'onViewport') {
+    return (
+      <div
+        ref={(el: HTMLElement) => {
+          sentinelRef = el
+        }}
+        style="width:0;height:0;overflow:hidden"
+      />
+    )
   }
 
   return null

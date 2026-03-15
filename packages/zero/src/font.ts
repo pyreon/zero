@@ -1,4 +1,4 @@
-import type { Plugin } from "vite"
+import type { Plugin } from 'vite'
 
 // ─── Font optimization ──────────────────────────────────────────────────────
 //
@@ -57,11 +57,11 @@ export interface LocalFont {
   src: string
   /** Single weight (400) or variable range ("100 900"). */
   weight?: number | `${number} ${number}`
-  style?: "normal" | "italic"
+  style?: 'normal' | 'italic'
   display?: FontDisplay
 }
 
-export type FontDisplay = "auto" | "block" | "swap" | "fallback" | "optional"
+export type FontDisplay = 'auto' | 'block' | 'swap' | 'fallback' | 'optional'
 
 /** Metrics for generating size-adjusted fallback fonts to reduce CLS. */
 export interface FallbackMetrics {
@@ -98,7 +98,7 @@ type ResolvedFont = StaticFont | VariableFont
  * Normalize a GoogleFontInput (string or object) into a ResolvedFont.
  */
 export function resolveGoogleFont(input: GoogleFontInput): ResolvedFont {
-  if (typeof input === "string") {
+  if (typeof input === 'string') {
     return parseGoogleFamily(input)
   }
 
@@ -127,23 +127,33 @@ export function resolveGoogleFont(input: GoogleFontInput): ResolvedFont {
  * Variable with italic: "Inter:ital,wght@100..900"
  */
 export function parseGoogleFamily(input: string): ResolvedFont {
-  const [familyPart, spec] = input.split(":")
-  const family = familyPart!.trim()
+  const [familyPart, spec] = input.split(':')
+  const family = familyPart?.trim()
   let italic = false
 
   if (spec) {
-    italic = spec.includes("ital")
+    italic = spec.includes('ital')
 
     // Variable font range syntax: wght@100..900
     const rangeMatch = spec.match(/wght@(\d+)\.\.(\d+)/)
     if (rangeMatch) {
-      return { family, italic, variable: true, weightRange: [Number(rangeMatch[1]), Number(rangeMatch[2])] }
+      return {
+        family,
+        italic,
+        variable: true,
+        weightRange: [Number(rangeMatch[1]), Number(rangeMatch[2])],
+      }
     }
 
     // Static weights: wght@400;500;700
     const weightMatch = spec.match(/wght@([\d;]+)/)
     if (weightMatch) {
-      return { family, italic, variable: false, weights: weightMatch[1]!.split(";").map(Number) }
+      return {
+        family,
+        italic,
+        variable: false,
+        weights: weightMatch[1]?.split(';').map(Number),
+      }
     }
   }
 
@@ -153,11 +163,14 @@ export function parseGoogleFamily(input: string): ResolvedFont {
 /**
  * Generate a Google Fonts CSS URL.
  */
-export function googleFontsUrl(families: ResolvedFont[], display: FontDisplay = "swap"): string {
+export function googleFontsUrl(
+  families: ResolvedFont[],
+  display: FontDisplay = 'swap',
+): string {
   const params = families
     .map((f) => {
-      const axes = f.italic ? "ital,wght" : "wght"
-      const name = f.family.replace(/ /g, "+")
+      const axes = f.italic ? 'ital,wght' : 'wght'
+      const name = f.family.replace(/ /g, '+')
 
       if (f.variable) {
         const range = `${f.weightRange[0]}..${f.weightRange[1]}`
@@ -167,10 +180,10 @@ export function googleFontsUrl(families: ResolvedFont[], display: FontDisplay = 
 
       const values = f.weights
         .map((w) => (f.italic ? `0,${w};1,${w}` : String(w)))
-        .join(";")
+        .join(';')
       return `family=${name}:${axes}@${values}`
     })
-    .join("&")
+    .join('&')
 
   return `https://fonts.googleapis.com/css2?${params}&display=${display}`
 }
@@ -184,12 +197,12 @@ function localFontFaces(fonts: LocalFont[], display: FontDisplay): string {
       (f) => `@font-face {
   font-family: "${f.family}";
   src: url("${f.src}");
-  font-weight: ${f.weight ?? "400"};
-  font-style: ${f.style ?? "normal"};
+  font-weight: ${f.weight ?? '400'};
+  font-style: ${f.style ?? 'normal'};
   font-display: ${f.display ?? display};
 }`,
     )
-    .join("\n\n")
+    .join('\n\n')
 }
 
 /**
@@ -211,10 +224,10 @@ function fallbackFontFaces(fallbacks: Record<string, FallbackMetrics>): string {
       return `@font-face {
   font-family: "${family} Fallback";
   src: local("${metrics.fallback}");
-${overrides.join("\n")}
+${overrides.join('\n')}
 }`
     })
-    .join("\n\n")
+    .join('\n\n')
 }
 
 /**
@@ -223,18 +236,18 @@ ${overrides.join("\n")}
 function preloadTags(fonts: LocalFont[]): string {
   return fonts
     .map((f) => {
-      const ext = f.src.split(".").pop()
+      const ext = f.src.split('.').pop()
       const type =
-        ext === "woff2"
-          ? "font/woff2"
-          : ext === "woff"
-            ? "font/woff"
-            : ext === "ttf"
-              ? "font/ttf"
-              : "font/otf"
+        ext === 'woff2'
+          ? 'font/woff2'
+          : ext === 'woff'
+            ? 'font/woff'
+            : ext === 'ttf'
+              ? 'font/ttf'
+              : 'font/otf'
       return `<link rel="preload" href="${f.src}" as="font" type="${type}" crossorigin>`
     })
-    .join("\n")
+    .join('\n')
 }
 
 /**
@@ -243,8 +256,8 @@ function preloadTags(fonts: LocalFont[]): string {
 async function downloadGoogleFontsCSS(url: string): Promise<string> {
   const response = await fetch(url, {
     headers: {
-      "User-Agent":
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      'User-Agent':
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
     },
   })
   if (!response.ok) {
@@ -269,9 +282,8 @@ async function downloadFontFile(url: string): Promise<Buffer> {
 function extractFontUrls(css: string): string[] {
   const urls: string[] = []
   const regex = /url\((https:\/\/fonts\.gstatic\.com\/[^)]+)\)/g
-  let match
-  while ((match = regex.exec(css)) !== null) {
-    urls.push(match[1]!)
+  for (const match of css.matchAll(regex)) {
+    if (match[1]) urls.push(match[1])
   }
   return urls
 }
@@ -282,7 +294,10 @@ function extractFontUrls(css: string): string[] {
 async function selfHostFonts(
   cssUrl: string,
   fontsSubDir: string,
-): Promise<{ css: string; fontFiles: Array<{ name: string; content: Buffer }> }> {
+): Promise<{
+  css: string
+  fontFiles: Array<{ name: string; content: Buffer }>
+}> {
   const css = await downloadGoogleFontsCSS(cssUrl)
   const fontUrls = extractFontUrls(css)
   const fontFiles: Array<{ name: string; content: Buffer }> = []
@@ -290,8 +305,8 @@ async function selfHostFonts(
   let rewrittenCss = css
 
   for (const url of fontUrls) {
-    const urlParts = url.split("/")
-    const fileName = urlParts[urlParts.length - 1]!.split("?")[0]!
+    const urlParts = url.split('/')
+    const fileName = urlParts.at(-1)?.split('?')[0] ?? 'font'
     const content = await downloadFontFile(url)
 
     fontFiles.push({ name: fileName, content })
@@ -324,31 +339,31 @@ async function selfHostFonts(
  * }
  */
 export function fontPlugin(config: FontConfig = {}): Plugin {
-  const display = config.display ?? "swap"
+  const display = config.display ?? 'swap'
   const shouldPreload = config.preload !== false
   const shouldSelfHost = config.selfHost !== false
   const googleFamilies = (config.google ?? []).map(resolveGoogleFont)
 
   let isBuild = false
-  let selfHostedCSS = ""
+  let selfHostedCSS = ''
   let selfHostedFontFiles: Array<{ name: string; content: Buffer }> = []
 
   return {
-    name: "pyreon-zero-fonts",
+    name: 'pyreon-zero-fonts',
 
     configResolved(resolvedConfig) {
-      isBuild = resolvedConfig.command === "build"
+      isBuild = resolvedConfig.command === 'build'
     },
 
     async buildStart() {
       if (isBuild && shouldSelfHost && googleFamilies.length > 0) {
         const cssUrl = googleFontsUrl(googleFamilies, display)
         try {
-          const result = await selfHostFonts(cssUrl, "assets/fonts")
+          const result = await selfHostFonts(cssUrl, 'assets/fonts')
           selfHostedCSS = result.css
           selfHostedFontFiles = result.fontFiles
-        } catch (err) {
-          console.warn("[zero-fonts] Failed to self-host fonts, falling back to CDN:", err)
+        } catch {
+          // Self-hosting failed — fall back to CDN link
         }
       }
     },
@@ -357,7 +372,7 @@ export function fontPlugin(config: FontConfig = {}): Plugin {
       // Emit self-hosted font files as assets
       for (const file of selfHostedFontFiles) {
         this.emitFile({
-          type: "asset",
+          type: 'asset',
           fileName: `assets/fonts/${file.name}`,
           source: file.content,
         })
@@ -373,10 +388,13 @@ export function fontPlugin(config: FontConfig = {}): Plugin {
 
         // Preload first font file per family
         if (shouldPreload) {
-          const preloadFiles = selfHostedFontFiles.slice(0, googleFamilies.length)
+          const preloadFiles = selfHostedFontFiles.slice(
+            0,
+            googleFamilies.length,
+          )
           for (const file of preloadFiles) {
-            const ext = file.name.split(".").pop()
-            const type = ext === "woff2" ? "font/woff2" : "font/woff"
+            const ext = file.name.split('.').pop()
+            const type = ext === 'woff2' ? 'font/woff2' : 'font/woff'
             tags.push(
               `<link rel="preload" href="/assets/fonts/${file.name}" as="font" type="${type}" crossorigin>`,
             )
@@ -386,7 +404,9 @@ export function fontPlugin(config: FontConfig = {}): Plugin {
         // Dev: CDN for fast startup
         const cssUrl = googleFontsUrl(googleFamilies, display)
         tags.push(`<link rel="preconnect" href="https://fonts.googleapis.com">`)
-        tags.push(`<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`)
+        tags.push(
+          `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`,
+        )
         tags.push(`<link rel="stylesheet" href="${cssUrl}">`)
       }
 
@@ -406,7 +426,7 @@ export function fontPlugin(config: FontConfig = {}): Plugin {
       }
 
       if (tags.length > 0) {
-        return html.replace("</head>", `${tags.join("\n")}\n</head>`)
+        return html.replace('</head>', `${tags.join('\n')}\n</head>`)
       }
 
       return html
@@ -417,11 +437,9 @@ export function fontPlugin(config: FontConfig = {}): Plugin {
 /**
  * Generate CSS variables for font families.
  */
-export function fontVariables(
-  families: Record<string, string>,
-): string {
+export function fontVariables(families: Record<string, string>): string {
   const vars = Object.entries(families)
     .map(([key, value]) => `  --font-${key}: ${value};`)
-    .join("\n")
+    .join('\n')
   return `:root {\n${vars}\n}`
 }

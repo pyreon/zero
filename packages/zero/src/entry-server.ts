@@ -1,8 +1,8 @@
-import { createHandler } from "@pyreon/server"
-import type { Middleware } from "@pyreon/server"
-import type { RouteRecord } from "@pyreon/router"
-import { createApp } from "./app"
-import type { ZeroConfig } from "./types"
+import type { RouteRecord } from '@pyreon/router'
+import type { Middleware } from '@pyreon/server'
+import { createHandler } from '@pyreon/server'
+import { createApp } from './app'
+import type { ZeroConfig } from './types'
 
 // ─── Server entry factory ───────────────────────────────────────────────────
 
@@ -37,14 +37,14 @@ export function createServer(options: CreateServerOptions) {
 
   const { App } = createApp({
     routes: options.routes,
-    routerMode: "history",
+    routerMode: 'history',
   })
 
   return createHandler({
     App,
     routes: options.routes,
     middleware: allMiddleware,
-    mode: config.ssr?.mode ?? "string",
+    mode: config.ssr?.mode ?? 'string',
     template: options.template,
     clientEntry: options.clientEntry,
   })

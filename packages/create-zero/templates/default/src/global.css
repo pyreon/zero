@@ -9,8 +9,8 @@
 }
 
 :root {
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
 
   /* Colors — neutral palette with electric accent */
   --c-bg: #0a0a0b;
@@ -51,7 +51,7 @@
 
 /* ─── Light theme ─────────────────────────────────────────────────────────── */
 
-[data-theme="light"] {
+[data-theme='light'] {
   --c-bg: #ffffff;
   --c-surface: #f4f4f5;
   --c-surface-hover: #e4e4e7;
@@ -81,7 +81,9 @@ body {
   color: var(--c-text);
   line-height: 1.6;
   min-height: 100dvh;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 a {
@@ -392,12 +394,24 @@ pre code {
   border-top: 1px solid var(--c-border);
 }
 
-.code-block .kw { color: #c084fc; }
-.code-block .fn { color: #60a5fa; }
-.code-block .str { color: #34d399; }
-.code-block .cm { color: var(--c-text-muted); }
-.code-block .tag { color: #f472b6; }
-.code-block .attr { color: #fbbf24; }
+.code-block .kw {
+  color: #c084fc;
+}
+.code-block .fn {
+  color: #60a5fa;
+}
+.code-block .str {
+  color: #34d399;
+}
+.code-block .cm {
+  color: var(--c-text-muted);
+}
+.code-block .tag {
+  color: #f472b6;
+}
+.code-block .attr {
+  color: #fbbf24;
+}
 
 /* ─── Counter demo ────────────────────────────────────────────────────────── */
 
@@ -566,7 +580,9 @@ pre code {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ─── Page headers ────────────────────────────────────────────────────────── */

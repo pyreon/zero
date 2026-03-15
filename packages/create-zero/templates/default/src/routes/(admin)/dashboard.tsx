@@ -1,9 +1,8 @@
-import { useHead } from "@pyreon/head"
-import { Link } from "@pyreon/zero/link"
-import type { LoaderContext } from "@pyreon/zero"
+import { useHead } from '@pyreon/head'
+import type { LoaderContext } from '@pyreon/zero'
 
 export const meta = {
-  title: "Dashboard — Pyreon Zero",
+  title: 'Dashboard — Pyreon Zero',
 }
 
 /**
@@ -15,11 +14,12 @@ export const meta = {
  */
 export function guard() {
   // Simulate auth check — in a real app, check session/token
-  const isAuthenticated = typeof window !== "undefined"
-    && localStorage.getItem("zero-demo-auth") === "true"
+  const isAuthenticated =
+    typeof window !== 'undefined' &&
+    localStorage.getItem('zero-demo-auth') === 'true'
 
   if (!isAuthenticated) {
-    return "/about" // Redirect unauthenticated users
+    return '/about' // Redirect unauthenticated users
   }
   return true // Allow navigation
 }
@@ -28,14 +28,17 @@ export function guard() {
  * Per-route middleware — runs on the server before the loader.
  * Great for logging, auth checks, rate limiting per-route.
  */
-export const middleware = async (request: Request, next: (req: Request) => Promise<Response>) => {
+export const middleware = async (
+  request: Request,
+  next: (req: Request) => Promise<Response>,
+) => {
   const start = Date.now()
   const response = await next(request)
   const duration = Date.now() - start
 
   // Add server timing header
   const headers = new Headers(response.headers)
-  headers.set("Server-Timing", `route;dur=${duration}`)
+  headers.set('Server-Timing', `route;dur=${duration}`)
 
   return new Response(response.body, {
     status: response.status,
@@ -44,13 +47,13 @@ export const middleware = async (request: Request, next: (req: Request) => Promi
   })
 }
 
-export async function loader(ctx: LoaderContext) {
+export async function loader(_ctx: LoaderContext) {
   return {
-    user: "Demo User",
+    user: 'Demo User',
     stats: {
       views: 12_847,
       routes: 6,
-      buildTime: "1.2s",
+      buildTime: '1.2s',
     },
   }
 }
@@ -84,31 +87,42 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div class="code-block" style="max-width: 520px; margin: var(--space-2xl) auto 0;">
+      <div
+        class="code-block"
+        style="max-width: 520px; margin: var(--space-2xl) auto 0;"
+      >
         <div class="code-block-header">
           <span>dashboard.tsx</span>
         </div>
-        <pre><code><span class="cm">{"// Navigation guard — protect routes"}</span>
-<span class="kw">export function</span> <span class="fn">guard</span>() {"{"}
-  <span class="kw">if</span> (!isAuthenticated) {"{"}
-    <span class="kw">return</span> <span class="str">"/login"</span> <span class="cm">{"// redirect"}</span>
-  {"}"}
-  <span class="kw">return</span> <span class="str">true</span> <span class="cm">{"// allow"}</span>
-{"}"}
-
-<span class="cm">{"// Per-route server middleware"}</span>
-<span class="kw">export const</span> <span class="fn">middleware</span> = (req, next) =&gt; {"{"}
-  <span class="cm">{"// logging, auth, rate limiting..."}</span>
-  <span class="kw">return</span> <span class="fn">next</span>(req)
-{"}"}</code></pre>
+        <pre>
+          <code>
+            <span class="cm">{'// Navigation guard — protect routes'}</span>
+            <span class="kw">export function</span>{' '}
+            <span class="fn">guard</span>() {'{'}
+            <span class="kw">if</span> (!isAuthenticated) {'{'}
+            <span class="kw">return</span> <span class="str">"/login"</span>{' '}
+            <span class="cm">{'// redirect'}</span>
+            {'}'}
+            <span class="kw">return</span> <span class="str">true</span>{' '}
+            <span class="cm">{'// allow'}</span>
+            {'}'}
+            <span class="cm">{'// Per-route server middleware'}</span>
+            <span class="kw">export const</span>{' '}
+            <span class="fn">middleware</span> = (req, next) =&gt; {'{'}
+            <span class="cm">{'// logging, auth, rate limiting...'}</span>
+            <span class="kw">return</span> <span class="fn">next</span>(req)
+            {'}'}
+          </code>
+        </pre>
       </div>
 
       <div style="text-align: center; margin-top: var(--space-2xl);">
         <button
+          type="button"
           class="btn btn-secondary"
           onclick={() => {
-            localStorage.removeItem("zero-demo-auth")
-            window.location.href = "/about"
+            localStorage.removeItem('zero-demo-auth')
+            window.location.href = '/about'
           }}
         >
           Log out (clear demo auth)
