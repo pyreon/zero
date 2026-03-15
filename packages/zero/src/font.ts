@@ -11,8 +11,15 @@ import type { Plugin } from "vite"
 // - Size-adjusted fallback fonts to reduce CLS
 
 export interface FontConfig {
-  /** Google Fonts families. Static: "Inter:wght@400;500;700", Variable: "Inter:wght@100..900" */
-  google?: string[]
+  /**
+   * Google Fonts families.
+   *
+   * Accepts both string shorthand and structured objects:
+   * - String: "Inter:wght@400;500;700" or "Inter:wght@100..900"
+   * - Object: { family: "Inter", weights: [400, 500, 700] }
+   * - Variable: { family: "Inter", variable: true, weightRange: [100, 900] }
+   */
+  google?: GoogleFontInput[]
   /** Local font files. */
   local?: LocalFont[]
   /** Default font-display strategy. Default: "swap" */
@@ -25,11 +32,31 @@ export interface FontConfig {
   fallbacks?: Record<string, FallbackMetrics>
 }
 
+/** Static Google Font config. */
+export interface GoogleFontStatic {
+  family: string
+  weights: number[]
+  italic?: boolean
+  variable?: false
+}
+
+/** Variable Google Font config. */
+export interface GoogleFontVariable {
+  family: string
+  /** Weight range as [min, max] tuple. e.g. [100, 900] */
+  weightRange: [number, number]
+  italic?: boolean
+  variable: true
+}
+
+/** Google font input: structured object or string shorthand. */
+export type GoogleFontInput = GoogleFontStatic | GoogleFontVariable | string
+
 export interface LocalFont {
   family: string
   src: string
   /** Single weight (400) or variable range ("100 900"). */
-  weight?: string | number
+  weight?: number | `${number} ${number}`
   style?: "normal" | "italic"
   display?: FontDisplay
 }
@@ -50,18 +77,50 @@ export interface FallbackMetrics {
   lineGapOverride?: number
 }
 
-interface ResolvedFont {
+interface ResolvedFontBase {
   family: string
-  weights: string[]
   italic: boolean
-  /** Whether this is a variable font with a weight range (e.g. 100..900). */
-  variable: boolean
-  /** Weight range for variable fonts. e.g. "100..900" */
-  weightRange?: string
+}
+
+interface StaticFont extends ResolvedFontBase {
+  variable: false
+  weights: number[]
+}
+
+interface VariableFont extends ResolvedFontBase {
+  variable: true
+  weightRange: [number, number]
+}
+
+type ResolvedFont = StaticFont | VariableFont
+
+/**
+ * Normalize a GoogleFontInput (string or object) into a ResolvedFont.
+ */
+export function resolveGoogleFont(input: GoogleFontInput): ResolvedFont {
+  if (typeof input === "string") {
+    return parseGoogleFamily(input)
+  }
+
+  if (input.variable) {
+    return {
+      family: input.family,
+      italic: input.italic ?? false,
+      variable: true,
+      weightRange: input.weightRange,
+    }
+  }
+
+  return {
+    family: input.family,
+    italic: input.italic ?? false,
+    variable: false,
+    weights: input.weights,
+  }
 }
 
 /**
- * Parse Google Fonts family string.
+ * Parse Google Fonts family string shorthand.
  *
  * Static weights: "Inter:wght@400;500;700"
  * Variable range:  "Inter:wght@100..900"
@@ -70,30 +129,25 @@ interface ResolvedFont {
 export function parseGoogleFamily(input: string): ResolvedFont {
   const [familyPart, spec] = input.split(":")
   const family = familyPart!.trim()
-  const weights: string[] = []
   let italic = false
-  let variable = false
-  let weightRange: string | undefined
 
   if (spec) {
-    // Check for variable font range syntax: wght@100..900
+    italic = spec.includes("ital")
+
+    // Variable font range syntax: wght@100..900
     const rangeMatch = spec.match(/wght@(\d+)\.\.(\d+)/)
     if (rangeMatch) {
-      variable = true
-      weightRange = `${rangeMatch[1]}..${rangeMatch[2]}`
-      weights.push(weightRange)
-    } else {
-      const weightMatch = spec.match(/wght@([\d;]+)/)
-      if (weightMatch) {
-        weights.push(...weightMatch[1]!.split(";"))
-      }
+      return { family, italic, variable: true, weightRange: [Number(rangeMatch[1]), Number(rangeMatch[2])] }
     }
-    italic = spec.includes("ital")
+
+    // Static weights: wght@400;500;700
+    const weightMatch = spec.match(/wght@([\d;]+)/)
+    if (weightMatch) {
+      return { family, italic, variable: false, weights: weightMatch[1]!.split(";").map(Number) }
+    }
   }
 
-  if (weights.length === 0) weights.push("400")
-
-  return { family, weights, italic, variable, weightRange }
+  return { family, italic, variable: false, weights: [400] }
 }
 
 /**
@@ -103,21 +157,18 @@ export function googleFontsUrl(families: ResolvedFont[], display: FontDisplay = 
   const params = families
     .map((f) => {
       const axes = f.italic ? "ital,wght" : "wght"
+      const name = f.family.replace(/ /g, "+")
 
-      if (f.variable && f.weightRange) {
-        // Variable font: use range syntax
-        // ital,wght@0,100..900;1,100..900 or wght@100..900
-        const range = f.italic
-          ? `0,${f.weightRange};1,${f.weightRange}`
-          : f.weightRange
-        return `family=${f.family.replace(/ /g, "+")}:${axes}@${range}`
+      if (f.variable) {
+        const range = `${f.weightRange[0]}..${f.weightRange[1]}`
+        const value = f.italic ? `0,${range};1,${range}` : range
+        return `family=${name}:${axes}@${value}`
       }
 
-      // Static font: list individual weights
       const values = f.weights
-        .map((w) => (f.italic ? `0,${w};1,${w}` : w))
+        .map((w) => (f.italic ? `0,${w};1,${w}` : String(w)))
         .join(";")
-      return `family=${f.family.replace(/ /g, "+")}:${axes}@${values}`
+      return `family=${name}:${axes}@${values}`
     })
     .join("&")
 
@@ -276,7 +327,7 @@ export function fontPlugin(config: FontConfig = {}): Plugin {
   const display = config.display ?? "swap"
   const shouldPreload = config.preload !== false
   const shouldSelfHost = config.selfHost !== false
-  const googleFamilies = (config.google ?? []).map(parseGoogleFamily)
+  const googleFamilies = (config.google ?? []).map(resolveGoogleFont)
 
   let isBuild = false
   let selfHostedCSS = ""

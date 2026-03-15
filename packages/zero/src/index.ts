@@ -50,7 +50,7 @@ export type { CacheConfig, CacheRule } from "./cache"
 // ─── Font optimization ─────────────────────────────────────────────────────
 
 export { fontPlugin, fontVariables } from "./font"
-export type { FontConfig, LocalFont, FontDisplay, FallbackMetrics } from "./font"
+export type { FontConfig, GoogleFontInput, GoogleFontStatic, GoogleFontVariable, LocalFont, FontDisplay, FallbackMetrics } from "./font"
 
 // ─── Image processing ──────────────────────────────────────────────────────
 
