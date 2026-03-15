@@ -36,10 +36,18 @@ export interface ImagePluginConfig {
 
 export type ImageFormat = "webp" | "avif" | "jpeg" | "png"
 
-interface ProcessedImage {
-  /** Original source path. */
+/** Per-format source set for <picture> <source> elements. */
+export interface FormatSource {
+  /** MIME type. e.g. "image/webp", "image/avif" */
+  type: string
+  /** srcset string for this format. e.g. "/img-640.webp 640w, /img-1920.webp 1920w" */
+  srcset: string
+}
+
+export interface ProcessedImage {
+  /** Fallback source path (last format, largest width). */
   src: string
-  /** Generated srcset string. */
+  /** Fallback srcset string (last format). */
   srcset: string
   /** Intrinsic width. */
   width: number
@@ -47,8 +55,10 @@ interface ProcessedImage {
   height: number
   /** Base64 blur placeholder data URI. */
   placeholder: string
-  /** Per-width sources. */
-  sources: Array<{ src: string; width: number }>
+  /** Per-format source sets for <picture> element. Ordered by priority (best format first). */
+  formats: FormatSource[]
+  /** Flat list of all sources. */
+  sources: Array<{ src: string; width: number; format: string }>
 }
 
 const IMAGE_EXT_RE = /\.(jpe?g|png|webp|avif)$/i
@@ -123,14 +133,16 @@ export function imagePlugin(config: ImagePluginConfig = {}): Plugin {
           ? rawPath
           : `/@fs/${absPath}`
 
-        return `export default ${JSON.stringify({
+        const devResult: ProcessedImage = {
           src: publicPath,
           srcset: "",
           width: metadata.width,
           height: metadata.height,
           placeholder: await generateBlurPlaceholder(absPath, placeholderSize),
-          sources: [{ src: publicPath, width: metadata.width }],
-        })}`
+          formats: [],
+          sources: [{ src: publicPath, width: metadata.width, format: "original" }],
+        }
+        return `export default ${JSON.stringify(devResult)}`
       }
 
       // Build mode — process the image
@@ -143,7 +155,7 @@ export function imagePlugin(config: ImagePluginConfig = {}): Plugin {
         outDir: join(root, outDir),
       })
 
-      // Emit processed files
+      // Emit processed files and rewrite paths to built output
       for (const source of processed.sources) {
         const fileName = join(outSubDir, basename(source.src))
         const content = await readFile(source.src)
@@ -152,14 +164,28 @@ export function imagePlugin(config: ImagePluginConfig = {}): Plugin {
           fileName,
           source: content,
         })
-        // Update source path to built output
         source.src = `/${fileName}`
       }
 
-      processed.src = processed.sources[processed.sources.length - 1]!.src
-      processed.srcset = processed.sources
-        .map((s) => `${s.src} ${s.width}w`)
-        .join(", ")
+      // Rebuild format srcsets with final output paths
+      const formatGroups = new Map<string, string[]>()
+      for (const s of processed.sources) {
+        let group = formatGroups.get(s.format)
+        if (!group) {
+          group = []
+          formatGroups.set(s.format, group)
+        }
+        group.push(`${s.src} ${s.width}w`)
+      }
+      processed.formats = [...formatGroups.entries()].map(([fmt, entries]) => ({
+        type: `image/${fmt}`,
+        srcset: entries.join(", "),
+      }))
+
+      // Fallback src/srcset from last format
+      const lastFormat = processed.formats[processed.formats.length - 1]
+      processed.srcset = lastFormat?.srcset ?? ""
+      processed.src = processed.sources[processed.sources.length - 1]?.src ?? absPath
 
       return `export default ${JSON.stringify(processed)}`
     },
@@ -184,7 +210,7 @@ async function processImage(
   const metadata = await getImageMetadata(absPath)
   const ext = extname(absPath)
   const name = basename(absPath, ext)
-  const sources: Array<{ src: string; width: number }> = []
+  const sources: Array<{ src: string; width: number; format: string }> = []
 
   // Ensure output directory exists
   const processedDir = join(opts.outDir, opts.outSubDir)
@@ -192,29 +218,49 @@ async function processImage(
     await mkdir(processedDir, { recursive: true })
   }
 
-  // Generate resized variants
-  for (const targetWidth of opts.widths) {
-    // Don't upscale
-    const width = Math.min(targetWidth, metadata.width)
-
-    for (const format of opts.formats) {
+  // Generate resized variants — iterate formats first so sources are grouped by format
+  for (const format of opts.formats) {
+    for (const targetWidth of opts.widths) {
+      // Don't upscale
+      const width = Math.min(targetWidth, metadata.width)
       const outName = `${name}-${width}.${format}`
       const outPath = join(processedDir, outName)
 
       await resizeImage(absPath, outPath, width, format, opts.quality)
-      sources.push({ src: outPath, width })
+      sources.push({ src: outPath, width, format })
     }
   }
+
+  // Build per-format source sets for <picture>
+  const formatGroups = new Map<string, Array<{ src: string; width: number }>>()
+  for (const s of sources) {
+    let group = formatGroups.get(s.format)
+    if (!group) {
+      group = []
+      formatGroups.set(s.format, group)
+    }
+    group.push({ src: s.src, width: s.width })
+  }
+
+  const formats: FormatSource[] = [...formatGroups.entries()].map(([fmt, group]) => ({
+    type: `image/${fmt === "jpeg" ? "jpeg" : fmt}`,
+    srcset: group.map((s) => `${s.src} ${s.width}w`).join(", "),
+  }))
+
+  // Fallback: last format's srcset
+  const fallbackFormat = formats[formats.length - 1]
+  const fallbackSources = formatGroups.get([...formatGroups.keys()].pop()!)!
 
   // Generate blur placeholder
   const placeholder = await generateBlurPlaceholder(absPath, opts.placeholderSize)
 
   return {
-    src: sources[sources.length - 1]?.src ?? absPath,
-    srcset: sources.map((s) => `${s.src} ${s.width}w`).join(", "),
+    src: fallbackSources[fallbackSources.length - 1]?.src ?? absPath,
+    srcset: fallbackFormat?.srcset ?? "",
     width: metadata.width,
     height: metadata.height,
     placeholder,
+    formats,
     sources,
   }
 }

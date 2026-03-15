@@ -40,12 +40,14 @@ export interface LinkRenderProps {
   onTouchStart: () => void
   isActive: () => boolean
   isExactActive: () => boolean
-  class?: string
+  /** Reactive class string — pass directly to element for auto-updates on route change. */
+  class: (() => string | undefined) | string | undefined
   style?: string
   target?: string
   rel?: string
   "aria-label"?: string
-  "aria-current"?: "page"
+  /** Reactive aria-current — pass directly to element for auto-updates on route change. */
+  "aria-current": (() => "page" | undefined) | "page" | undefined
   children?: any
 }
 
@@ -223,12 +225,12 @@ export function createLink(
         onTouchStart={link.handleTouchStart}
         isActive={link.isActive}
         isExactActive={link.isExactActive}
-        class={link.classes()}
+        class={() => link.classes()}
         style={props.style}
         target={props.external ? "_blank" : undefined}
         rel={props.external ? "noopener noreferrer" : undefined}
         aria-label={props["aria-label"]}
-        aria-current={link.isExactActive() ? "page" : undefined}
+        aria-current={() => link.isExactActive() ? "page" : undefined}
         children={props.children}
       />
     )

@@ -55,7 +55,7 @@ export type { FontConfig, GoogleFontInput, GoogleFontStatic, GoogleFontVariable,
 // ─── Image processing ──────────────────────────────────────────────────────
 
 export { imagePlugin } from "./image-plugin"
-export type { ImagePluginConfig, ImageFormat } from "./image-plugin"
+export type { ImagePluginConfig, ImageFormat, ProcessedImage, FormatSource } from "./image-plugin"
 
 // ─── Theme ──────────────────────────────────────────────────────────────────
 
