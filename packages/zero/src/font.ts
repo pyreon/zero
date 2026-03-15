@@ -11,7 +11,7 @@ import type { Plugin } from "vite"
 // - Size-adjusted fallback fonts to reduce CLS
 
 export interface FontConfig {
-  /** Google Fonts families. e.g. ["Inter:wght@400;500;700", "JetBrains Mono:wght@400"] */
+  /** Google Fonts families. Static: "Inter:wght@400;500;700", Variable: "Inter:wght@100..900" */
   google?: string[]
   /** Local font files. */
   local?: LocalFont[]
@@ -28,6 +28,7 @@ export interface FontConfig {
 export interface LocalFont {
   family: string
   src: string
+  /** Single weight (400) or variable range ("100 900"). */
   weight?: string | number
   style?: "normal" | "italic"
   display?: FontDisplay
@@ -53,29 +54,46 @@ interface ResolvedFont {
   family: string
   weights: string[]
   italic: boolean
+  /** Whether this is a variable font with a weight range (e.g. 100..900). */
+  variable: boolean
+  /** Weight range for variable fonts. e.g. "100..900" */
+  weightRange?: string
 }
 
 /**
  * Parse Google Fonts family string.
- * e.g. "Inter:wght@400;500;700" → { family: "Inter", weights: ["400", "500", "700"] }
+ *
+ * Static weights: "Inter:wght@400;500;700"
+ * Variable range:  "Inter:wght@100..900"
+ * Variable with italic: "Inter:ital,wght@100..900"
  */
 export function parseGoogleFamily(input: string): ResolvedFont {
   const [familyPart, spec] = input.split(":")
   const family = familyPart!.trim()
   const weights: string[] = []
   let italic = false
+  let variable = false
+  let weightRange: string | undefined
 
   if (spec) {
-    const weightMatch = spec.match(/wght@([\d;]+)/)
-    if (weightMatch) {
-      weights.push(...weightMatch[1]!.split(";"))
+    // Check for variable font range syntax: wght@100..900
+    const rangeMatch = spec.match(/wght@(\d+)\.\.(\d+)/)
+    if (rangeMatch) {
+      variable = true
+      weightRange = `${rangeMatch[1]}..${rangeMatch[2]}`
+      weights.push(weightRange)
+    } else {
+      const weightMatch = spec.match(/wght@([\d;]+)/)
+      if (weightMatch) {
+        weights.push(...weightMatch[1]!.split(";"))
+      }
     }
     italic = spec.includes("ital")
   }
 
   if (weights.length === 0) weights.push("400")
 
-  return { family, weights, italic }
+  return { family, weights, italic, variable, weightRange }
 }
 
 /**
@@ -85,6 +103,17 @@ export function googleFontsUrl(families: ResolvedFont[], display: FontDisplay = 
   const params = families
     .map((f) => {
       const axes = f.italic ? "ital,wght" : "wght"
+
+      if (f.variable && f.weightRange) {
+        // Variable font: use range syntax
+        // ital,wght@0,100..900;1,100..900 or wght@100..900
+        const range = f.italic
+          ? `0,${f.weightRange};1,${f.weightRange}`
+          : f.weightRange
+        return `family=${f.family.replace(/ /g, "+")}:${axes}@${range}`
+      }
+
+      // Static font: list individual weights
       const values = f.weights
         .map((w) => (f.italic ? `0,${w};1,${w}` : w))
         .join(";")
