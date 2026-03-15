@@ -75,7 +75,7 @@ export function generateSitemap(
     .filter((p): p is string => p !== null)
     .filter((p) => !exclude.some((e) => p.startsWith(e)))
 
-  const allPaths = [
+  const allPaths: SitemapEntry[] = [
     ...paths.map((p) => ({ path: p, changefreq, priority })),
     ...(config.additionalPaths ?? []),
   ]
