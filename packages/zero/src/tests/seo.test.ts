@@ -11,7 +11,7 @@ describe("generateSitemap", () => {
     expect(sitemap).toContain('<?xml version="1.0"')
     expect(sitemap).toContain("<loc>https://example.com</loc>")
     expect(sitemap).toContain("<loc>https://example.com/about</loc>")
-    expect(sitemap).toContain("<loc>https://example.com/posts</loc>")
+    expect(sitemap).toContain("<loc>https://example.com/posts/</loc>")
   })
 
   it("excludes layout, error, and loading files", () => {

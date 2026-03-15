@@ -36,7 +36,8 @@ const HASHED_ASSET = /\.[a-f0-9]{8,}\.\w+$/
 const STATIC_EXT = /\.(png|jpe?g|gif|svg|webp|avif|ico|woff2?|ttf|otf|eot|mp4|webm|ogg|mp3|wav)$/i
 const SCRIPT_EXT = /\.(js|css|mjs)$/i
 
-function matchGlob(pattern: string, path: string): boolean {
+/** @internal Exported for testing */
+export function matchGlob(pattern: string, path: string): boolean {
   // Escape regex special chars, then convert glob wildcards
   const escaped = pattern.replace(/[.+^${}()|[\]\\]/g, "\\$&")
   const regex = escaped

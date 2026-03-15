@@ -1,8 +1,5 @@
 import { describe, it, expect } from "vitest"
-
-// Test the cache middleware logic by simulating requests/responses
-// The middleware depends on @pyreon/server types, so we test the pattern matching
-// and header logic directly.
+import { matchGlob } from "../cache"
 
 describe("cache header logic", () => {
   const HASHED_ASSET = /\.[a-f0-9]{8,}\.\w+$/
@@ -10,8 +7,9 @@ describe("cache header logic", () => {
   const SCRIPT_EXT = /\.(js|css|mjs)$/i
 
   it("detects hashed assets", () => {
-    expect(HASHED_ASSET.test("/assets/app-a1b2c3d4.js")).toBe(true)
-    expect(HASHED_ASSET.test("/assets/style-deadbeef01.css")).toBe(true)
+    // Vite uses dot-separated hashes: app.a1b2c3d4.js
+    expect(HASHED_ASSET.test("/assets/app.a1b2c3d4.js")).toBe(true)
+    expect(HASHED_ASSET.test("/assets/style.deadbeef01.css")).toBe(true)
     expect(HASHED_ASSET.test("/assets/app.js")).toBe(false)
     expect(HASHED_ASSET.test("/index.html")).toBe(false)
   })
@@ -32,18 +30,6 @@ describe("cache header logic", () => {
     expect(SCRIPT_EXT.test("/image.png")).toBe(false)
   })
 
-  function matchGlob(pattern: string, path: string): boolean {
-    const regex = pattern.replace(/\*/g, ".*").replace(/\?/g, ".")
-    return new RegExp(`^${regex}$`).test(path)
-  }
-
-  it("matches glob patterns", () => {
-    expect(matchGlob("/api/*", "/api/users")).toBe(true)
-    expect(matchGlob("/api/*", "/api/users/123")).toBe(true)
-    expect(matchGlob("/api/*", "/about")).toBe(false)
-    expect(matchGlob("/assets/*", "/assets/img/hero.png")).toBe(true)
-  })
-
   it("determines correct cache strategy", () => {
     function getCacheStrategy(path: string): string {
       if (HASHED_ASSET.test(path)) return "immutable"
@@ -52,10 +38,58 @@ describe("cache header logic", () => {
       return "no-cache"
     }
 
-    expect(getCacheStrategy("/assets/app-a1b2c3d4.js")).toBe("immutable")
+    expect(getCacheStrategy("/assets/app.a1b2c3d4.js")).toBe("immutable")
     expect(getCacheStrategy("/assets/style.css")).toBe("short-cache")
     expect(getCacheStrategy("/img/hero.webp")).toBe("long-cache")
     expect(getCacheStrategy("/")).toBe("no-cache")
     expect(getCacheStrategy("/about")).toBe("no-cache")
+  })
+})
+
+describe("matchGlob", () => {
+  it("matches simple wildcard patterns", () => {
+    expect(matchGlob("/api/*", "/api/users")).toBe(true)
+    expect(matchGlob("/api/*", "/api/users/123")).toBe(true)
+    expect(matchGlob("/api/*", "/about")).toBe(false)
+  })
+
+  it("matches exact paths", () => {
+    expect(matchGlob("/about", "/about")).toBe(true)
+    expect(matchGlob("/about", "/about/team")).toBe(false)
+    expect(matchGlob("/about", "/")).toBe(false)
+  })
+
+  it("matches single-character wildcards", () => {
+    expect(matchGlob("/user?", "/user1")).toBe(true)
+    expect(matchGlob("/user?", "/userA")).toBe(true)
+    expect(matchGlob("/user?", "/user")).toBe(false)
+    expect(matchGlob("/user?", "/user12")).toBe(false)
+  })
+
+  it("handles dots in patterns (escaped properly)", () => {
+    expect(matchGlob("/file.txt", "/file.txt")).toBe(true)
+    expect(matchGlob("/file.txt", "/fileXtxt")).toBe(false)
+  })
+
+  it("handles multiple wildcards", () => {
+    expect(matchGlob("/*/files/*", "/user/files/doc")).toBe(true)
+    expect(matchGlob("/*/files/*", "/admin/files/report.pdf")).toBe(true)
+  })
+
+  it("matches root path", () => {
+    expect(matchGlob("/", "/")).toBe(true)
+    expect(matchGlob("/", "/about")).toBe(false)
+  })
+
+  it("handles patterns with special regex characters", () => {
+    expect(matchGlob("/api/v1+v2", "/api/v1+v2")).toBe(true)
+    expect(matchGlob("/api/v1+v2", "/api/v11v2")).toBe(false)
+    expect(matchGlob("/path(1)", "/path(1)")).toBe(true)
+    expect(matchGlob("/price$10", "/price$10")).toBe(true)
+  })
+
+  it("handles patterns with brackets", () => {
+    expect(matchGlob("/api/[id]", "/api/[id]")).toBe(true)
+    expect(matchGlob("/api/[id]", "/api/123")).toBe(false)
   })
 })

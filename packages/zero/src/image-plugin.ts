@@ -256,7 +256,8 @@ async function getImageMetadata(absPath: string): Promise<ImageMetadata> {
   return { width: 0, height: 0, format: ext.slice(1) }
 }
 
-function parseJpegDimensions(buffer: Buffer): { width: number; height: number } {
+/** @internal Exported for testing */
+export function parseJpegDimensions(buffer: Buffer): { width: number; height: number } {
   let offset = 2 // Skip SOI marker
   while (offset < buffer.length) {
     if (buffer[offset] !== 0xff) break
@@ -279,7 +280,8 @@ function parseJpegDimensions(buffer: Buffer): { width: number; height: number } 
   return { width: 0, height: 0 }
 }
 
-function parseWebPDimensions(buffer: Buffer): { width: number; height: number } {
+/** @internal Exported for testing */
+export function parseWebPDimensions(buffer: Buffer): { width: number; height: number } {
   // RIFF header: bytes 0-3 = "RIFF", 8-11 = "WEBP"
   const chunk = buffer.toString("ascii", 12, 16)
   if (chunk === "VP8 ") {
