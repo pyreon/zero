@@ -168,32 +168,37 @@ interface RouteNode {
 /**
  * Group flat file routes into a directory tree.
  */
-function buildRouteTree(routes: FileRoute[]): RouteNode {
-  const root: RouteNode = { pages: [], children: new Map() }
+function getOrCreateChild(node: RouteNode, segment: string): RouteNode {
+  let child = node.children.get(segment)
+  if (!child) {
+    child = { pages: [], children: new Map() }
+    node.children.set(segment, child)
+  }
+  return child
+}
 
-  for (const route of routes) {
-    // Navigate to the correct node in the tree
-    let node = root
-    if (route.dirPath) {
-      for (const segment of route.dirPath.split('/')) {
-        if (!node.children.has(segment)) {
-          node.children.set(segment, { pages: [], children: new Map() })
-        }
-        node = node.children.get(segment) as typeof node
-      }
-    }
-
-    if (route.isLayout) {
-      node.layout = route
-    } else if (route.isError) {
-      node.error = route
-    } else if (route.isLoading) {
-      node.loading = route
-    } else {
-      node.pages.push(route)
+function resolveNode(root: RouteNode, dirPath: string): RouteNode {
+  let node = root
+  if (dirPath) {
+    for (const segment of dirPath.split('/')) {
+      node = getOrCreateChild(node, segment)
     }
   }
+  return node
+}
 
+function placeRoute(node: RouteNode, route: FileRoute) {
+  if (route.isLayout) node.layout = route
+  else if (route.isError) node.error = route
+  else if (route.isLoading) node.loading = route
+  else node.pages.push(route)
+}
+
+function buildRouteTree(routes: FileRoute[]): RouteNode {
+  const root: RouteNode = { pages: [], children: new Map() }
+  for (const route of routes) {
+    placeRoute(resolveNode(root, route.dirPath), route)
+  }
   return root
 }
 
@@ -244,92 +249,85 @@ export function generateRouteModule(
     return name
   }
 
+  function generatePageRoute(
+    page: FileRoute,
+    indent: string,
+    loadingName: string | undefined,
+    errorName: string | undefined,
+  ): string {
+    const mod = nextModuleImport(page.filePath)
+    const comp = nextLazy(page.filePath, loadingName, errorName)
+
+    const props: string[] = [
+      `${indent}  path: ${JSON.stringify(page.urlPath)}`,
+      `${indent}  component: ${comp}`,
+      `${indent}  loader: ${mod}.loader`,
+      `${indent}  beforeEnter: ${mod}.guard`,
+      `${indent}  meta: ${mod}.meta`,
+    ]
+
+    if (errorName) {
+      props.push(`${indent}  errorComponent: ${mod}.error || ${errorName}`)
+    } else {
+      props.push(`${indent}  errorComponent: ${mod}.error`)
+    }
+
+    return `${indent}{\n${props.join(',\n')}\n${indent}}`
+  }
+
+  function wrapWithLayout(
+    node: RouteNode,
+    children: string[],
+    indent: string,
+    errorName: string | undefined,
+  ): string {
+    const layout = node.layout as FileRoute
+    const layoutMod = nextModuleImport(layout.filePath)
+    const layoutComp = nextImport(layout.filePath, 'layout')
+
+    const props: string[] = [
+      `${indent}path: ${JSON.stringify(layout.urlPath)}`,
+      `${indent}component: ${layoutComp}`,
+      `${indent}loader: ${layoutMod}.loader`,
+      `${indent}beforeEnter: ${layoutMod}.guard`,
+      `${indent}meta: ${layoutMod}.meta`,
+    ]
+    if (errorName) {
+      props.push(`${indent}errorComponent: ${errorName}`)
+    }
+    if (children.length > 0) {
+      props.push(`${indent}children: [\n${children.join(',\n')}\n${indent}]`)
+    }
+
+    return `${indent}{\n${props.map((p) => `  ${p}`).join(',\n')}\n${indent}}`
+  }
+
   /**
    * Generate route definitions for a tree node.
-   * Returns an array of route definition strings.
    */
   function generateNode(node: RouteNode, depth: number): string[] {
     const indent = '  '.repeat(depth + 1)
-    const routeDefs: string[] = []
 
-    // Resolve error/loading components for this level
-    let errorName: string | undefined
-    let loadingName: string | undefined
-    if (node.error) {
-      errorName = nextImport(node.error.filePath)
-    }
-    if (node.loading) {
-      loadingName = nextImport(node.loading.filePath)
-    }
+    const errorName = node.error ? nextImport(node.error.filePath) : undefined
+    const loadingName = node.loading
+      ? nextImport(node.loading.filePath)
+      : undefined
 
-    // Collect child directory routes
     const childRouteDefs: string[] = []
     for (const [, childNode] of node.children) {
       childRouteDefs.push(...generateNode(childNode, depth + 1))
     }
 
-    // Generate page routes at this level
-    const pageRouteDefs: string[] = []
-    for (const page of node.pages) {
-      // Import the full module to access loader, guard, middleware, meta, renderMode
-      const mod = nextModuleImport(page.filePath)
-      // Lazy-load the component with loading/error from this directory level
-      const comp = nextLazy(page.filePath, loadingName, errorName)
-
-      const props: string[] = [
-        `${indent}  path: ${JSON.stringify(page.urlPath)}`,
-        `${indent}  component: ${comp}`,
-      ]
-
-      // Wire up loader
-      props.push(`${indent}  loader: ${mod}.loader`)
-      // Wire up beforeEnter guard
-      props.push(`${indent}  beforeEnter: ${mod}.guard`)
-      // Wire up meta
-      props.push(`${indent}  meta: ${mod}.meta`)
-      // Wire up error component (per-route override or directory-level)
-      if (errorName) {
-        props.push(`${indent}  errorComponent: ${mod}.error || ${errorName}`)
-      } else {
-        props.push(`${indent}  errorComponent: ${mod}.error`)
-      }
-
-      pageRouteDefs.push(`${indent}{\n${props.join(',\n')}\n${indent}}`)
-    }
+    const pageRouteDefs = node.pages.map((page) =>
+      generatePageRoute(page, indent, loadingName, errorName),
+    )
 
     const allChildren = [...pageRouteDefs, ...childRouteDefs]
 
-    // If this node has a layout, wrap all routes as children of a layout route
     if (node.layout) {
-      const layoutMod = nextModuleImport(node.layout.filePath)
-      const layoutComp = nextImport(node.layout.filePath, 'layout')
-
-      const layoutPath = node.layout.urlPath
-      const layoutProps: string[] = [
-        `${indent}path: ${JSON.stringify(layoutPath)}`,
-        `${indent}component: ${layoutComp}`,
-        `${indent}loader: ${layoutMod}.loader`,
-        `${indent}beforeEnter: ${layoutMod}.guard`,
-        `${indent}meta: ${layoutMod}.meta`,
-      ]
-      if (errorName) {
-        layoutProps.push(`${indent}errorComponent: ${errorName}`)
-      }
-      if (allChildren.length > 0) {
-        layoutProps.push(
-          `${indent}children: [\n${allChildren.join(',\n')}\n${indent}]`,
-        )
-      }
-
-      routeDefs.push(
-        `${indent}{\n${layoutProps.map((p) => `  ${p}`).join(',\n')}\n${indent}}`,
-      )
-    } else {
-      // No layout — push routes directly
-      routeDefs.push(...allChildren)
+      return [wrapWithLayout(node, allChildren, indent, errorName)]
     }
-
-    return routeDefs
+    return allChildren
   }
 
   const routeDefs = generateNode(tree, 0)

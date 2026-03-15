@@ -72,15 +72,30 @@ export function cacheMiddleware(config: CacheConfig = {}): Middleware {
   const swr = config.staleWhileRevalidate ?? 60
   const rules = config.rules ?? []
 
+  function resolveControl(path: string, contentType: string | null): string {
+    if (HASHED_ASSET.test(path)) {
+      return `public, max-age=${immutableDuration}, immutable`
+    }
+    if (SCRIPT_EXT.test(path)) {
+      return `public, max-age=3600, stale-while-revalidate=${swr}`
+    }
+    if (STATIC_EXT.test(path)) {
+      return `public, max-age=${staticDuration}, stale-while-revalidate=${swr}`
+    }
+    if (contentType?.includes('text/html')) {
+      return pageDuration > 0
+        ? `public, max-age=${pageDuration}, stale-while-revalidate=${swr}`
+        : 'no-cache'
+    }
+    return `public, max-age=60, stale-while-revalidate=${swr}`
+  }
+
   return (request, next) => {
-    const url = new URL(request.url)
-    const path = url.pathname
+    const path = new URL(request.url).pathname
 
     return next(request).then((response) => {
-      // Skip if Cache-Control is already set
       if (response.headers.has('Cache-Control')) return response
 
-      // Check custom rules first
       for (const rule of rules) {
         if (matchGlob(rule.match, path)) {
           return withHeaders(response, (h) =>
@@ -89,30 +104,8 @@ export function cacheMiddleware(config: CacheConfig = {}): Middleware {
         }
       }
 
-      let cacheControl: string
-
-      if (HASHED_ASSET.test(path)) {
-        // Hashed assets are immutable — cache forever
-        cacheControl = `public, max-age=${immutableDuration}, immutable`
-      } else if (SCRIPT_EXT.test(path)) {
-        // Unhashed JS/CSS — short cache with revalidation
-        cacheControl = `public, max-age=3600, stale-while-revalidate=${swr}`
-      } else if (STATIC_EXT.test(path)) {
-        // Static assets — long cache
-        cacheControl = `public, max-age=${staticDuration}, stale-while-revalidate=${swr}`
-      } else if (response.headers.get('content-type')?.includes('text/html')) {
-        // HTML pages
-        if (pageDuration > 0) {
-          cacheControl = `public, max-age=${pageDuration}, stale-while-revalidate=${swr}`
-        } else {
-          cacheControl = 'no-cache'
-        }
-      } else {
-        // Default: short cache
-        cacheControl = `public, max-age=60, stale-while-revalidate=${swr}`
-      }
-
-      return withHeaders(response, (h) => h.set('Cache-Control', cacheControl))
+      const control = resolveControl(path, response.headers.get('content-type'))
+      return withHeaders(response, (h) => h.set('Cache-Control', control))
     })
   }
 }

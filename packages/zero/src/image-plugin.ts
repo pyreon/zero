@@ -120,32 +120,17 @@ export function imagePlugin(config: ImagePluginConfig = {}): Plugin {
     async load(id) {
       if (!id.startsWith('\0virtual:zero-image:')) return null
 
-      const rawPath = id.replace('\0virtual:zero-image:', '').split('?')[0]!
+      const rawPath =
+        id.replace('\0virtual:zero-image:', '').split('?')[0] ?? id
       const absPath = rawPath.startsWith('/')
         ? join(root, 'public', rawPath)
         : rawPath
 
-      // In dev mode, return metadata without processing
-      // The browser handles the original image
       if (!isBuild) {
-        const metadata = await getImageMetadata(absPath)
-        const publicPath = rawPath.startsWith('/') ? rawPath : `/@fs/${absPath}`
-
-        const devResult: ProcessedImage = {
-          src: publicPath,
-          srcset: '',
-          width: metadata.width,
-          height: metadata.height,
-          placeholder: await generateBlurPlaceholder(absPath, placeholderSize),
-          formats: [],
-          sources: [
-            { src: publicPath, width: metadata.width, format: 'original' },
-          ],
-        }
-        return `export default ${JSON.stringify(devResult)}`
+        const result = await loadDevImage(absPath, rawPath, placeholderSize)
+        return `export default ${JSON.stringify(result)}`
       }
 
-      // Build mode — process the image
       const processed = await processImage(absPath, {
         widths: defaultWidths,
         formats: defaultFormats,
@@ -155,42 +140,70 @@ export function imagePlugin(config: ImagePluginConfig = {}): Plugin {
         outDir: join(root, outDir),
       })
 
-      // Emit processed files and rewrite paths to built output
-      for (const source of processed.sources) {
-        const fileName = join(outSubDir, basename(source.src))
-        const content = await readFile(source.src)
-        this.emitFile({
-          type: 'asset',
-          fileName,
-          source: content,
-        })
-        source.src = `/${fileName}`
-      }
-
-      // Rebuild format srcsets with final output paths
-      const formatGroups = new Map<string, string[]>()
-      for (const s of processed.sources) {
-        let group = formatGroups.get(s.format)
-        if (!group) {
-          group = []
-          formatGroups.set(s.format, group)
-        }
-        group.push(`${s.src} ${s.width}w`)
-      }
-      processed.formats = [...formatGroups.entries()].map(([fmt, entries]) => ({
-        type: `image/${fmt}`,
-        srcset: entries.join(', '),
-      }))
-
-      // Fallback src/srcset from last format
-      const lastFormat = processed.formats[processed.formats.length - 1]
-      processed.srcset = lastFormat?.srcset ?? ''
-      processed.src =
-        processed.sources[processed.sources.length - 1]?.src ?? absPath
+      await emitProcessedSources(processed, outSubDir, this)
+      rebuildFormatSrcsets(processed, absPath)
 
       return `export default ${JSON.stringify(processed)}`
     },
   }
+}
+
+async function loadDevImage(
+  absPath: string,
+  rawPath: string,
+  placeholderSize: number,
+): Promise<ProcessedImage> {
+  const metadata = await getImageMetadata(absPath)
+  const publicPath = rawPath.startsWith('/') ? rawPath : `/@fs/${absPath}`
+
+  return {
+    src: publicPath,
+    srcset: '',
+    width: metadata.width,
+    height: metadata.height,
+    placeholder: await generateBlurPlaceholder(absPath, placeholderSize),
+    formats: [],
+    sources: [{ src: publicPath, width: metadata.width, format: 'original' }],
+  }
+}
+
+async function emitProcessedSources(
+  processed: ProcessedImage,
+  outSubDir: string,
+  ctx: {
+    emitFile: (f: {
+      type: 'asset'
+      fileName: string
+      source: Uint8Array
+    }) => void
+  },
+) {
+  for (const source of processed.sources) {
+    const fileName = join(outSubDir, basename(source.src))
+    const content = await readFile(source.src)
+    ctx.emitFile({ type: 'asset', fileName, source: content })
+    source.src = `/${fileName}`
+  }
+}
+
+function rebuildFormatSrcsets(processed: ProcessedImage, fallbackPath: string) {
+  const formatGroups = new Map<string, string[]>()
+  for (const s of processed.sources) {
+    let group = formatGroups.get(s.format)
+    if (!group) {
+      group = []
+      formatGroups.set(s.format, group)
+    }
+    group.push(`${s.src} ${s.width}w`)
+  }
+  processed.formats = [...formatGroups.entries()].map(([fmt, entries]) => ({
+    type: `image/${fmt}`,
+    srcset: entries.join(', '),
+  }))
+
+  const lastFormat = processed.formats.at(-1)
+  processed.srcset = lastFormat?.srcset ?? ''
+  processed.src = processed.sources.at(-1)?.src ?? fallbackPath
 }
 
 // ─── Image processing utilities ─────────────────────────────────────────────

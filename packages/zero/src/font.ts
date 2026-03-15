@@ -382,55 +382,71 @@ export function fontPlugin(config: FontConfig = {}): Plugin {
     transformIndexHtml(html) {
       const tags: string[] = []
 
-      if (isBuild && selfHostedCSS) {
-        // Build: inline self-hosted font CSS
-        tags.push(`<style>${selfHostedCSS}</style>`)
+      collectGoogleFontTags(tags, {
+        isBuild,
+        selfHostedCSS,
+        selfHostedFontFiles,
+        shouldPreload,
+        googleFamilies,
+        display,
+      })
+      collectLocalFontTags(tags, config, shouldPreload, display)
 
-        // Preload first font file per family
-        if (shouldPreload) {
-          const preloadFiles = selfHostedFontFiles.slice(
-            0,
-            googleFamilies.length,
-          )
-          for (const file of preloadFiles) {
-            const ext = file.name.split('.').pop()
-            const type = ext === 'woff2' ? 'font/woff2' : 'font/woff'
-            tags.push(
-              `<link rel="preload" href="/assets/fonts/${file.name}" as="font" type="${type}" crossorigin>`,
-            )
-          }
-        }
-      } else if (googleFamilies.length > 0) {
-        // Dev: CDN for fast startup
-        const cssUrl = googleFontsUrl(googleFamilies, display)
-        tags.push(`<link rel="preconnect" href="https://fonts.googleapis.com">`)
-        tags.push(
-          `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`,
-        )
-        tags.push(`<link rel="stylesheet" href="${cssUrl}">`)
-      }
-
-      // Local font preloads
-      if (shouldPreload && config.local?.length) {
-        tags.push(preloadTags(config.local))
-      }
-
-      // Local font @font-face
-      if (config.local?.length) {
-        tags.push(`<style>${localFontFaces(config.local, display)}</style>`)
-      }
-
-      // Fallback font metrics (CLS reduction)
-      if (config.fallbacks && Object.keys(config.fallbacks).length > 0) {
-        tags.push(`<style>${fallbackFontFaces(config.fallbacks)}</style>`)
-      }
-
-      if (tags.length > 0) {
-        return html.replace('</head>', `${tags.join('\n')}\n</head>`)
-      }
-
-      return html
+      if (tags.length === 0) return html
+      return html.replace('</head>', `${tags.join('\n')}\n</head>`)
     },
+  }
+}
+
+function collectGoogleFontTags(
+  tags: string[],
+  opts: {
+    isBuild: boolean
+    selfHostedCSS: string
+    selfHostedFontFiles: Array<{ name: string; content: Buffer }>
+    shouldPreload: boolean
+    googleFamilies: ResolvedFont[]
+    display: FontDisplay
+  },
+) {
+  if (opts.isBuild && opts.selfHostedCSS) {
+    tags.push(`<style>${opts.selfHostedCSS}</style>`)
+    if (opts.shouldPreload) {
+      for (const file of opts.selfHostedFontFiles.slice(
+        0,
+        opts.googleFamilies.length,
+      )) {
+        const ext = file.name.split('.').pop()
+        const type = ext === 'woff2' ? 'font/woff2' : 'font/woff'
+        tags.push(
+          `<link rel="preload" href="/assets/fonts/${file.name}" as="font" type="${type}" crossorigin>`,
+        )
+      }
+    }
+  } else if (opts.googleFamilies.length > 0) {
+    const cssUrl = googleFontsUrl(opts.googleFamilies, opts.display)
+    tags.push(`<link rel="preconnect" href="https://fonts.googleapis.com">`)
+    tags.push(
+      `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`,
+    )
+    tags.push(`<link rel="stylesheet" href="${cssUrl}">`)
+  }
+}
+
+function collectLocalFontTags(
+  tags: string[],
+  config: FontConfig,
+  shouldPreload: boolean,
+  display: FontDisplay,
+) {
+  if (shouldPreload && config.local?.length) {
+    tags.push(preloadTags(config.local))
+  }
+  if (config.local?.length) {
+    tags.push(`<style>${localFontFaces(config.local, display)}</style>`)
+  }
+  if (config.fallbacks && Object.keys(config.fallbacks).length > 0) {
+    tags.push(`<style>${fallbackFontFaces(config.fallbacks)}</style>`)
   }
 }
 
