@@ -2,6 +2,13 @@
   "name": "create-zero",
   "version": "0.0.1",
   "description": "Create a new Pyreon Zero project",
+  "license": "MIT",
+  "author": "Vit Bokisch",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/user/pyreon-zero",
+    "directory": "packages/create-zero"
+  },
   "type": "module",
   "bin": {
     "create-zero": "./bin/create-zero.js"
@@ -9,7 +16,9 @@
   "files": [
     "bin",
     "lib",
-    "templates"
+    "templates",
+    "LICENSE",
+    "README.md"
   ],
   "scripts": {
     "build": "vl_rolldown_build",
