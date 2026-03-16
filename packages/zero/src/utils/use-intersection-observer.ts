@@ -1,4 +1,4 @@
-import { onCleanup, onMount } from '@pyreon/reactivity'
+import { onMount, onUnmount } from '@pyreon/core'
 
 /**
  * Observes an element and calls `onIntersect` once it enters the viewport.
@@ -15,7 +15,7 @@ export function useIntersectionObserver(
 ) {
   onMount(() => {
     const el = getElement()
-    if (!el) return
+    if (!el) return undefined
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -30,6 +30,7 @@ export function useIntersectionObserver(
     )
 
     observer.observe(el)
-    onCleanup(() => observer.disconnect())
+    onUnmount(() => observer.disconnect())
+    return undefined
   })
 }

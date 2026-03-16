@@ -256,31 +256,26 @@ export function seoPlugin(config: SeoPluginConfig = {}): Plugin {
  * Serves sitemap.xml and robots.txt dynamically during development.
  */
 export function seoMiddleware(config: SeoPluginConfig = {}): Middleware {
-  return async (request, next) => {
-    const url = new URL(request.url)
-
-    if (url.pathname === '/robots.txt' && config.robots) {
+  return async (ctx) => {
+    if (ctx.url.pathname === '/robots.txt' && config.robots) {
       return new Response(generateRobots(config.robots), {
         headers: { 'Content-Type': 'text/plain' },
       })
     }
 
-    if (url.pathname === '/sitemap.xml' && config.sitemap) {
-      const { scanRouteFiles } = await import('./fs-router')
-      const routesDir = `${process.cwd()}/src/routes`
-
+    if (ctx.url.pathname === '/sitemap.xml' && config.sitemap) {
       try {
+        const { scanRouteFiles } = await import('./fs-router')
+        const routesDir = `${process.cwd()}/src/routes`
         const files = await scanRouteFiles(routesDir)
         const sitemap = generateSitemap(files, config.sitemap)
 
         return new Response(sitemap, {
           headers: { 'Content-Type': 'application/xml' },
         })
-      } catch (_err) {
-        return next(request)
+      } catch {
+        // Sitemap generation failed — continue to rendering
       }
     }
-
-    return next(request)
   }
 }

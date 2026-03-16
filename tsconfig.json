@@ -3,6 +3,7 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "customConditions": ["bun"],
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -17,5 +18,6 @@
     "rootDir": "./src",
     "types": ["vitest/globals", "node"]
   },
+  "include": [],
   "exclude": ["node_modules", "lib", "dist"]
 }

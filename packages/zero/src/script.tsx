@@ -1,4 +1,4 @@
-import { onCleanup, onMount } from '@pyreon/reactivity'
+import { createRef, onMount, onUnmount } from '@pyreon/core'
 import { useIntersectionObserver } from './utils/use-intersection-observer'
 
 // ─── Script optimization component ─────────────────────────────────────────
@@ -102,7 +102,7 @@ export function Script(props: ScriptProps) {
         for (const e of events) {
           document.addEventListener(e, handler, { once: true, passive: true })
         }
-        onCleanup(() => {
+        onUnmount(() => {
           for (const e of events) document.removeEventListener(e, handler)
         })
         break
@@ -112,27 +112,21 @@ export function Script(props: ScriptProps) {
         // Handled below via useIntersectionObserver on the sentinel element
         break
     }
+    return undefined
   })
 
-  let sentinelRef: HTMLElement | undefined
+  const sentinelRef = createRef<HTMLElement>()
   const strategy = props.strategy ?? 'afterHydration'
 
   if (strategy === 'onViewport') {
     useIntersectionObserver(
-      () => sentinelRef,
+      () => sentinelRef.current ?? undefined,
       () => loadScript(),
     )
   }
 
   if (strategy === 'onViewport') {
-    return (
-      <div
-        ref={(el: HTMLElement) => {
-          sentinelRef = el
-        }}
-        style="width:0;height:0;overflow:hidden"
-      />
-    )
+    return <div ref={sentinelRef} style="width:0;height:0;overflow:hidden" />
   }
 
   return null

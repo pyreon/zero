@@ -36,7 +36,7 @@ export function startClient(options: StartClientOptions) {
 
   // If container has SSR content, hydrate. Otherwise mount fresh.
   if (container.childNodes.length > 0) {
-    return hydrateRoot(vnode, container)
+    return hydrateRoot(container, vnode)
   }
 
   return mount(vnode, container)

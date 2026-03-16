@@ -1,4 +1,5 @@
-import { effect, onCleanup, onMount, signal } from '@pyreon/reactivity'
+import { onMount, onUnmount } from '@pyreon/core'
+import { effect, signal } from '@pyreon/reactivity'
 
 // ─── Theme system ───────────────────────────────────────────────────────────
 //
@@ -35,7 +36,7 @@ export function toggleTheme() {
 
 /** Set theme explicitly. */
 export function setTheme(t: Theme) {
-  theme(t)
+  theme.set(t)
   if (typeof document !== 'undefined') {
     document.documentElement.dataset.theme = resolvedTheme()
     try {
@@ -56,7 +57,7 @@ export function initTheme() {
     try {
       const stored = localStorage.getItem(STORAGE_KEY) as Theme | null
       if (stored === 'light' || stored === 'dark' || stored === 'system') {
-        theme(stored)
+        theme.set(stored)
       }
     } catch {
       // localStorage may not be available
@@ -73,13 +74,15 @@ export function initTheme() {
       }
     }
     mq.addEventListener('change', onChange)
-    onCleanup(() => mq.removeEventListener('change', onChange))
+    onUnmount(() => mq.removeEventListener('change', onChange))
 
     // Re-apply when theme signal changes
     const dispose = effect(() => {
       document.documentElement.dataset.theme = resolvedTheme()
     })
-    if (dispose) onCleanup(dispose)
+    if (dispose) onUnmount(() => dispose.dispose())
+
+    return undefined
   })
 }
 

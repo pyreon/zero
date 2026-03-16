@@ -70,16 +70,16 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@pyreon/core": "workspace:*",
-    "@pyreon/head": "workspace:*",
-    "@pyreon/router": "workspace:*",
-    "@pyreon/runtime-dom": "workspace:*",
-    "@pyreon/runtime-server": "workspace:*",
-    "@pyreon/server": "workspace:*",
-    "@pyreon/vite-plugin": "workspace:*",
-    "vite": "^7.0.0"
+    "@pyreon/core": "^0.1.2",
+    "@pyreon/head": "^0.1.2",
+    "@pyreon/router": "^0.1.2",
+    "@pyreon/runtime-dom": "^0.1.2",
+    "@pyreon/runtime-server": "^0.1.2",
+    "@pyreon/server": "^0.1.2",
+    "@pyreon/vite-plugin": "^0.1.2",
+    "vite": "^8.0.0"
   },
   "peerDependencies": {
-    "@pyreon/reactivity": "workspace:^"
+    "@pyreon/reactivity": "^0.1.2"
   }
 }

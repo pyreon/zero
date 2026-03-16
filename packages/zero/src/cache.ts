@@ -1,5 +1,4 @@
-import type { Middleware } from '@pyreon/server'
-import { withHeaders } from './utils/with-headers'
+import type { Middleware, MiddlewareContext } from '@pyreon/server'
 
 // ─── Cache control middleware ───────────────────────────────────────────────
 //
@@ -45,14 +44,36 @@ export function matchGlob(pattern: string, path: string): boolean {
   return new RegExp(`^${regex}$`).test(path)
 }
 
+function resolveControl(
+  path: string,
+  immutableDuration: number,
+  staticDuration: number,
+  pageDuration: number,
+  swr: number,
+): string {
+  if (HASHED_ASSET.test(path)) {
+    return `public, max-age=${immutableDuration}, immutable`
+  }
+  if (SCRIPT_EXT.test(path)) {
+    return `public, max-age=3600, stale-while-revalidate=${swr}`
+  }
+  if (STATIC_EXT.test(path)) {
+    return `public, max-age=${staticDuration}, stale-while-revalidate=${swr}`
+  }
+  if (pageDuration > 0) {
+    return `public, max-age=${pageDuration}, stale-while-revalidate=${swr}`
+  }
+  return 'no-cache'
+}
+
 /**
  * Cache control middleware for Zero.
- * Automatically sets optimal Cache-Control headers based on asset type.
+ * Sets Cache-Control headers on the response based on asset type.
  *
  * @example
  * import { cacheMiddleware } from "@pyreon/zero/cache"
  *
- * export default createServer({
+ * export default createHandler({
  *   routes,
  *   middleware: [
  *     cacheMiddleware({
@@ -72,41 +93,24 @@ export function cacheMiddleware(config: CacheConfig = {}): Middleware {
   const swr = config.staleWhileRevalidate ?? 60
   const rules = config.rules ?? []
 
-  function resolveControl(path: string, contentType: string | null): string {
-    if (HASHED_ASSET.test(path)) {
-      return `public, max-age=${immutableDuration}, immutable`
-    }
-    if (SCRIPT_EXT.test(path)) {
-      return `public, max-age=3600, stale-while-revalidate=${swr}`
-    }
-    if (STATIC_EXT.test(path)) {
-      return `public, max-age=${staticDuration}, stale-while-revalidate=${swr}`
-    }
-    if (contentType?.includes('text/html')) {
-      return pageDuration > 0
-        ? `public, max-age=${pageDuration}, stale-while-revalidate=${swr}`
-        : 'no-cache'
-    }
-    return `public, max-age=60, stale-while-revalidate=${swr}`
-  }
+  return (ctx: MiddlewareContext) => {
+    const path = ctx.url.pathname
 
-  return (request, next) => {
-    const path = new URL(request.url).pathname
-
-    return next(request).then((response) => {
-      if (response.headers.has('Cache-Control')) return response
-
-      for (const rule of rules) {
-        if (matchGlob(rule.match, path)) {
-          return withHeaders(response, (h) =>
-            h.set('Cache-Control', rule.control),
-          )
-        }
+    for (const rule of rules) {
+      if (matchGlob(rule.match, path)) {
+        ctx.headers.set('Cache-Control', rule.control)
+        return
       }
+    }
 
-      const control = resolveControl(path, response.headers.get('content-type'))
-      return withHeaders(response, (h) => h.set('Cache-Control', control))
-    })
+    const control = resolveControl(
+      path,
+      immutableDuration,
+      staticDuration,
+      pageDuration,
+      swr,
+    )
+    ctx.headers.set('Cache-Control', control)
   }
 }
 
@@ -115,15 +119,14 @@ export function cacheMiddleware(config: CacheConfig = {}): Middleware {
  * Adds common security headers to all responses.
  */
 export function securityHeaders(): Middleware {
-  return (request, next) => {
-    return next(request).then((response) =>
-      withHeaders(response, (h) => {
-        h.set('X-Content-Type-Options', 'nosniff')
-        h.set('X-Frame-Options', 'DENY')
-        h.set('X-XSS-Protection', '1; mode=block')
-        h.set('Referrer-Policy', 'strict-origin-when-cross-origin')
-        h.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
-      }),
+  return (ctx: MiddlewareContext) => {
+    ctx.headers.set('X-Content-Type-Options', 'nosniff')
+    ctx.headers.set('X-Frame-Options', 'DENY')
+    ctx.headers.set('X-XSS-Protection', '1; mode=block')
+    ctx.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+    ctx.headers.set(
+      'Permissions-Policy',
+      'camera=(), microphone=(), geolocation=()',
     )
   }
 }
@@ -134,17 +137,13 @@ export function securityHeaders(): Middleware {
  * Actual compression is handled by the runtime (Bun/Node) or reverse proxy.
  */
 export function varyEncoding(): Middleware {
-  return (request, next) => {
-    return next(request).then((response) =>
-      withHeaders(response, (h) => {
-        const existing = h.get('Vary')
-        if (!existing?.includes('Accept-Encoding')) {
-          h.set(
-            'Vary',
-            existing ? `${existing}, Accept-Encoding` : 'Accept-Encoding',
-          )
-        }
-      }),
-    )
+  return (ctx: MiddlewareContext) => {
+    const existing = ctx.headers.get('Vary')
+    if (!existing?.includes('Accept-Encoding')) {
+      ctx.headers.set(
+        'Vary',
+        existing ? `${existing}, Accept-Encoding` : 'Accept-Encoding',
+      )
+    }
   }
 }

@@ -1,3 +1,4 @@
+import { createRef } from '@pyreon/core'
 import { useRouter } from '@pyreon/router'
 import { useIntersectionObserver } from './utils/use-intersection-observer'
 
@@ -34,27 +35,25 @@ export interface LinkProps {
 /** Props passed to a custom component via createLink. */
 export interface LinkRenderProps {
   href: string
-  ref: (el: HTMLElement) => void
+  ref: import('@pyreon/core').Ref<HTMLElement>
   onClick: (e: MouseEvent) => void
   onMouseEnter: () => void
   onTouchStart: () => void
   isActive: () => boolean
   isExactActive: () => boolean
   /** Reactive class string — pass directly to element for auto-updates on route change. */
-  class: (() => string | undefined) | string | undefined
+  class: (() => string) | string | undefined
   style?: string
   target?: string
   rel?: string
   'aria-label'?: string
-  /** Reactive aria-current — pass directly to element for auto-updates on route change. */
-  'aria-current': (() => 'page' | undefined) | 'page' | undefined
   children?: any
 }
 
 /** Return type of useLink. */
 export interface UseLinkReturn {
-  /** Ref callback — attach to the root element for viewport-based prefetch. */
-  ref: (el: HTMLElement) => void
+  /** Ref object — attach to the root element for viewport-based prefetch. */
+  ref: import('@pyreon/core').Ref<HTMLElement>
   /** Click handler — performs client-side navigation. */
   handleClick: (e: MouseEvent) => void
   /** Mouse enter handler — triggers hover prefetch. */
@@ -66,7 +65,7 @@ export interface UseLinkReturn {
   /** Whether the link exactly matches the current route. */
   isExactActive: () => boolean
   /** Resolved class string including active classes. */
-  classes: () => string | undefined
+  classes: () => string
 }
 
 const prefetched = new Set<string>()
@@ -109,12 +108,8 @@ function doPrefetch(href: string) {
  */
 export function useLink(props: LinkProps): UseLinkReturn {
   const router = useRouter()
-  let elementRef: HTMLElement | undefined
+  const elementRef = createRef<HTMLElement>()
   const strategy = props.prefetch ?? 'hover'
-
-  function ref(el: HTMLElement) {
-    elementRef = el
-  }
 
   function handleClick(e: MouseEvent) {
     if (
@@ -146,7 +141,7 @@ export function useLink(props: LinkProps): UseLinkReturn {
 
   if (strategy === 'viewport') {
     useIntersectionObserver(
-      () => elementRef,
+      () => elementRef.current ?? undefined,
       () => doPrefetch(props.href),
     )
   }
@@ -170,11 +165,11 @@ export function useLink(props: LinkProps): UseLinkReturn {
     if (props.activeClass && isActive()) cls.push(props.activeClass)
     if (props.exactActiveClass && isExactActive())
       cls.push(props.exactActiveClass)
-    return cls.join(' ') || undefined
+    return cls.join(' ')
   }
 
   return {
-    ref,
+    ref: elementRef,
     handleClick,
     handleMouseEnter,
     handleTouchStart,
@@ -234,12 +229,11 @@ export function createLink(
         onTouchStart={link.handleTouchStart}
         isActive={link.isActive}
         isExactActive={link.isExactActive}
-        class={() => link.classes()}
+        class={link.classes}
         style={props.style}
         target={props.external ? '_blank' : undefined}
         rel={props.external ? 'noopener noreferrer' : undefined}
         aria-label={props['aria-label']}
-        aria-current={() => (link.isExactActive() ? 'page' : undefined)}
         children={props.children}
       />
     )
@@ -262,7 +256,7 @@ export const Link = createLink((props: LinkRenderProps) => (
     target={props.target}
     rel={props.rel}
     aria-label={props['aria-label']}
-    aria-current={props['aria-current']}
+    aria-current={props.isExactActive() ? 'page' : undefined}
     onclick={props.onClick}
     onmouseenter={props.onMouseEnter}
     ontouchstart={props.onTouchStart}

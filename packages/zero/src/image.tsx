@@ -1,3 +1,4 @@
+import { createRef } from '@pyreon/core'
 import { signal } from '@pyreon/reactivity'
 import type { FormatSource } from './image-plugin'
 import { useIntersectionObserver } from './utils/use-intersection-observer'
@@ -65,7 +66,7 @@ export function Image(props: ImageProps) {
   const isEager = props.priority || props.loading === 'eager'
   const loaded = signal(isEager)
   const inView = signal(isEager)
-  let containerRef: HTMLElement | undefined
+  const containerRef = createRef<HTMLElement>()
 
   // Resolve srcset from string or array
   const resolvedSrcset =
@@ -80,8 +81,8 @@ export function Image(props: ImageProps) {
 
   if (!isEager) {
     useIntersectionObserver(
-      () => containerRef,
-      () => inView(true),
+      () => containerRef.current ?? undefined,
+      () => inView.set(true),
     )
   }
 
@@ -99,8 +100,10 @@ export function Image(props: ImageProps) {
 
   const imgEl = (
     <img
-      src={() => (inView() ? props.src : undefined)}
-      srcset={() => (!hasFormats && inView() ? resolvedSrcset : undefined)}
+      src={() => (inView() ? props.src : '')}
+      srcset={() =>
+        !hasFormats && inView() && resolvedSrcset ? resolvedSrcset : ''
+      }
       sizes={resolvedSrcset ? sizes : undefined}
       alt={props.alt}
       width={props.width}
@@ -108,7 +111,7 @@ export function Image(props: ImageProps) {
       loading={isEager ? 'eager' : 'lazy'}
       decoding={props.decoding ?? 'async'}
       fetchpriority={props.priority ? 'high' : undefined}
-      onload={() => loaded(true)}
+      onload={() => loaded.set(true)}
       style={() =>
         [
           'display: block',
@@ -123,13 +126,7 @@ export function Image(props: ImageProps) {
   )
 
   return (
-    <div
-      ref={(el: HTMLElement) => {
-        containerRef = el
-      }}
-      class={props.class}
-      style={containerStyle}
-    >
+    <div ref={containerRef} class={props.class} style={containerStyle}>
       {props.placeholder && (
         <img
           src={props.placeholder}
