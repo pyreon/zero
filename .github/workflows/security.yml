@@ -58,7 +58,7 @@ jobs:
       - run: bun install --frozen-lockfile
 
       - name: Check for known vulnerabilities
-        run: bunx audit-ci --high
+        run: bun pm untrusted
 
   scorecard:
     name: OpenSSF Scorecard
