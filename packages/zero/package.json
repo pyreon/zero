@@ -2,7 +2,20 @@
   "name": "@pyreon/zero",
   "version": "0.0.1",
   "description": "Pyreon Zero — zero-config full-stack framework powered by Pyreon and Vite",
+  "license": "MIT",
+  "author": "Vit Bokisch",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/user/pyreon-zero",
+    "directory": "packages/zero"
+  },
   "type": "module",
+  "files": [
+    "lib",
+    "src",
+    "LICENSE",
+    "README.md"
+  ],
   "main": "./lib/index.js",
   "module": "./lib/index.js",
   "types": "./lib/types/index.d.ts",

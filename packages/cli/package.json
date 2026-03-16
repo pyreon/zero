@@ -2,7 +2,20 @@
   "name": "zero-cli",
   "version": "0.0.1",
   "description": "CLI for Pyreon Zero — dev, build, preview",
+  "license": "MIT",
+  "author": "Vit Bokisch",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/user/pyreon-zero",
+    "directory": "packages/cli"
+  },
   "type": "module",
+  "files": [
+    "bin",
+    "lib",
+    "LICENSE",
+    "README.md"
+  ],
   "bin": {
     "zero": "./bin/zero.js"
   },
