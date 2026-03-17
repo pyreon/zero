@@ -3,7 +3,11 @@
   "compilerOptions": {
     "outDir": "./lib",
     "rootDir": "./src",
+    "declaration": true,
+    "declarationDir": "./lib/types",
+    "emitDeclarationOnly": true,
     "types": ["node", "vitest/globals"]
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["src/tests"]
 }

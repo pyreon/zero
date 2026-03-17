@@ -1,6 +1,6 @@
 {
   "name": "@pyreon/zero",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "Pyreon Zero — zero-config full-stack framework powered by Pyreon and Vite",
   "license": "MIT",
   "author": "Vit Bokisch",
@@ -12,7 +12,9 @@
   "type": "module",
   "files": [
     "lib",
+    "!lib/analysis",
     "src",
+    "!src/tests",
     "LICENSE",
     "README.md"
   ],
@@ -77,7 +79,7 @@
     }
   },
   "scripts": {
-    "build": "vl_rolldown_build",
+    "build": "vl_rolldown_build && tsc",
     "dev": "vl_rolldown_build-watch",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
