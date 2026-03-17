@@ -8,17 +8,22 @@ export interface DevOptions {
 }
 
 export async function dev(root: string | undefined, options: DevOptions) {
-  const projectRoot = resolve(root ?? '.')
+  try {
+    const projectRoot = resolve(root ?? '.')
 
-  const server = await createServer({
-    root: projectRoot,
-    server: {
-      port: options.port ?? 3000,
-      host: options.host === true ? '0.0.0.0' : options.host,
-      open: options.open,
-    },
-  })
+    const server = await createServer({
+      root: projectRoot,
+      server: {
+        port: options.port ?? 3000,
+        host: options.host === true ? '0.0.0.0' : options.host,
+        open: options.open,
+      },
+    })
 
-  await server.listen()
-  server.printUrls()
+    await server.listen()
+    server.printUrls()
+  } catch (error) {
+    console.error('Failed to start dev server:', (error as Error).message)
+    process.exit(1)
+  }
 }

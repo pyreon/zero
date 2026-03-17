@@ -10,15 +10,20 @@ export async function preview(
   root: string | undefined,
   options: PreviewOptions,
 ) {
-  const projectRoot = resolve(root ?? '.')
+  try {
+    const projectRoot = resolve(root ?? '.')
 
-  const server = await vitePreview({
-    root: projectRoot,
-    preview: {
-      port: options.port ?? 3000,
-      host: options.host === true ? '0.0.0.0' : options.host,
-    },
-  })
+    const server = await vitePreview({
+      root: projectRoot,
+      preview: {
+        port: options.port ?? 3000,
+        host: options.host === true ? '0.0.0.0' : options.host,
+      },
+    })
 
-  server.printUrls()
+    server.printUrls()
+  } catch (error) {
+    console.error('Failed to start preview server:', (error as Error).message)
+    process.exit(1)
+  }
 }
