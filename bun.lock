@@ -24,7 +24,7 @@
         "zero": "./bin/zero.js",
       },
       "dependencies": {
-        "@pyreon/server": "^0.1.2",
+        "@pyreon/server": "^0.2.1",
         "@pyreon/zero": "workspace:*",
         "cac": "^7.0.0",
         "vite": "^8.0.0",
@@ -41,42 +41,30 @@
       "name": "@pyreon/zero",
       "version": "0.0.1",
       "dependencies": {
-        "@pyreon/core": "^0.1.2",
-        "@pyreon/head": "^0.1.2",
-        "@pyreon/router": "^0.1.2",
-        "@pyreon/runtime-dom": "^0.1.2",
-        "@pyreon/runtime-server": "^0.1.2",
-        "@pyreon/server": "^0.1.2",
-        "@pyreon/vite-plugin": "^0.1.2",
+        "@pyreon/core": "^0.2.1",
+        "@pyreon/head": "^0.2.1",
+        "@pyreon/router": "^0.2.1",
+        "@pyreon/runtime-dom": "^0.2.1",
+        "@pyreon/runtime-server": "^0.2.1",
+        "@pyreon/server": "^0.2.1",
+        "@pyreon/vite-plugin": "^0.2.1",
         "vite": "^8.0.0",
       },
       "peerDependencies": {
-        "@pyreon/reactivity": "^0.1.2",
+        "@pyreon/reactivity": "^0.2.1",
       },
     },
-  },
-  "overrides": {
-    "@pyreon/compiler": "^0.1.2",
-    "@pyreon/core": "^0.1.2",
-    "@pyreon/head": "^0.1.2",
-    "@pyreon/reactivity": "^0.1.2",
-    "@pyreon/router": "^0.1.2",
-    "@pyreon/runtime-dom": "^0.1.2",
-    "@pyreon/runtime-server": "^0.1.2",
-    "@pyreon/server": "^0.1.2",
-    "@pyreon/store": "^0.1.2",
-    "@pyreon/vite-plugin": "^0.1.2",
   },
   "packages": {
     "@babel/generator": ["@babel/generator@8.0.0-rc.2", "", { "dependencies": { "@babel/parser": "^8.0.0-rc.2", "@babel/types": "^8.0.0-rc.2", "@jridgewell/gen-mapping": "^0.3.12", "@jridgewell/trace-mapping": "^0.3.28", "@types/jsesc": "^2.5.0", "jsesc": "^3.0.2" } }, "sha512-oCQ1IKPwkzCeJzAPb7Fv8rQ9k5+1sG8mf2uoHiMInPYvkRfrDJxbTIbH51U+jstlkghus0vAi3EBvkfvEsYNLQ=="],
 
-    "@babel/helper-string-parser": ["@babel/helper-string-parser@8.0.0-rc.2", "", {}, "sha512-noLx87RwlBEMrTzncWd/FvTxoJ9+ycHNg0n8yyYydIoDsLZuxknKgWRJUqcrVkNrJ74uGyhWQzQaS3q8xfGAhQ=="],
+    "@babel/helper-string-parser": ["@babel/helper-string-parser@8.0.0-rc.3", "", {}, "sha512-AmwWFx1m8G/a5cXkxLxTiWl+YEoWuoFLUCwqMlNuWO1tqAYITQAbCRPUkyBHv1VOFgfjVOqEj6L3u15J5ZCzTA=="],
 
     "@babel/helper-validator-identifier": ["@babel/helper-validator-identifier@8.0.0-rc.2", "", {}, "sha512-xExUBkuXWJjVuIbO7z6q7/BA9bgfJDEhVL0ggrggLMbg0IzCUWGT1hZGE8qUH7Il7/RD/a6cZ3AAFrrlp1LF/A=="],
 
     "@babel/parser": ["@babel/parser@8.0.0-rc.2", "", { "dependencies": { "@babel/types": "^8.0.0-rc.2" }, "bin": "./bin/babel-parser.js" }, "sha512-29AhEtcq4x8Dp3T72qvUMZHx0OMXCj4Jy/TEReQa+KWLln524Cj1fWb3QFi0l/xSpptQBR6y9RNEXuxpFvwiUQ=="],
 
-    "@babel/runtime": ["@babel/runtime@7.28.6", "", {}, "sha512-05WQkdpL9COIMz4LjTxGpPNCdlpyimKppYNoJ5Di5EUObifl8t4tuLuUBBZEpoLYOmfvIWrsp9fCl0HoPRVTdA=="],
+    "@babel/runtime": ["@babel/runtime@7.29.2", "", {}, "sha512-JiDShH45zKHWyGe4ZNVRrCjBz8Nh9TMmZG1kh4QTK8hCBTWBi8Da+i7s1fJw7/lYpM4ccepSNfqzZ/QvABBi5g=="],
 
     "@babel/types": ["@babel/types@8.0.0-rc.2", "", { "dependencies": { "@babel/helper-string-parser": "^8.0.0-rc.2", "@babel/helper-validator-identifier": "^8.0.0-rc.2" } }, "sha512-91gAaWRznDwSX4E2tZ1YjBuIfnQVOFDCQ2r0Toby0gu4XEbyF623kXLMA8d4ZbCu+fINcrudkmEcwSUHgDDkNw=="],
 
@@ -190,23 +178,23 @@
 
     "@pkgjs/parseargs": ["@pkgjs/parseargs@0.11.0", "", {}, "sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg=="],
 
-    "@pyreon/compiler": ["@pyreon/compiler@0.1.2", "", { "peerDependencies": { "typescript": ">=5.0.0" } }, "sha512-6Ief4VOuNiCIM3Y9G1+Yk0uDAm3mEhbTprD5tWQ5XinbWnxhzhIHCVS1zobadYvlC69AVpjuS4KdQlaUKXlqFg=="],
+    "@pyreon/compiler": ["@pyreon/compiler@0.2.1", "", { "peerDependencies": { "typescript": ">=5.0.0" } }, "sha512-6tK1Kgyu5RYuzmvY+/USvWAlpzU18KW9BJv4XEixFRihP7ngnhLVhCBVNaJCdzpJ2ZrGxk8JqQaudLR9tDVeFg=="],
 
-    "@pyreon/core": ["@pyreon/core@0.1.2", "", { "dependencies": { "@pyreon/reactivity": "workspace:*" } }, "sha512-75j/Q29be3b+pAcycm4FIwgfMlkppUfRITNWoacfHv78tY3hb7QLVyT+YMav11npFaWe384GueEsiaS25Gp3oA=="],
+    "@pyreon/core": ["@pyreon/core@0.2.1", "", { "dependencies": { "@pyreon/reactivity": "^0.2.1" } }, "sha512-pg4rQb072qi8NcotjotxobeSJ7RuLdmZcsg6Fi8V/hakZ2cwPDaX+tjP0OkOEHUA6ms0E2lSxW4TI6iHMjg0Ng=="],
 
-    "@pyreon/head": ["@pyreon/head@0.1.2", "", { "dependencies": { "@pyreon/core": "workspace:*", "@pyreon/reactivity": "workspace:*", "@pyreon/runtime-server": "workspace:*" } }, "sha512-aNF4nzVlWMgrOL2ifPnbyipN3oC8IwWMSq2gcP4h51MSYGsf4YBiB0dCqDsyUw9dhL8Ve0Yy60dGEdEroJU0SA=="],
+    "@pyreon/head": ["@pyreon/head@0.2.1", "", { "dependencies": { "@pyreon/core": "^0.2.1", "@pyreon/reactivity": "^0.2.1", "@pyreon/runtime-server": "^0.2.1" } }, "sha512-15p0SkSxpPmbGOESbpqFqg+UUvxHMih4xeZx+M5/bqzIiITefQQPneP2l4pCzYuQbRLAHcjP4mFS5nMjwk0xGA=="],
 
-    "@pyreon/reactivity": ["@pyreon/reactivity@0.1.2", "", {}, "sha512-48GVBf5HtBd6I+aUh3eSdU8v2xRIlyCGP43Uff+A0c5Pfdm0nYOc5XxCRdHynBc18sIodEYIV8K3QqxG8OSEMQ=="],
+    "@pyreon/reactivity": ["@pyreon/reactivity@0.2.1", "", {}, "sha512-oyeiriloPCfiXrMGB5+IfFC4m03eWmgEVEt9ymmjCQF92cCcnZYt18vq+2UcRMKhEGpg8sxOWOiyDJ4aCHRhPw=="],
 
-    "@pyreon/router": ["@pyreon/router@0.1.2", "", { "dependencies": { "@pyreon/core": "workspace:*", "@pyreon/reactivity": "workspace:*", "@pyreon/runtime-dom": "workspace:*" } }, "sha512-E6fgC+Cy6mxppyT9Xb3XYfm2Q0PKHpxaEOf6NveoS9Zphub88eUjwV8wGGqFEvSjtbct8XWVihBDSAIhAoyQ+Q=="],
+    "@pyreon/router": ["@pyreon/router@0.2.1", "", { "dependencies": { "@pyreon/core": "^0.2.1", "@pyreon/reactivity": "^0.2.1", "@pyreon/runtime-dom": "^0.2.1" } }, "sha512-YHd1pgL3YjYVn6MCu9Yi+dpITq2hfmwi43H1sldhfSCcuoVcknNhGdRzk3mAV4uM0bmtvBzIdawguwbkI3WEIw=="],
 
-    "@pyreon/runtime-dom": ["@pyreon/runtime-dom@0.1.2", "", { "dependencies": { "@pyreon/core": "workspace:*", "@pyreon/reactivity": "workspace:*" } }, "sha512-hYANCLG/J/Gqtf545470jC50vD1BZkaUG0QyNaqjj8y5N1+MKc414pTGhMVLoy1sE1S5LAMzKQyGcDhNE6JfYA=="],
+    "@pyreon/runtime-dom": ["@pyreon/runtime-dom@0.2.1", "", { "dependencies": { "@pyreon/core": "^0.2.1", "@pyreon/reactivity": "^0.2.1" } }, "sha512-inC4FTlQu56cgoK9mxHUYbBqOPCMmKuXtRA2ohF2+/unavgNOF7VP4Ne9T7Sk4d3QfFoXWszT3WDyHbwf/737w=="],
 
-    "@pyreon/runtime-server": ["@pyreon/runtime-server@0.1.2", "", { "dependencies": { "@pyreon/core": "workspace:*", "@pyreon/reactivity": "workspace:*" } }, "sha512-uEYM7uhuPalQaH19tXfG1jCfa9JF3DZVi4FqmhUZ3SfVXerGAzP/bv5d7qKapX/s/X5sSOhq2VptQxu2VqalAQ=="],
+    "@pyreon/runtime-server": ["@pyreon/runtime-server@0.2.1", "", { "dependencies": { "@pyreon/core": "^0.2.1", "@pyreon/reactivity": "^0.2.1" } }, "sha512-4oK/UJulADUZokWDJCXmExZ3myWjqpJVJRLE118kdSmMmrRcLJj+e6J2zWekcTZnjgMFOyYLTuHt/OZgMMmdBw=="],
 
-    "@pyreon/server": ["@pyreon/server@0.1.2", "", { "dependencies": { "@pyreon/core": "workspace:*", "@pyreon/head": "workspace:*", "@pyreon/reactivity": "workspace:*", "@pyreon/router": "workspace:*", "@pyreon/runtime-dom": "workspace:*", "@pyreon/runtime-server": "workspace:*" } }, "sha512-BWd6C7OdrgJN977lgXIs+SL6kD+dLyA7CPVqXdFu0d8j7e2EnlIBJ3uaVPouwjOUH9aRRcfAlcshUuRKvqzRVA=="],
+    "@pyreon/server": ["@pyreon/server@0.2.1", "", { "dependencies": { "@pyreon/core": "^0.2.1", "@pyreon/head": "^0.2.1", "@pyreon/reactivity": "^0.2.1", "@pyreon/router": "^0.2.1", "@pyreon/runtime-dom": "^0.2.1", "@pyreon/runtime-server": "^0.2.1" } }, "sha512-BBwL+SkW2l4kPGTzf4MVx9mtlWLh5cYfDGKhd2zsyDeuHo+m/sC7NV8PLWXXbh4LotPRS7/J/gzhG69rcRX4aA=="],
 
-    "@pyreon/vite-plugin": ["@pyreon/vite-plugin@0.1.2", "", { "dependencies": { "@pyreon/compiler": "workspace:*" }, "peerDependencies": { "vite": ">=5.0.0" } }, "sha512-x5q/qdha5boiToT1eNghs1N35zhyrdd0mlLi1tej2DGqBzeDc1z/RbEU4Nbl7CgXtLwA+j3XTOgyP7v1Jn3Gog=="],
+    "@pyreon/vite-plugin": ["@pyreon/vite-plugin@0.2.1", "", { "dependencies": { "@pyreon/compiler": "^0.2.1" }, "peerDependencies": { "vite": ">=8.0.0" } }, "sha512-eYi9CVZV/RCd7zXwdh/KPXGlRfveJ8QfBINKauxAvdVTHNebUyxnEqVZ2cGJC+qqJtyFM1DtK2tN7/0d4uTgfQ=="],
 
     "@pyreon/zero": ["@pyreon/zero@workspace:packages/zero"],
 
