@@ -21,17 +21,5 @@
     "@vitus-labs/tools-vitest": "latest",
     "typescript": "^5.9.3",
     "vitest": "^4.1.0"
-  },
-  "overrides": {
-    "@pyreon/reactivity": "^0.1.2",
-    "@pyreon/core": "^0.1.2",
-    "@pyreon/runtime-dom": "^0.1.2",
-    "@pyreon/runtime-server": "^0.1.2",
-    "@pyreon/router": "^0.1.2",
-    "@pyreon/head": "^0.1.2",
-    "@pyreon/server": "^0.1.2",
-    "@pyreon/compiler": "^0.1.2",
-    "@pyreon/vite-plugin": "^0.1.2",
-    "@pyreon/store": "^0.1.2"
   }
 }

@@ -83,16 +83,16 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@pyreon/core": "^0.1.2",
-    "@pyreon/head": "^0.1.2",
-    "@pyreon/router": "^0.1.2",
-    "@pyreon/runtime-dom": "^0.1.2",
-    "@pyreon/runtime-server": "^0.1.2",
-    "@pyreon/server": "^0.1.2",
-    "@pyreon/vite-plugin": "^0.1.2",
+    "@pyreon/core": "^0.2.1",
+    "@pyreon/head": "^0.2.1",
+    "@pyreon/router": "^0.2.1",
+    "@pyreon/runtime-dom": "^0.2.1",
+    "@pyreon/runtime-server": "^0.2.1",
+    "@pyreon/server": "^0.2.1",
+    "@pyreon/vite-plugin": "^0.2.1",
     "vite": "^8.0.0"
   },
   "peerDependencies": {
-    "@pyreon/reactivity": "^0.1.2"
+    "@pyreon/reactivity": "^0.2.1"
   }
 }
