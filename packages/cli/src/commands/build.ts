@@ -95,6 +95,15 @@ async function runAdapter(
 }
 
 export async function build(root: string | undefined, options: BuildOptions) {
+  try {
+    await runBuild(root, options)
+  } catch (error) {
+    console.error('Build failed:', (error as Error).message)
+    process.exit(1)
+  }
+}
+
+async function runBuild(root: string | undefined, options: BuildOptions) {
   const projectRoot = resolve(root ?? '.')
   const start = performance.now()
 

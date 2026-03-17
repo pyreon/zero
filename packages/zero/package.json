@@ -6,7 +6,7 @@
   "author": "Vit Bokisch",
   "repository": {
     "type": "git",
-    "url": "https://github.com/user/pyreon-zero",
+    "url": "https://github.com/pyreon/zero",
     "directory": "packages/zero"
   },
   "type": "module",

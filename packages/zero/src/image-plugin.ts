@@ -3,6 +3,16 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { basename, extname, join } from 'node:path'
 import type { Plugin } from 'vite'
 
+let sharpWarned = false
+function warnSharpMissing() {
+  if (sharpWarned) return
+  sharpWarned = true
+  // biome-ignore lint/suspicious/noConsole: intentional build-time warning
+  console.warn(
+    '\n[zero:image] sharp not installed — images will not be optimized. Install for full support: bun add -D sharp\n',
+  )
+}
+
 // ─── Image processing Vite plugin ──────────────────────────────────────────
 //
 // Processes images at build time:
@@ -413,7 +423,7 @@ async function resizeImage(
     await pipeline.toFile(output)
   } catch {
     // sharp not available — copy original as fallback
-    // The image still works, just not resized
+    warnSharpMissing()
     const content = await readFile(input)
     await writeFile(output, content)
   }

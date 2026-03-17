@@ -88,6 +88,8 @@ export {
 // ─── SEO ────────────────────────────────────────────────────────────────────
 
 export type {
+  ChangeFreq,
+  JsonLdType,
   RobotsConfig,
   RobotsRule,
   SeoPluginConfig,
