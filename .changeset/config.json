@@ -1,8 +1,8 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
-  "changelog": "@changesets/changelog-github",
+  "changelog": ["@changesets/changelog-github", { "repo": "pyreon/zero" }],
   "commit": false,
-  "fixed": [["@pyreon/zero", "zero-cli", "create-zero"]],
+  "fixed": [["@pyreon/zero", "@pyreon/zero-cli", "@pyreon/create-zero"]],
   "access": "public",
   "baseBranch": "main"
 }
