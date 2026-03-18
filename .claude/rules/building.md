@@ -61,6 +61,30 @@ or useTable() directly for custom configurations.
 2. Wrap app with `<I18nProvider instance={i18n}>`
 3. Use `const { t, locale } = useI18n()` in components
 
+## Devtools
+Devtools are auto-enabled in dev mode via `__ZERO_DEVTOOLS__` define.
+The starter template already calls `initDevtools()` in entry-client.ts.
+
+To inspect state at runtime, import from the devtools registries:
+```ts
+import { getDevtoolsRegistry } from '@pyreon/zero/devtools'
+const { store, form, i18n } = getDevtoolsRegistry()
+// store.getRegisteredStores(), store.getStoreById('auth')
+// form.getActiveForms(), form.getFormSnapshot('login')
+// i18n.getActiveI18nInstances(), i18n.getI18nSnapshot('main')
+```
+
+To force devtools on/off in config:
+```ts
+zero({ devtools: true })  // force on, even in production
+zero({ devtools: false }) // force off, even in dev
+```
+
+## When user asks to debug state
+1. Check devtools are enabled (`__ZERO_DEVTOOLS__` is true)
+2. Use `getDevtoolsRegistry()` to access store/form/i18n registries
+3. Point them to install `@pyreon/devtools` Chrome extension for component tree inspection
+
 ## JSX patterns
 - Reactive text: `<span>{() => count()}</span>`
 - Conditional: `{() => show() ? <Modal /> : null}`

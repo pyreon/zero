@@ -72,7 +72,10 @@ export function zeroPlugin(userConfig: ZeroConfig = {}): Plugin {
       })
     },
 
-    config() {
+    config(_, { command }) {
+      const isDev = command === 'serve'
+      const devtools = userConfig.devtools ?? isDev
+
       return {
         resolve: {
           conditions: ['bun'],
@@ -83,6 +86,7 @@ export function zeroPlugin(userConfig: ZeroConfig = {}): Plugin {
         define: {
           __ZERO_MODE__: JSON.stringify(config.mode),
           __ZERO_BASE__: JSON.stringify(config.base),
+          __ZERO_DEVTOOLS__: JSON.stringify(devtools),
         },
       }
     },

@@ -39,6 +39,11 @@
 - Return `void` / `undefined` to pass through (don't short-circuit)
 - Use `withHeaders()` from `utils/with-headers.ts` to modify Response headers
 
+## Devtools mistakes
+- **Never** call `initDevtools()` without checking `__ZERO_DEVTOOLS__` — it will bundle devtools registries in production
+- **Never** import from `@pyreon/store/devtools` directly in app code — use `getDevtoolsRegistry()` from `@pyreon/zero/devtools`
+- **Never** call `initDevtools()` more than once — it's idempotent but wasteful
+
 ## Hydration
 - `hydrateRoot(container, vnode)` — container first, then vnode (not reversed)
 - The `startClient()` function handles this automatically — prefer it over manual hydration
