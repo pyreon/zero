@@ -37,24 +37,34 @@
         "create-zero": "./bin/create-zero.js",
       },
     },
+    "packages/meta": {
+      "name": "@pyreon/meta",
+      "version": "0.1.1",
+      "dependencies": {
+        "@pyreon/feature": "^0.0.1",
+        "@pyreon/form": "^0.0.1",
+        "@pyreon/i18n": "^0.0.1",
+        "@pyreon/query": "^0.0.1",
+        "@pyreon/store": "^0.0.1",
+        "@pyreon/table": "^0.0.1",
+        "@pyreon/validation": "^0.0.1",
+        "@pyreon/virtual": "^0.0.1",
+      },
+      "peerDependencies": {
+        "@pyreon/reactivity": "^0.3.0",
+      },
+    },
     "packages/zero": {
       "name": "@pyreon/zero",
       "version": "0.1.1",
       "dependencies": {
         "@pyreon/core": "^0.3.0",
-        "@pyreon/feature": "^0.0.1",
-        "@pyreon/form": "^0.0.1",
         "@pyreon/head": "^0.3.0",
-        "@pyreon/i18n": "^0.0.1",
-        "@pyreon/query": "^0.0.1",
+        "@pyreon/meta": "workspace:^",
         "@pyreon/router": "^0.3.0",
         "@pyreon/runtime-dom": "^0.3.0",
         "@pyreon/runtime-server": "^0.3.0",
         "@pyreon/server": "^0.3.0",
-        "@pyreon/store": "^0.0.1",
-        "@pyreon/table": "^0.0.1",
-        "@pyreon/validation": "^0.0.1",
-        "@pyreon/virtual": "^0.0.1",
         "@pyreon/vite-plugin": "^0.3.0",
         "vite": "^8.0.0",
       },
@@ -209,6 +219,8 @@
     "@pyreon/head": ["@pyreon/head@0.3.0", "", { "dependencies": { "@pyreon/core": "^0.3.0", "@pyreon/reactivity": "^0.3.0", "@pyreon/runtime-server": "^0.3.0" } }, "sha512-b8uBiHWV8yR89xy3sqx6hVIXQOF4U+EuNrIrSbYDNEDJuXTCHPx8F6SnHYBxdzQqL2brrGru1T8VWAdgZeicdg=="],
 
     "@pyreon/i18n": ["@pyreon/i18n@0.0.1", "", { "peerDependencies": { "@pyreon/core": "^0.2.1", "@pyreon/reactivity": "^0.2.1" } }, "sha512-hDCjaAMPRdZqVbNRuDCgbkSvzUxy3Ay0cNV/LFnQjjGY6RT19PPAYkzTasX1ahQnzWlU5ppEfAwF+jjq5I3Fog=="],
+
+    "@pyreon/meta": ["@pyreon/meta@workspace:packages/meta"],
 
     "@pyreon/query": ["@pyreon/query@0.0.1", "", { "dependencies": { "@tanstack/query-core": "^5.0.0" }, "peerDependencies": { "@pyreon/core": "^0.2.1", "@pyreon/reactivity": "^0.2.1" } }, "sha512-x3qZxyQET8uNjv6Y3sQ6JQWN6bw8fqvvYynJElpD1VC34CJRmbZ9y7qP0XIrcdUDPdaFNZfDnNZSnANjskrByw=="],
 

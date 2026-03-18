@@ -4,7 +4,7 @@
 
 Zero is the full-stack meta-framework for Pyreon's signal-based UI ecosystem. Built on Vite with file-based routing, SSR/SSG/ISR/SPA modes, adapters, and a CLI. Integrates the full Pyreon fundamentals ecosystem out of the box.
 
-**Packages:** `@pyreon/zero` (core), `@pyreon/zero-cli` (CLI), `@pyreon/create-zero` (scaffolding)
+**Packages:** `@pyreon/zero` (framework), `@pyreon/meta` (fundamentals barrel), `@pyreon/zero-cli` (CLI), `@pyreon/create-zero` (scaffolding)
 
 ## Ecosystem
 
@@ -14,7 +14,8 @@ Zero re-exports and integrates the full Pyreon stack:
 
 **Routing & Server:** `@pyreon/router`, `@pyreon/server`, `@pyreon/head`
 
-**Fundamentals (re-exported from `@pyreon/zero`):**
+**Fundamentals (re-exported from `@pyreon/meta`):**
+
 - `@pyreon/store` — `defineStore`, `signal`, `computed`, `effect`, `batch`
 - `@pyreon/form` — `useForm`, `useField`, `useFieldArray`, `FormProvider`
 - `@pyreon/validation` — `zodSchema`, `zodField` (+ valibot, arktype adapters)
@@ -27,7 +28,8 @@ Zero re-exports and integrates the full Pyreon stack:
 ## Monorepo
 
 ```text
-packages/zero/        → @pyreon/zero
+packages/zero/        → @pyreon/zero (framework: routing, SSR, adapters, components)
+packages/meta/        → @pyreon/meta (fundamentals barrel: store, form, query, etc.)
 packages/cli/         → @pyreon/zero-cli (dev/build/preview)
 packages/create-zero/ → @pyreon/create-zero + starter template
 ```
@@ -90,7 +92,7 @@ Build-time Vite plugin: `?optimize` imports, multiple sizes, WebP/AVIF via sharp
 
 ## Package Exports
 
-`.` (core + fundamentals re-exports), `./client`, `./config`, `./image`, `./link`, `./script`, `./font`, `./cache`, `./seo`, `./theme`, `./image-plugin`
+`.` (core), `./client`, `./config`, `./image`, `./link`, `./script`, `./font`, `./cache`, `./seo`, `./theme`, `./image-plugin`
 
 ## Starter Template (`packages/create-zero/templates/default/`)
 
