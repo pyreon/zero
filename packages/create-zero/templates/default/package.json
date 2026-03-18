@@ -10,17 +10,30 @@
   },
   "dependencies": {
     "@pyreon/core": "latest",
+    "@pyreon/feature": "latest",
+    "@pyreon/form": "latest",
+    "@pyreon/head": "latest",
+    "@pyreon/i18n": "latest",
+    "@pyreon/meta": "latest",
+    "@pyreon/query": "latest",
     "@pyreon/reactivity": "latest",
+    "@pyreon/router": "latest",
     "@pyreon/runtime-dom": "latest",
     "@pyreon/runtime-server": "latest",
-    "@pyreon/router": "latest",
-    "@pyreon/head": "latest",
     "@pyreon/server": "latest",
-    "@pyreon/zero": "latest"
+    "@pyreon/store": "latest",
+    "@pyreon/table": "latest",
+    "@pyreon/validation": "latest",
+    "@pyreon/virtual": "latest",
+    "@pyreon/zero": "latest",
+    "@tanstack/query-core": "^5.90.0",
+    "@tanstack/table-core": "^8.21.0",
+    "@tanstack/virtual-core": "^3.13.0",
+    "zod": "^4.0.0"
   },
   "devDependencies": {
     "@pyreon/vite-plugin": "latest",
-    "zero-cli": "latest",
+    "@pyreon/zero-cli": "latest",
     "typescript": "^5.9.3",
     "vite": "^7.0.0"
   }

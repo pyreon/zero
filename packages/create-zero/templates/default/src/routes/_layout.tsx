@@ -1,9 +1,17 @@
+import { QueryClient, QueryClientProvider } from '@pyreon/query'
 import { Link } from '@pyreon/zero/link'
 import { ThemeToggle } from '@pyreon/zero/theme'
+import { useAppStore } from '../stores/app'
+
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { staleTime: 30000 } },
+})
 
 export function layout(props: { children: any }) {
+  const { sidebarOpen, toggleSidebar } = useAppStore()
+
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <header class="app-header">
         <div class="app-header-inner">
           <Link href="/" class="app-logo">
@@ -34,6 +42,14 @@ export function layout(props: { children: any }) {
             >
               Dashboard
             </Link>
+            <button
+              type="button"
+              class="sidebar-toggle"
+              onClick={toggleSidebar}
+              title="Toggle sidebar"
+            >
+              {() => (sidebarOpen() ? '◀' : '▶')}
+            </button>
             <ThemeToggle class="theme-toggle" />
           </nav>
         </div>
@@ -44,6 +60,6 @@ export function layout(props: { children: any }) {
       <footer class="app-footer">
         Built with Pyreon Zero — signal-based, blazing fast.
       </footer>
-    </>
+    </QueryClientProvider>
   )
 }

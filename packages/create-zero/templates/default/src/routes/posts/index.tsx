@@ -70,6 +70,9 @@ export default function PostsIndex() {
           Each post is loaded via a <code>loader</code> function — server-side
           data fetching that runs before the route renders.
         </p>
+        <Link href="/posts/new" class="btn" style="margin-top: var(--space-md);">
+          + New Post
+        </Link>
       </div>
 
       <div class="posts-grid">

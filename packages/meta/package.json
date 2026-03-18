@@ -1,0 +1,48 @@
+{
+  "name": "@pyreon/meta",
+  "version": "0.1.1",
+  "description": "Pyreon Meta — barrel package re-exporting the full Pyreon fundamentals ecosystem",
+  "license": "MIT",
+  "author": "Vit Bokisch",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pyreon/zero",
+    "directory": "packages/meta"
+  },
+  "type": "module",
+  "files": [
+    "lib",
+    "!lib/analysis",
+    "src",
+    "LICENSE",
+    "README.md"
+  ],
+  "main": "./lib/index.js",
+  "module": "./lib/index.js",
+  "types": "./lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "bun": "./src/index.ts",
+      "import": "./lib/index.js",
+      "types": "./lib/types/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "vl_rolldown_build && tsc",
+    "dev": "vl_rolldown_build-watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@pyreon/feature": "^0.0.1",
+    "@pyreon/form": "^0.0.1",
+    "@pyreon/i18n": "^0.0.1",
+    "@pyreon/query": "^0.0.1",
+    "@pyreon/store": "^0.0.1",
+    "@pyreon/table": "^0.0.1",
+    "@pyreon/validation": "^0.0.1",
+    "@pyreon/virtual": "^0.0.1"
+  },
+  "peerDependencies": {
+    "@pyreon/reactivity": "^0.3.0"
+  }
+}

@@ -87,6 +87,7 @@
   "dependencies": {
     "@pyreon/core": "^0.3.0",
     "@pyreon/head": "^0.3.0",
+    "@pyreon/meta": "workspace:^",
     "@pyreon/router": "^0.3.0",
     "@pyreon/runtime-dom": "^0.3.0",
     "@pyreon/runtime-server": "^0.3.0",

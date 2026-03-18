@@ -2,19 +2,38 @@
 
 ## Overview
 
-Zero is the meta-framework for Pyreon's signal-based UI. Built on Vite with file-based routing, SSR/SSG/ISR/SPA modes, adapters, and a CLI.
+Zero is the full-stack meta-framework for Pyreon's signal-based UI ecosystem. Built on Vite with file-based routing, SSR/SSG/ISR/SPA modes, adapters, and a CLI. Integrates the full Pyreon fundamentals ecosystem out of the box.
 
-**Packages:** `@pyreon/zero` (core), `zero-cli` (CLI), `create-zero` (scaffolding)
+**Packages:** `@pyreon/zero` (framework), `@pyreon/meta` (fundamentals barrel), `@pyreon/zero-cli` (CLI), `@pyreon/create-zero` (scaffolding)
+
+## Ecosystem
+
+Zero re-exports and integrates the full Pyreon stack:
+
+**Core:** `@pyreon/core`, `@pyreon/reactivity`, `@pyreon/runtime-dom`, `@pyreon/runtime-server`, `@pyreon/compiler`, `@pyreon/vite-plugin`
+
+**Routing & Server:** `@pyreon/router`, `@pyreon/server`, `@pyreon/head`
+
+**Fundamentals (re-exported from `@pyreon/meta`):**
+
+- `@pyreon/store` — `defineStore`, `signal`, `computed`, `effect`, `batch`
+- `@pyreon/form` — `useForm`, `useField`, `useFieldArray`, `FormProvider`
+- `@pyreon/validation` — `zodSchema`, `zodField` (+ valibot, arktype adapters)
+- `@pyreon/query` — `useQuery`, `useMutation`, `QueryClient`, `QueryClientProvider`
+- `@pyreon/table` — `useTable`, `flexRender`
+- `@pyreon/virtual` — `useVirtualizer`, `useWindowVirtualizer`
+- `@pyreon/i18n` — `createI18n`, `I18nProvider`, `useI18n`, `Trans`
+- `@pyreon/feature` — `defineFeature`, `reference` (schema-driven CRUD features)
 
 ## Monorepo
 
 ```text
-packages/zero/        → @pyreon/zero
-packages/cli/         → zero-cli (dev/build/preview)
-packages/create-zero/ → create-zero + starter template
+packages/zero/        → @pyreon/zero (framework: routing, SSR, adapters, components)
+packages/meta/        → @pyreon/meta (fundamentals barrel: store, form, query, etc.)
+packages/cli/         → @pyreon/zero-cli (dev/build/preview)
+packages/create-zero/ → @pyreon/create-zero + starter template
 ```
 
-Depends on `../pyreon` and `../fundamentals` via `overrides` with `file:` paths.
 Workspace resolution: `"bun": "./src/index.ts"` exports, `customConditions: ["bun"]`.
 
 ## Architecture
@@ -77,13 +96,14 @@ Build-time Vite plugin: `?optimize` imports, multiple sizes, WebP/AVIF via sharp
 
 ## Starter Template (`packages/create-zero/templates/default/`)
 
-Full-featured project: streaming SSR, dark/light theme, font optimization, SEO, cache middleware, guarded routes, error/loading boundaries. Routes: index, counter, about, posts/[id], (admin)/dashboard.
+Full-featured project: streaming SSR, dark/light theme, font optimization, SEO, cache middleware, guarded routes, error/loading boundaries. Includes feature example (posts with Zod schema), store example (app state), and QueryClientProvider setup.
+
+Routes: index, counter, about, posts/[id], posts/new, (admin)/dashboard.
 
 ## CI/CD
 
 - **ci.yml** — lint (Biome), typecheck, test (vitest), build + uncommitted changes check. Reusable via `workflow_call`.
 - **security.yml** — CodeQL analysis, dependency review (blocks high CVEs + GPL), audit, OpenSSF Scorecard
-- **pr-review.yml** — Claude Code auto-review on PRs + `@claude` mentions
 - **release.yml** — gates on CI, then changesets version/publish
 
 Changesets: fixed versioning (all packages bump together). `workspace:^` for peer deps.
@@ -117,6 +137,9 @@ cd packages/zero && bun test   # vitest — pure logic tests in src/tests/
 - Route exports: `default`, `loader`, `guard`, `meta`, `error`, `loading`, `middleware`, `renderMode`
 - `useLoaderData<T>()`, `useRoute()`, `useHead()` from `@pyreon/router` / `@pyreon/head`
 - `cacheMiddleware()` + `securityHeaders()` + `varyEncoding()` in server middleware
+- `defineFeature()` for schema-driven CRUD with auto forms, queries, and tables
+- `defineStore()` for global state management with signals
+- `useQuery()` / `useMutation()` for data fetching (TanStack Query adapter)
 
 ## Scripts
 
