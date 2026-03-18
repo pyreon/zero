@@ -4,7 +4,7 @@
 
 Zero is the full-stack meta-framework for Pyreon's signal-based UI ecosystem. Built on Vite with file-based routing, SSR/SSG/ISR/SPA modes, adapters, and a CLI. Integrates the full Pyreon fundamentals ecosystem out of the box.
 
-**Packages:** `@pyreon/zero` (framework), `@pyreon/meta` (fundamentals barrel), `@pyreon/zero-cli` (CLI), `@pyreon/create-zero` (scaffolding)
+**Packages:** `@pyreon/zero` (framework), `@pyreon/meta` (fundamentals barrel), `@pyreon/zero-cli` (CLI), `@pyreon/create-zero` (scaffolding), `@pyreon/devtools` (Chrome extension)
 
 ## Ecosystem
 
@@ -85,6 +85,10 @@ Build-time Vite plugin: `?optimize` imports, multiple sizes, WebP/AVIF via sharp
 
 `generateSitemap()`, `generateRobots()`, `jsonLd()`, `seoPlugin()`, `seoMiddleware()`
 
+### Devtools (`devtools.ts`)
+
+`initDevtools()` lazily imports store, form, and i18n devtools registries for the `@pyreon/devtools` Chrome extension. Controlled by `zero({ devtools: true/false })` — defaults to `true` in dev, `false` in production. The Vite plugin injects `__ZERO_DEVTOOLS__` boolean define. Granular control: `initDevtools({ store: true, form: false, i18n: true })`.
+
 ### Shared Utilities (`utils/`)
 
 - `use-intersection-observer.ts` — reusable observer composable (used by Image, Link)
@@ -92,7 +96,7 @@ Build-time Vite plugin: `?optimize` imports, multiple sizes, WebP/AVIF via sharp
 
 ## Package Exports
 
-`.` (core), `./client`, `./config`, `./image`, `./link`, `./script`, `./font`, `./cache`, `./seo`, `./theme`, `./image-plugin`
+`.` (core), `./client`, `./config`, `./devtools`, `./image`, `./link`, `./script`, `./font`, `./cache`, `./seo`, `./theme`, `./image-plugin`
 
 ## Starter Template (`packages/create-zero/templates/default/`)
 
@@ -119,12 +123,24 @@ import { seoPlugin } from "@pyreon/zero/seo"
 export default {
   plugins: [
     pyreon(),
-    zero({ mode: "ssr" }),
+    zero({ mode: "ssr", devtools: true }), // devtools: auto in dev
     fontPlugin({ google: ["Inter:wght@400;500;700"] }),
     seoPlugin({ sitemap: { origin: "https://example.com" } }),
   ],
 }
 ```
+
+## Devtools
+
+The `@pyreon/devtools` Chrome extension inspects the live component tree. The `@pyreon/zero/devtools` module connects fundamentals registries (store, form, i18n) to the extension.
+
+```ts
+// entry-client.ts — already wired in the starter template:
+import { initDevtools } from '@pyreon/zero/devtools'
+if (__ZERO_DEVTOOLS__) initDevtools()
+```
+
+Devtools registries provide: `getRegisteredStores()`, `getStoreById()`, `getActiveForms()`, `getFormSnapshot()`, `getActiveI18nInstances()`, `getI18nSnapshot()`. Access via `getDevtoolsRegistry()` from `@pyreon/zero/devtools`.
 
 ## Testing
 
