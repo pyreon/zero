@@ -27,7 +27,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@pyreon/server": "^0.2.1",
+    "@pyreon/server": "^0.3.0",
     "@pyreon/zero": "workspace:^",
     "cac": "^7.0.0",
     "vite": "^8.0.0"
