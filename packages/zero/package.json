@@ -76,6 +76,11 @@
       "bun": "./src/image-plugin.ts",
       "import": "./lib/image-plugin.js",
       "types": "./lib/types/image-plugin.d.ts"
+    },
+    "./devtools": {
+      "bun": "./src/devtools.ts",
+      "import": "./lib/devtools.js",
+      "types": "./lib/types/devtools.d.ts"
     }
   },
   "scripts": {

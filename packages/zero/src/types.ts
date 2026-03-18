@@ -85,6 +85,13 @@ export interface ZeroConfig {
 
   /** Server port for dev/preview. Default: 3000 */
   port?: number
+
+  /**
+   * Enable devtools integration. Default: true in dev, false in production.
+   * When enabled, registers fundamentals devtools (store, form, i18n) for
+   * inspection via @pyreon/devtools Chrome extension.
+   */
+  devtools?: boolean
 }
 
 // ─── File-system route ───────────────────────────────────────────────────────
