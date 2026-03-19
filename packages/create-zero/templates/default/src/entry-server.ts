@@ -1,4 +1,5 @@
 import { routes } from 'virtual:zero/routes'
+import { routeMiddleware } from 'virtual:zero/route-middleware'
 import { createServer } from '@pyreon/zero'
 import {
   cacheMiddleware,
@@ -8,6 +9,7 @@ import {
 
 export default createServer({
   routes,
+  routeMiddleware,
   config: {
     ssr: { mode: 'stream' },
   },

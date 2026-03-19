@@ -13,6 +13,7 @@ export { zeroPlugin as default } from './vite-plugin'
 
 export {
   filePathToUrlPath,
+  generateMiddlewareModule,
   generateRouteModule,
   parseFileRoutes,
   scanRouteFiles,
@@ -104,6 +105,11 @@ export {
   seoPlugin,
 } from './seo'
 
+// ─── Actions ─────────────────────────────────────────────────────────────────
+
+export type { Action, ActionContext, ActionHandler } from './actions'
+export { createActionMiddleware, defineAction } from './actions'
+
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 export type {
@@ -114,6 +120,7 @@ export type {
   LoaderContext,
   RenderMode,
   RouteMeta,
+  RouteMiddlewareEntry,
   RouteModule,
   ZeroConfig,
 } from './types'

@@ -1,10 +1,18 @@
 import type { Plugin } from 'vite'
 import { resolveConfig } from './config'
-import { generateRouteModule, scanRouteFiles } from './fs-router'
+import { renderErrorOverlay } from './error-overlay'
+import {
+  generateMiddlewareModule,
+  generateRouteModule,
+  scanRouteFiles,
+} from './fs-router'
 import type { ZeroConfig } from './types'
 
 const VIRTUAL_ROUTES_ID = 'virtual:zero/routes'
 const RESOLVED_VIRTUAL_ROUTES_ID = `\0${VIRTUAL_ROUTES_ID}`
+
+const VIRTUAL_MIDDLEWARE_ID = 'virtual:zero/route-middleware'
+const RESOLVED_VIRTUAL_MIDDLEWARE_ID = `\0${VIRTUAL_MIDDLEWARE_ID}`
 
 /**
  * Zero Vite plugin — adds file-based routing and zero-config conventions
@@ -35,9 +43,8 @@ export function zeroPlugin(userConfig: ZeroConfig = {}): Plugin {
     },
 
     resolveId(id) {
-      if (id === VIRTUAL_ROUTES_ID) {
-        return RESOLVED_VIRTUAL_ROUTES_ID
-      }
+      if (id === VIRTUAL_ROUTES_ID) return RESOLVED_VIRTUAL_ROUTES_ID
+      if (id === VIRTUAL_MIDDLEWARE_ID) return RESOLVED_VIRTUAL_MIDDLEWARE_ID
     },
 
     async load(id) {
@@ -49,25 +56,48 @@ export function zeroPlugin(userConfig: ZeroConfig = {}): Plugin {
           return `export const routes = []`
         }
       }
+
+      if (id === RESOLVED_VIRTUAL_MIDDLEWARE_ID) {
+        try {
+          const files = await scanRouteFiles(routesDir)
+          return generateMiddlewareModule(files, routesDir)
+        } catch (_err) {
+          return `export const routeMiddleware = []`
+        }
+      }
     },
 
     configureServer(server) {
+      // SSR error overlay — catch render errors and show a styled page
+      server.middlewares.use((_req, res, next) => {
+        const originalEnd = res.end.bind(res)
+        res.on('error', (err: Error) => {
+          server.ssrFixStacktrace(err)
+          const html = renderErrorOverlay(err)
+          res.statusCode = 500
+          res.setHeader('Content-Type', 'text/html')
+          originalEnd(html)
+        })
+        next()
+      })
+
       // Watch routes directory for changes
       server.watcher.add(`${routesDir}/**/*.{tsx,jsx,ts,js}`)
 
-      // Invalidate virtual module when route files change
+      // Invalidate virtual modules when route files change
       server.watcher.on('all', (event, path) => {
         if (
           path.startsWith(routesDir) &&
           (event === 'add' || event === 'unlink')
         ) {
-          const mod = server.moduleGraph.getModuleById(
+          for (const resolvedId of [
             RESOLVED_VIRTUAL_ROUTES_ID,
-          )
-          if (mod) {
-            server.moduleGraph.invalidateModule(mod)
-            server.ws.send({ type: 'full-reload' })
+            RESOLVED_VIRTUAL_MIDDLEWARE_ID,
+          ]) {
+            const mod = server.moduleGraph.getModuleById(resolvedId)
+            if (mod) server.moduleGraph.invalidateModule(mod)
           }
+          server.ws.send({ type: 'full-reload' })
         }
       })
     },
