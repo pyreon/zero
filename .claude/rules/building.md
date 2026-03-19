@@ -61,6 +61,49 @@ or useTable() directly for custom configurations.
 2. Wrap app with `<I18nProvider instance={i18n}>`
 3. Use `const { t, locale } = useI18n()` in components
 
+## When user asks for styled components
+Use `styled` from @pyreon/styler (CSS-in-JS):
+```tsx
+import { styled } from '@pyreon/styler'
+
+const Button = styled('button')`
+  padding: 8px 16px;
+  background: ${({ theme }) => theme.colors.primary};
+  border-radius: 4px;
+`
+```
+
+## When user asks for animations
+Use `kinetic` from @pyreon/kinetic with presets:
+```tsx
+import { kinetic } from '@pyreon/kinetic'
+import { fade, slideUp } from '@pyreon/kinetic-presets'
+
+const FadeIn = kinetic('div', fade)
+const SlideUp = kinetic('div', slideUp)
+
+// Usage: <FadeIn in={visible()}>content</FadeIn>
+```
+
+## When user asks for responsive layout
+Use @pyreon/coolgrid for grid layouts:
+```tsx
+import { Container, Row, Col } from '@pyreon/coolgrid'
+
+<Container>
+  <Row>
+    <Col size={{ xs: 12, md: 6 }}>Left</Col>
+    <Col size={{ xs: 12, md: 6 }}>Right</Col>
+  </Row>
+</Container>
+```
+
+## When user asks for UI interaction hooks
+Use @pyreon/hooks (signal-based, NOT React hooks):
+```tsx
+import { useHover, useClickOutside, useFocusTrap } from '@pyreon/hooks'
+```
+
 ## JSX patterns
 - Reactive text: `<span>{() => count()}</span>`
 - Conditional: `{() => show() ? <Modal /> : null}`

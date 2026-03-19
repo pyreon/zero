@@ -25,6 +25,18 @@ Zero re-exports and integrates the full Pyreon stack:
 - `@pyreon/i18n` — `createI18n`, `I18nProvider`, `useI18n`, `Trans`
 - `@pyreon/feature` — `defineFeature`, `reference` (schema-driven CRUD features)
 
+**UI System (re-exported from `@pyreon/meta`):**
+
+- `@pyreon/styler` — `css`, `styled`, `createGlobalStyle`, `keyframes`
+- `@pyreon/hooks` — 25+ signal-based hooks (`useBreakpoint`, `useHover`, `useFocus`, `useMediaQuery`, etc.)
+- `@pyreon/elements` — `Element`, `Text`, `List`, `Overlay`, `Portal`, `Iterator`
+- `@pyreon/unistyle` — responsive theming, breakpoints, `makeItResponsive`
+- `@pyreon/coolgrid` — `Col`, `Container`, `Row` responsive grid
+- `@pyreon/kinetic` — CSS transition animations, `kinetic`, `useTransitionState`
+- `@pyreon/kinetic-presets` — 120+ animation presets (`createFade`, `createSlide`, `createScale`, etc.)
+- `@pyreon/attrs` — `attrs` HOC for default prop chaining
+- `@pyreon/rocketstyle` — `rocketstyle` multi-dimensional style composition
+
 ## Monorepo
 
 ```text
