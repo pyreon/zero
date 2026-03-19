@@ -68,7 +68,7 @@
       "types": "./lib/types/seo.d.ts"
     },
     "./theme": {
-      "bun": "./src/theme.tsx",n
+      "bun": "./src/theme.tsx",
       "import": "./lib/theme.js",
       "types": "./lib/types/theme.d.ts"
     },
