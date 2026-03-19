@@ -85,7 +85,6 @@ export interface ZeroConfig {
 
   /** Server port for dev/preview. Default: 3000 */
   port?: number
-
 }
 
 // ─── File-system route ───────────────────────────────────────────────────────
@@ -110,6 +109,14 @@ export interface FileRoute {
   isCatchAll: boolean
   /** Resolved rendering mode. */
   renderMode: RenderMode
+}
+
+// ─── Route middleware ────────────────────────────────────────────────────
+
+/** Entry mapping a URL pattern to its route-level middleware. */
+export interface RouteMiddlewareEntry {
+  pattern: string
+  middleware: Middleware | Middleware[]
 }
 
 // ─── Adapter ─────────────────────────────────────────────────────────────────

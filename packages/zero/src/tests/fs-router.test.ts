@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
+import { matchPattern } from '../entry-server'
 import {
   filePathToUrlPath,
+  generateMiddlewareModule,
   generateRouteModule,
   parseFileRoutes,
 } from '../fs-router'
@@ -226,5 +228,91 @@ describe('generateRouteModule', () => {
   it('includes clean() helper to strip undefined props', () => {
     const code = generateRouteModule(['index.tsx'], '/src/routes')
     expect(code).toContain('function clean(routes)')
+  })
+
+  it('wires renderMode into route meta', () => {
+    const code = generateRouteModule(['index.tsx'], '/src/routes')
+    expect(code).toContain('.renderMode')
+    expect(code).toMatch(/meta:.*renderMode/)
+  })
+
+  it('wires renderMode in layout routes', () => {
+    const code = generateRouteModule(
+      ['_layout.tsx', 'index.tsx'],
+      '/src/routes',
+    )
+    // Both layout and page should have renderMode in meta
+    const matches = code.match(/renderMode/g)
+    expect(matches?.length).toBeGreaterThanOrEqual(2)
+  })
+})
+
+// ─── generateMiddlewareModule ───────────────────────────────────────────────
+
+describe('generateMiddlewareModule', () => {
+  it('generates middleware imports for route files', () => {
+    const code = generateMiddlewareModule(
+      ['index.tsx', 'about.tsx'],
+      '/src/routes',
+    )
+    expect(code).toContain('import { middleware as')
+    expect(code).toContain('export const routeMiddleware')
+  })
+
+  it('maps URL patterns to middleware', () => {
+    const code = generateMiddlewareModule(['about.tsx'], '/src/routes')
+    expect(code).toContain('pattern: "/about"')
+  })
+
+  it('skips layout, error, and loading files', () => {
+    const code = generateMiddlewareModule(
+      ['_layout.tsx', '_error.tsx', '_loading.tsx', 'index.tsx'],
+      '/src/routes',
+    )
+    expect(code).not.toContain('_layout')
+    expect(code).not.toContain('_error')
+    expect(code).not.toContain('_loading')
+    expect(code).toContain('pattern: "/"')
+  })
+
+  it('filters out entries with no middleware at runtime', () => {
+    const code = generateMiddlewareModule(['index.tsx'], '/src/routes')
+    expect(code).toContain('.filter(e => e.middleware)')
+  })
+})
+
+// ─── matchPattern ───────────────────────────────────────────────────────────
+
+describe('matchPattern', () => {
+  it('matches exact paths', () => {
+    expect(matchPattern('/about', '/about')).toBe(true)
+  })
+
+  it('rejects non-matching paths', () => {
+    expect(matchPattern('/about', '/contact')).toBe(false)
+  })
+
+  it('matches root path', () => {
+    expect(matchPattern('/', '/')).toBe(true)
+  })
+
+  it('matches dynamic segments', () => {
+    expect(matchPattern('/users/:id', '/users/123')).toBe(true)
+  })
+
+  it('rejects paths with wrong prefix for dynamic routes', () => {
+    expect(matchPattern('/users/:id', '/posts/123')).toBe(false)
+  })
+
+  it('matches catch-all segments', () => {
+    expect(matchPattern('/blog/:slug*', '/blog/2024/hello-world')).toBe(true)
+  })
+
+  it('rejects paths with different segment count', () => {
+    expect(matchPattern('/about', '/about/team')).toBe(false)
+  })
+
+  it('matches nested dynamic paths', () => {
+    expect(matchPattern('/users/:id/settings', '/users/42/settings')).toBe(true)
   })
 })

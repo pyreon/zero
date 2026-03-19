@@ -263,7 +263,7 @@ export function generateRouteModule(
       `${indent}  component: ${comp}`,
       `${indent}  loader: ${mod}.loader`,
       `${indent}  beforeEnter: ${mod}.guard`,
-      `${indent}  meta: ${mod}.meta`,
+      `${indent}  meta: { ...${mod}.meta, renderMode: ${mod}.renderMode }`,
     ]
 
     if (errorName) {
@@ -290,7 +290,7 @@ export function generateRouteModule(
       `${indent}component: ${layoutComp}`,
       `${indent}loader: ${layoutMod}.loader`,
       `${indent}beforeEnter: ${layoutMod}.guard`,
-      `${indent}meta: ${layoutMod}.meta`,
+      `${indent}meta: { ...${layoutMod}.meta, renderMode: ${layoutMod}.renderMode }`,
     ]
     if (errorName) {
       props.push(`${indent}errorComponent: ${errorName}`)
@@ -350,6 +350,38 @@ export function generateRouteModule(
     `export const routes = clean([`,
     routeDefs.join(',\n'),
     `])`,
+  ].join('\n')
+}
+
+/**
+ * Generate a virtual module that maps URL patterns to their middleware exports.
+ * Used by the server entry to dispatch per-route middleware.
+ */
+export function generateMiddlewareModule(
+  files: string[],
+  routesDir: string,
+): string {
+  const routes = parseFileRoutes(files)
+  const imports: string[] = []
+  const entries: string[] = []
+  let counter = 0
+
+  for (const route of routes) {
+    if (route.isLayout || route.isError || route.isLoading) continue
+    const name = `_mw${counter++}`
+    const fullPath = `${routesDir}/${route.filePath}`
+    imports.push(`import { middleware as ${name} } from "${fullPath}"`)
+    entries.push(
+      `  { pattern: ${JSON.stringify(route.urlPath)}, middleware: ${name} }`,
+    )
+  }
+
+  return [
+    ...imports,
+    '',
+    `export const routeMiddleware = [`,
+    entries.join(',\n'),
+    `].filter(e => e.middleware)`,
   ].join('\n')
 }
 

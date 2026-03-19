@@ -131,10 +131,7 @@ async function runBuild(root: string | undefined, options: BuildOptions) {
     await prerenderIfNeeded(projectRoot, zeroConfig)
   }
 
-  const adapterName = (zeroConfig?.adapter as string) ?? 'node'
-  if (!(adapterName === 'static' && renderMode === 'ssg')) {
-    await runAdapter(projectRoot, zeroConfig ?? {})
-  }
+  await runAdapter(projectRoot, zeroConfig ?? {})
 
   const elapsed = Math.round(performance.now() - start)
   console.log(`Build completed in ${elapsed}ms`)

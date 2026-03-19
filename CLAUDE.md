@@ -85,6 +85,18 @@ Build-time Vite plugin: `?optimize` imports, multiple sizes, WebP/AVIF via sharp
 
 `generateSitemap()`, `generateRobots()`, `jsonLd()`, `seoPlugin()`, `seoMiddleware()`
 
+### Server Actions (`actions.ts`)
+
+`defineAction(handler)` registers a server-side function callable from the client via POST to `/_zero/actions/<id>`. `createActionMiddleware()` mounts the action handler. Actions receive `ActionContext` with parsed JSON or FormData.
+
+### Per-Route Middleware (`virtual:zero/route-middleware`)
+
+Route files can `export const middleware` — the Vite plugin generates a virtual module mapping URL patterns to middleware exports. `createServer({ routeMiddleware })` dispatches them before global middleware.
+
+### Error Overlay (`error-overlay.ts`)
+
+Dev-only styled HTML overlay for SSR errors with source-mapped stack traces. Injected via Vite plugin's `configureServer` hook.
+
 ### Shared Utilities (`utils/`)
 
 - `use-intersection-observer.ts` — reusable observer composable (used by Image, Link)
@@ -92,7 +104,7 @@ Build-time Vite plugin: `?optimize` imports, multiple sizes, WebP/AVIF via sharp
 
 ## Package Exports
 
-`.` (core), `./client`, `./config`, `./image`, `./link`, `./script`, `./font`, `./cache`, `./seo`, `./theme`, `./image-plugin`
+`.` (core), `./client`, `./config`, `./image`, `./link`, `./script`, `./font`, `./cache`, `./seo`, `./theme`, `./image-plugin`, `./actions`
 
 ## Starter Template (`packages/create-zero/templates/default/`)
 
@@ -140,6 +152,9 @@ cd packages/zero && bun test   # vitest — pure logic tests in src/tests/
 - `defineFeature()` for schema-driven CRUD with auto forms, queries, and tables
 - `defineStore()` for global state management with signals
 - `useQuery()` / `useMutation()` for data fetching (TanStack Query adapter)
+- `defineAction()` for server actions (mutations via POST to `/_zero/actions/*`)
+- Per-route `middleware` export — dispatched via `virtual:zero/route-middleware`
+- Per-route `renderMode` export — wired into route `meta.renderMode`
 
 ## Scripts
 

@@ -1,4 +1,5 @@
 import { useHead } from '@pyreon/head'
+import type { MiddlewareContext } from '@pyreon/server'
 import type { LoaderContext } from '@pyreon/zero'
 
 export const meta = {
@@ -25,26 +26,15 @@ export function guard() {
 }
 
 /**
- * Per-route middleware — runs on the server before the loader.
+ * Per-route middleware — runs on the server before rendering.
  * Great for logging, auth checks, rate limiting per-route.
+ *
+ * Uses @pyreon/server's Middleware signature: (ctx) => Response | void
+ * Return a Response to short-circuit, or void to continue.
  */
-export const middleware = async (
-  request: Request,
-  next: (req: Request) => Promise<Response>,
-) => {
-  const start = Date.now()
-  const response = await next(request)
-  const duration = Date.now() - start
-
-  // Add server timing header
-  const headers = new Headers(response.headers)
-  headers.set('Server-Timing', `route;dur=${duration}`)
-
-  return new Response(response.body, {
-    status: response.status,
-    statusText: response.statusText,
-    headers,
-  })
+export const middleware = (ctx: MiddlewareContext) => {
+  // Add server timing header to track route performance
+  ctx.headers.set('Server-Timing', `route;desc="Dashboard"`)
 }
 
 export async function loader(_ctx: LoaderContext) {

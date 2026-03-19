@@ -76,6 +76,11 @@
       "bun": "./src/image-plugin.ts",
       "import": "./lib/image-plugin.js",
       "types": "./lib/types/image-plugin.d.ts"
+    },
+    "./actions": {
+      "bun": "./src/actions.ts",
+      "import": "./lib/actions.js",
+      "types": "./lib/types/actions.d.ts"
     }
   },
   "scripts": {
