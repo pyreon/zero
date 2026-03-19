@@ -73,7 +73,7 @@ bun install --no-save 2>&1 || {
 
   echo ""
   echo "==> Checking package.json has AI toolchain deps"
-  for dep in "@pyreon/cli" "@pyreon/mcp"; do
+  for dep in "@pyreon/mcp"; do
     if ! grep -q "\"$dep\"" package.json; then
       echo "FAIL: Missing devDependency: $dep"
       exit 1

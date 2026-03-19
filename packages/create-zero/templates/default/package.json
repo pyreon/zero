@@ -7,9 +7,9 @@
     "dev": "zero dev",
     "build": "zero build",
     "preview": "zero preview",
-    "doctor": "bunx @pyreon/cli doctor",
-    "doctor:fix": "bunx @pyreon/cli doctor --fix",
-    "doctor:ci": "bunx @pyreon/cli doctor --ci"
+    "doctor": "zero doctor",
+    "doctor:fix": "zero doctor --fix",
+    "doctor:ci": "zero doctor --ci"
   },
   "dependencies": {
     "@pyreon/attrs": "latest",
@@ -44,7 +44,6 @@
     "zod": "^4.0.0"
   },
   "devDependencies": {
-    "@pyreon/cli": "latest",
     "@pyreon/mcp": "latest",
     "@pyreon/vite-plugin": "latest",
     "@pyreon/zero-cli": "latest",
