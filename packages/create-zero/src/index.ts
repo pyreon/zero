@@ -94,7 +94,7 @@ async function main() {
     message: 'Project name',
     placeholder: 'my-zero-app',
     validate: (v) => {
-      if (!v.trim()) return 'Project name is required'
+      if (!v?.trim()) return 'Project name is required'
       if (existsSync(resolve(process.cwd(), v))) return `Directory "${v}" already exists`
     },
   }))
