@@ -25,5 +25,8 @@
   "scripts": {
     "build": "vl_rolldown_build",
     "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@clack/prompts": "^1.0.0"
   }
 }

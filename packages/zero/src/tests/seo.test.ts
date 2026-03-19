@@ -130,9 +130,11 @@ describe('jsonLd', () => {
     })
 
     expect(result).toContain('<script type="application/ld+json">')
-    const data = JSON.parse(
-      result.replace(/<script[^>]*>/, '').replace(/<\/script>/, ''),
+    const jsonStr = result.slice(
+      result.indexOf('>') + 1,
+      result.lastIndexOf('<'),
     )
+    const data = JSON.parse(jsonStr)
     expect(data['@context']).toBe('https://schema.org')
     expect(data['@type']).toBe('WebSite')
     expect(data.name).toBe('My Site')
@@ -145,9 +147,11 @@ describe('jsonLd', () => {
       author: { '@type': 'Person', name: 'Author' },
     })
 
-    const data = JSON.parse(
-      result.replace(/<script[^>]*>/, '').replace(/<\/script>/, ''),
+    const jsonStr = result.slice(
+      result.indexOf('>') + 1,
+      result.lastIndexOf('<'),
     )
+    const data = JSON.parse(jsonStr)
     expect(data.headline).toBe('Test Article')
     expect(data.author.name).toBe('Author')
   })
