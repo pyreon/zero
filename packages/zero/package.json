@@ -68,7 +68,7 @@
       "types": "./lib/types/seo.d.ts"
     },
     "./theme": {
-      "bun": "./src/theme.tsx",
+      "bun": "./src/theme.tsx",n
       "import": "./lib/theme.js",
       "types": "./lib/types/theme.d.ts"
     },
@@ -76,11 +76,6 @@
       "bun": "./src/image-plugin.ts",
       "import": "./lib/image-plugin.js",
       "types": "./lib/types/image-plugin.d.ts"
-    },
-    "./devtools": {
-      "bun": "./src/devtools.ts",
-      "import": "./lib/devtools.js",
-      "types": "./lib/types/devtools.d.ts"
     }
   },
   "scripts": {
@@ -90,17 +85,17 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@pyreon/core": "^0.3.0",
-    "@pyreon/head": "^0.3.0",
+    "@pyreon/core": "^0.4.0",
+    "@pyreon/head": "^0.4.0",
     "@pyreon/meta": "workspace:^",
-    "@pyreon/router": "^0.3.0",
-    "@pyreon/runtime-dom": "^0.3.0",
-    "@pyreon/runtime-server": "^0.3.0",
-    "@pyreon/server": "^0.3.0",
-    "@pyreon/vite-plugin": "^0.3.0",
+    "@pyreon/router": "^0.4.0",
+    "@pyreon/runtime-dom": "^0.4.0",
+    "@pyreon/runtime-server": "^0.4.0",
+    "@pyreon/server": "^0.4.0",
+    "@pyreon/vite-plugin": "^0.4.0",
     "vite": "^8.0.0"
   },
   "peerDependencies": {
-    "@pyreon/reactivity": "^0.3.0"
+    "@pyreon/reactivity": "^0.4.0"
   }
 }

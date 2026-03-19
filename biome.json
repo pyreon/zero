@@ -26,6 +26,12 @@
       }
     },
     {
+      "includes": ["packages/create-zero/templates/**"],
+      "javascript": {
+        "globals": ["__ZERO_MODE__", "__ZERO_BASE__"]
+      }
+    },
+    {
       "includes": ["packages/zero/src/**/*.tsx"],
       "linter": {
         "rules": {
