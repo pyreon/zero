@@ -24,6 +24,7 @@
         "zero": "./bin/zero.js",
       },
       "dependencies": {
+        "@pyreon/cli": "^0.5.0",
         "@pyreon/server": "^0.5.0",
         "@pyreon/zero": "workspace:^",
         "cac": "^7.0.0",
@@ -205,6 +206,8 @@
     "@pkgjs/parseargs": ["@pkgjs/parseargs@0.11.0", "", {}, "sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg=="],
 
     "@pyreon/attrs": ["@pyreon/attrs@0.0.2", "", { "peerDependencies": { "@pyreon/core": ">=0.3.0", "@pyreon/ui-core": "^0.0.2" } }, "sha512-mlYZpcPx/H6/5Gt5G++1gYxmSKxuKzpR5GcLVnXLzzJtkghBuoUhnrPhOUk0zV1eycoLnfER7Z6YJLAiajECYA=="],
+
+    "@pyreon/cli": ["@pyreon/cli@0.5.2", "", { "dependencies": { "@pyreon/compiler": "0.5.2" }, "peerDependencies": { "typescript": ">=5.0.0" }, "bin": { "pyreon": "lib/index.js" } }, "sha512-H7fxhinQdeA3CdIMTAEknghD6uKYzITwIE+1JhmZDPO2dm9PvKRlwgGv1GQmfyQWagDqIZf+mpBcrre+KBWKDw=="],
 
     "@pyreon/compiler": ["@pyreon/compiler@0.5.0", "", { "peerDependencies": { "typescript": ">=5.0.0" } }, "sha512-TXKt8315taMG7CiXGL+Chl6MxntkfJAMq+et36mn1SLkbdUjlp6W0fa/pkAbJF67GT2Kmig8iJ2mdAmIMK7cVA=="],
 
@@ -949,6 +952,8 @@
     "@npmcli/promise-spawn/which": ["which@3.0.1", "", { "dependencies": { "isexe": "^2.0.0" }, "bin": { "node-which": "bin/which.js" } }, "sha512-XA1b62dzQzLfaEOSQFTCOd5KFf/1VSzZo7/7TUjnya6u0vGGKzU96UQBZTAThCb2j4/xjBAyii1OhRLJEivHvg=="],
 
     "@npmcli/run-script/which": ["which@3.0.1", "", { "dependencies": { "isexe": "^2.0.0" }, "bin": { "node-which": "bin/which.js" } }, "sha512-XA1b62dzQzLfaEOSQFTCOd5KFf/1VSzZo7/7TUjnya6u0vGGKzU96UQBZTAThCb2j4/xjBAyii1OhRLJEivHvg=="],
+
+    "@pyreon/cli/@pyreon/compiler": ["@pyreon/compiler@0.5.2", "", { "peerDependencies": { "typescript": ">=5.0.0" } }, "sha512-hnF6t6VsIuMjsStIV/MzG8uwTpolEY4ZbhaZXzmrdAOUGzR182/SuTq8xNxUVKIYRMXclLj+oR1Es5DlhnY3Cg=="],
 
     "@tufjs/models/minimatch": ["minimatch@9.0.9", "", { "dependencies": { "brace-expansion": "^2.0.2" } }, "sha512-OBwBN9AL4dqmETlpS2zasx+vTeWclWzkblfZk7KTA5j3jeOONz/tRCnZomUyvNg83wL5Zv9Ss6HMJXAgL8R2Yg=="],
 
