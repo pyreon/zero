@@ -9,5 +9,4 @@
 - Components that need customization should expose 3 levels: composable (`useX`), HOC (`createX`), default component
 - The starter template in `packages/create-zero/templates/default/` is user-facing — prioritize readability over DRY
 - Route modules can export: `default`, `loader`, `guard`, `meta`, `error`, `loading`, `middleware`, `renderMode`
-- Devtools integration uses lazy `import()` for tree-shaking — guarded by `__ZERO_DEVTOOLS__` define injected by the Vite plugin
 - `@pyreon/meta` is the barrel for fundamentals, `@pyreon/zero` is the framework — never re-export fundamentals from zero directly

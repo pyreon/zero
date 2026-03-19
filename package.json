@@ -10,16 +10,6 @@
     "test": "bun run --filter='*' test",
     "typecheck": "bun run --filter='*' typecheck"
   },
-  "overrides": {
-    "@pyreon/feature": "^0.0.1",
-    "@pyreon/form": "^0.0.1",
-    "@pyreon/i18n": "^0.0.1",
-    "@pyreon/query": "^0.0.1",
-    "@pyreon/store": "^0.0.1",
-    "@pyreon/table": "^0.0.1",
-    "@pyreon/validation": "^0.0.1",
-    "@pyreon/virtual": "^0.0.1"
-  },
   "devDependencies": {
     "@changesets/changelog-github": "^0.6.0",
     "@changesets/cli": "^2.30.0",

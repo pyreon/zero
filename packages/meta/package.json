@@ -33,16 +33,16 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@pyreon/feature": "^0.0.1",
-    "@pyreon/form": "^0.0.1",
-    "@pyreon/i18n": "^0.0.1",
-    "@pyreon/query": "^0.0.1",
-    "@pyreon/store": "^0.0.1",
-    "@pyreon/table": "^0.0.1",
-    "@pyreon/validation": "^0.0.1",
-    "@pyreon/virtual": "^0.0.1"
+    "@pyreon/feature": "^0.3.0",
+    "@pyreon/form": "^0.3.0",
+    "@pyreon/i18n": "^0.3.0",
+    "@pyreon/query": "^0.3.0",
+    "@pyreon/store": "^0.3.0",
+    "@pyreon/table": "^0.3.0",
+    "@pyreon/validation": "^0.3.0",
+    "@pyreon/virtual": "^0.3.0"
   },
   "peerDependencies": {
-    "@pyreon/reactivity": "^0.3.0"
+    "@pyreon/reactivity": "^0.4.0"
   }
 }
