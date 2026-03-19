@@ -57,10 +57,23 @@ jobs:
       - name: Run tests
         run: bun run test
 
+  template:
+    name: Template Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Test template scaffold
+        run: bash scripts/test-template.sh
+
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [lint, typecheck, test]
+    needs: [lint, typecheck, test, template]
     steps:
       - uses: actions/checkout@v4
 

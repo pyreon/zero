@@ -8,7 +8,8 @@
     "build": "bun run --filter='*' build",
     "dev": "bun run --filter='*' dev",
     "test": "bun run --filter='*' test",
-    "typecheck": "bun run --filter='*' typecheck"
+    "typecheck": "bun run --filter='*' typecheck",
+    "test:template": "bash scripts/test-template.sh"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.6.0",

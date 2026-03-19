@@ -17,7 +17,6 @@
     "@pyreon/form": "latest",
     "@pyreon/head": "latest",
     "@pyreon/i18n": "latest",
-    "@pyreon/meta": "latest",
     "@pyreon/query": "latest",
     "@pyreon/reactivity": "latest",
     "@pyreon/router": "latest",
