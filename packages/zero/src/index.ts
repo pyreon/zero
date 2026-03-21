@@ -129,7 +129,11 @@ export { rateLimitMiddleware } from './rate-limit'
 // ─── Compression ────────────────────────────────────────────────────────────
 
 export type { CompressionConfig } from './compression'
-export { compressionMiddleware, compressResponse } from './compression'
+export {
+  compressionMiddleware,
+  compressResponse,
+  isCompressible,
+} from './compression'
 
 // ─── Actions ─────────────────────────────────────────────────────────────────
 

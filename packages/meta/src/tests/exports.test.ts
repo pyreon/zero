@@ -1,0 +1,46 @@
+import { describe, expect, it } from 'vitest'
+import * as meta from '../index'
+
+describe('@pyreon/meta exports', () => {
+  // ─── Fundamentals ───────────────────────────────────────────────────────
+  const fundamentals = [
+    'defineStore', 'signal', 'computed', 'effect', 'batch',
+    'resetStore', 'resetAllStores', 'addStorePlugin',
+    'useForm', 'useField', 'useFieldArray', 'FormProvider',
+    'useFormContext', 'useFormState', 'useWatch',
+    'zodSchema', 'zodField',
+    'QueryClient', 'QueryClientProvider', 'useQuery', 'useMutation',
+    'useQueryClient', 'useInfiniteQuery', 'useIsFetching', 'useIsMutating',
+    'useTable', 'flexRender',
+    'useVirtualizer', 'useWindowVirtualizer',
+    'createI18n', 'I18nProvider', 'useI18n', 'Trans',
+    'defineFeature', 'reference',
+  ]
+
+  for (const name of fundamentals) {
+    it(`exports ${name}`, () => {
+      expect(name in meta).toBe(true)
+    })
+  }
+
+  // ─── UI System ──────────────────────────────────────────────────────────
+  const uiSystem = [
+    'css', 'styled', 'createGlobalStyle', 'keyframes',
+    'useBreakpoint', 'useClickOutside', 'useColorScheme',
+    'useHover', 'useFocus', 'useMediaQuery', 'useToggle',
+    'useElementSize', 'useIntersection', 'useInterval',
+    'Element', 'Text', 'List', 'Overlay', 'Portal', 'Iterator',
+    'makeItResponsive', 'normalizeTheme', 'sortBreakpoints',
+    'Col', 'Container', 'Row',
+    'kinetic', 'useAnimationEnd', 'useTransitionState',
+    'createBlur', 'createFade', 'createRotate', 'createScale', 'createSlide',
+    'attrs',
+    'rocketstyle',
+  ]
+
+  for (const name of uiSystem) {
+    it(`exports ${name}`, () => {
+      expect(name in meta).toBe(true)
+    })
+  }
+})

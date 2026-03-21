@@ -82,17 +82,37 @@ export function zeroPlugin(userConfig: ZeroConfig = {}): Plugin {
     },
 
     configureServer(server) {
-      // SSR error overlay — catch render errors and show a styled page
-      server.middlewares.use((_req, res, next) => {
+      // SSR error overlay — intercept HTML requests and catch SSR errors
+      // This runs as a late middleware (return function) so it wraps
+      // Vite's own SSR handling and catches rendering failures.
+      server.middlewares.use((req, res, next) => {
+        const accept = req.headers.accept ?? ''
+        if (!accept.includes('text/html')) return next()
+
+        // Monkey-patch res.end to catch errors from SSR rendering
         const originalEnd = res.end.bind(res)
-        res.on('error', (err: Error) => {
-          server.ssrFixStacktrace(err)
-          const html = renderErrorOverlay(err)
+        let errored = false
+
+        const handleError = (err: unknown) => {
+          if (errored) return
+          errored = true
+          const error = err instanceof Error ? err : new Error(String(err))
+          server.ssrFixStacktrace(error)
+          const html = renderErrorOverlay(error)
           res.statusCode = 500
-          res.setHeader('Content-Type', 'text/html')
+          res.setHeader('Content-Type', 'text/html; charset=utf-8')
+          res.setHeader('Content-Length', Buffer.byteLength(html))
           originalEnd(html)
-        })
-        next()
+        }
+
+        res.on('error', handleError)
+
+        // Wrap next() in try/catch to handle synchronous errors
+        try {
+          next()
+        } catch (err) {
+          handleError(err)
+        }
       })
 
       // Watch routes directory for changes

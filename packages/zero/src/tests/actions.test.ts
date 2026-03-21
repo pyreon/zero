@@ -84,6 +84,36 @@ describe('createActionMiddleware', () => {
   })
 })
 
+describe('defineAction — server-side execution', () => {
+  it('executes handler directly on server (no fetch)', async () => {
+    // In test env (Node/Bun), globalThis.window is undefined → server mode
+    const action = defineAction(async (ctx) => {
+      const data = ctx.json as { x: number }
+      return { result: data.x + 1 }
+    })
+
+    const result = await action({ x: 10 })
+    expect(result).toEqual({ result: 11 })
+  })
+
+  it('passes null json when called without data', async () => {
+    const action = defineAction(async (ctx) => {
+      return { received: ctx.json }
+    })
+
+    const result = await action()
+    expect(result).toEqual({ received: null })
+  })
+
+  it('propagates errors on server-side execution', async () => {
+    const action = defineAction(async () => {
+      throw new Error('server error')
+    })
+
+    await expect(action()).rejects.toThrow('server error')
+  })
+})
+
 function mockCtx(path: string, method: string, body?: string) {
   const url = new URL(`http://localhost${path}`)
   const req = new Request(url.toString(), {

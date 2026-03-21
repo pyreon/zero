@@ -14,7 +14,7 @@ export interface CompressionConfig {
  * based on the client's Accept-Encoding header.
  *
  * Only compresses text-based content types (HTML, JSON, JS, CSS, XML, SVG).
- * Skips responses below the size threshold.
+ * Skips responses below the size threshold and already-encoded responses.
  *
  * @example
  * import { compressionMiddleware } from "@pyreon/zero/compression"
@@ -25,23 +25,25 @@ export interface CompressionConfig {
 export function compressionMiddleware(
   config: CompressionConfig = {},
 ): Middleware {
-  const { encodings = ['gzip', 'deflate'] } = config
+  const { threshold = 1024, encodings = ['gzip', 'deflate'] } = config
 
-  return async (ctx: MiddlewareContext) => {
+  return (ctx: MiddlewareContext) => {
     const acceptEncoding = ctx.req.headers.get('accept-encoding') ?? ''
 
     // Find the best supported encoding
     const encoding = encodings.find((enc) => acceptEncoding.includes(enc))
     if (!encoding) return
 
-    // Signal to downstream that we handle encoding
-    ctx.headers.set('X-Zero-Compress', encoding)
+    // Store the encoding choice for post-processing
+    ctx.locals.__compressionEncoding = encoding
+    ctx.locals.__compressionThreshold = threshold
+    ctx.headers.append('Vary', 'Accept-Encoding')
   }
 }
 
 /**
  * Compress a Response body if it meets the criteria.
- * Call this after the response is generated (post-middleware).
+ * Use this to post-process responses after the handler runs.
  *
  * @example
  * const response = await handler(request)
@@ -69,7 +71,7 @@ export async function compressResponse(
 
   const headers = new Headers(response.headers)
   headers.set('Content-Encoding', encoding)
-  headers.delete('Content-Length') // Let the runtime recalculate
+  headers.delete('Content-Length')
   headers.append('Vary', 'Accept-Encoding')
 
   return new Response(compressed, {
@@ -88,7 +90,8 @@ const COMPRESSIBLE_TYPES = [
   'image/svg+xml',
 ]
 
-function isCompressible(contentType: string): boolean {
+/** Check if a content type is compressible. Exported for testing. */
+export function isCompressible(contentType: string): boolean {
   return COMPRESSIBLE_TYPES.some((t) => contentType.includes(t))
 }
 
