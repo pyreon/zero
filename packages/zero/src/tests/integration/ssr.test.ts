@@ -1,6 +1,7 @@
 import { resolve } from 'node:path'
 import { createServer, type ViteDevServer } from 'vite'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { zeroPlugin } from '../../vite-plugin'
 
 const FIXTURE_DIR = resolve(import.meta.dirname, 'fixture')
 
@@ -10,7 +11,9 @@ let baseUrl: string
 beforeAll(async () => {
   server = await createServer({
     root: FIXTURE_DIR,
-    server: { port: 0 }, // random available port
+    configFile: false, // Don't load vite.config.ts — configure inline
+    plugins: [zeroPlugin({ mode: 'ssr' })],
+    server: { port: 0 },
     logLevel: 'silent',
   })
   await server.listen()
@@ -54,7 +57,6 @@ describe('SSR integration', () => {
     const mod = await server.ssrLoadModule('virtual:zero/routes')
     const route = mod.routes.find((r: { path: string }) => r.path === '/')
     expect(route).toBeDefined()
-    // renderMode should be in meta (wired by generateRouteModule)
     expect(route.meta).toBeDefined()
   })
 
@@ -80,7 +82,6 @@ describe('SSR integration', () => {
   })
 
   it('loads virtual modules via plugin resolveId', async () => {
-    // Test that the zero plugin resolves virtual module IDs
     const resolved = await server.pluginContainer.resolveId(
       'virtual:zero/routes',
     )
