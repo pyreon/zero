@@ -121,6 +121,14 @@ File-based API routes: `.ts` files in `src/routes/api/` export HTTP method handl
 
 `rateLimitMiddleware(config)` — in-memory per-client limiting with `X-RateLimit-*` headers. Configurable `max`, `window`, `include`/`exclude` patterns, custom key function.
 
+### Compression (`compression.ts`)
+
+`compressionMiddleware()` signals encoding preference, `compressResponse(response, encoding, threshold)` compresses text-based responses (HTML, JSON, JS, CSS, SVG) using gzip or deflate via `CompressionStream`.
+
+### Testing (`testing.ts`)
+
+`createTestContext(path, options)` — mock `MiddlewareContext` for testing middleware. `testMiddleware(mw, path)` — run middleware and capture response + headers. `createTestApiServer(routes)` — test API routes with `server.request(path)`. `createMockHandler(config)` — mock API handler that records calls.
+
 ### Shared Utilities (`utils/`)
 
 - `use-intersection-observer.ts` — reusable observer composable (used by Image, Link)
@@ -128,7 +136,7 @@ File-based API routes: `.ts` files in `src/routes/api/` export HTTP method handl
 
 ## Package Exports
 
-`.` (core), `./client`, `./config`, `./image`, `./link`, `./script`, `./font`, `./cache`, `./seo`, `./theme`, `./image-plugin`, `./actions`, `./api-routes`, `./cors`, `./rate-limit`
+`.` (core), `./client`, `./config`, `./image`, `./link`, `./script`, `./font`, `./cache`, `./seo`, `./theme`, `./image-plugin`, `./actions`, `./api-routes`, `./cors`, `./rate-limit`, `./compression`, `./testing`
 
 ## Starter Template (`packages/create-zero/templates/default/`)
 

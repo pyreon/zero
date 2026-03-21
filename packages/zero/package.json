@@ -96,6 +96,16 @@
       "bun": "./src/rate-limit.ts",
       "import": "./lib/rate-limit.js",
       "types": "./lib/types/rate-limit.d.ts"
+    },
+    "./compression": {
+      "bun": "./src/compression.ts",
+      "import": "./lib/compression.js",
+      "types": "./lib/types/compression.d.ts"
+    },
+    "./testing": {
+      "bun": "./src/testing.ts",
+      "import": "./lib/testing.js",
+      "types": "./lib/types/testing.d.ts"
     }
   },
   "scripts": {
