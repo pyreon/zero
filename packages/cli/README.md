@@ -1,31 +1,51 @@
-# zero-cli
+# @pyreon/zero-cli
 
-CLI for [Pyreon Zero](https://github.com/user/pyreon-zero) — dev server, production builds, and preview.
+Unified CLI for [Pyreon Zero](https://github.com/pyreon/zero) — development, builds, code quality, and project scaffolding.
 
 ## Install
 
 ```bash
-bun add -D zero-cli
+bun add -D @pyreon/zero-cli
 ```
 
 ## Commands
 
+### Development
+
 ```bash
-zero dev [root]      # Start development server
-zero build [root]    # Build for production
-zero preview [root]  # Preview production build
+zero dev [root]          # Start dev server (prints route table on startup)
+  --port <port>          # Server port (default: 3000)
+  --host [host]          # Server host (use --host for 0.0.0.0)
+  --open                 # Open browser on start
+
+zero build [root]        # Build for production
+  --mode <mode>          # Rendering mode override (ssr, ssg, spa)
+
+zero preview [root]      # Preview production build
+  --port <port>          # Server port (default: 3000)
+  --host [host]          # Server host
 ```
 
-### Options
+### Code Quality
 
 ```bash
-# dev / preview
---port <port>    # Server port (default: 3000)
---host [host]    # Server host
---open           # Open browser on start
+zero doctor [root]       # Detect React patterns in codebase
+  --fix                  # Auto-fix fixable issues (className → class, etc.)
+  --json                 # Output as JSON
+  --ci                   # CI mode — exit with code 1 on errors
+```
 
-# build
---mode <mode>    # Rendering mode override (ssr, ssg, spa)
+### Project Context
+
+```bash
+zero context [root]      # Generate AI project context (.pyreon/context.json)
+  --out <path>           # Custom output path
+```
+
+### Scaffolding
+
+```bash
+zero create <name>       # Scaffold a new Pyreon Zero project
 ```
 
 ## License

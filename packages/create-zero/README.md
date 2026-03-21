@@ -1,31 +1,40 @@
-# create-zero
+# @pyreon/create-zero
 
-Scaffold a new [Pyreon Zero](https://github.com/user/pyreon-zero) project.
+Interactive scaffolding tool for [Pyreon Zero](https://github.com/pyreon/zero) projects.
 
 ## Usage
 
 ```bash
-bun create zero my-app
+bun create @pyreon/zero my-app
 ```
 
-Or with npx:
+Or via the CLI:
 
 ```bash
-npx create-zero my-app
+zero create my-app
 ```
 
-## What's Included
+## Interactive Setup
 
-The default template sets up a full-featured project with:
+The CLI prompts you to configure:
 
-- Streaming SSR
-- Dark/light theme
-- Font optimization
-- SEO (sitemap, robots.txt)
-- Cache and security middleware
-- File-based routing with example routes
-- Error and loading boundaries
-- Route guards
+1. **Rendering mode** — SSR Streaming, SSR String, SSG, or SPA
+2. **Features** — pick from store, query, forms, feature CRUD, i18n, tables, virtual lists, CSS-in-JS, UI elements, animations, hooks
+3. **AI toolchain** — MCP server config, CLAUDE.md, doctor scripts
+
+## What Gets Generated
+
+Based on your selections:
+
+- `package.json` — only the dependencies you chose
+- `vite.config.ts` — configured for your rendering mode
+- `src/entry-server.ts` — matching SSR/stream config with CORS + rate limiting
+- `src/routes/` — example pages, API routes, protected dashboard
+- `src/features/` — feature example with Zod schema (if selected)
+- `src/stores/` — store example (if selected)
+- `.mcp.json` — AI IDE integration (if AI toolchain selected)
+- `CLAUDE.md` — project rules for AI agents (if AI toolchain selected)
+- `env.d.ts` — virtual module type declarations
 
 ## License
 
