@@ -30,28 +30,30 @@
   "scripts": {
     "build": "vl_rolldown_build && tsc",
     "dev": "vl_rolldown_build-watch",
-    "test": "vitest run",
+    "test": "bun test",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@pyreon/attrs": "^0.0.2",
-    "@pyreon/coolgrid": "^0.0.2",
-    "@pyreon/elements": "^0.0.2",
+    "@pyreon/attrs": "^0.1.1",
+    "@pyreon/coolgrid": "^0.1.1",
+    "@pyreon/elements": "^0.1.1",
     "@pyreon/feature": "^0.3.0",
     "@pyreon/form": "^0.3.0",
-    "@pyreon/hooks": "^0.0.2",
+    "@pyreon/hooks": "^0.1.1",
     "@pyreon/i18n": "^0.3.0",
-    "@pyreon/kinetic": "^0.0.2",
-    "@pyreon/kinetic-presets": "^0.0.2",
-    "@pyreon/query": "^0.4.0",
-    "@pyreon/rocketstyle": "^0.0.2",
+    "@pyreon/machine": "^0.5.0",
+    "@pyreon/permissions": "^0.5.0",
+    "@pyreon/kinetic": "^0.1.1",
+    "@pyreon/kinetic-presets": "^0.1.1",
+    "@pyreon/query": "^0.5.0",
+    "@pyreon/rocketstyle": "^0.1.1",
     "@pyreon/store": "^0.3.0",
-    "@pyreon/styler": "^0.0.2",
+    "@pyreon/styler": "^0.1.1",
     "@pyreon/table": "^0.3.0",
-    "@pyreon/ui-core": "^0.0.2",
-    "@pyreon/unistyle": "^0.0.2",
+    "@pyreon/ui-core": "^0.1.1",
+    "@pyreon/unistyle": "^0.1.1",
     "@pyreon/validation": "^0.3.0",
-    "@pyreon/virtual": "^0.4.0"
+    "@pyreon/virtual": "^0.5.0"
   },
   "peerDependencies": {
     "@pyreon/reactivity": "^0.5.4"
