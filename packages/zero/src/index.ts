@@ -105,6 +105,27 @@ export {
   seoPlugin,
 } from './seo'
 
+// ─── API routes ──────────────────────────────────────────────────────────────
+
+export type {
+  ApiContext,
+  ApiHandler,
+  ApiRouteEntry,
+  ApiRouteModule,
+  HttpMethod,
+} from './api-routes'
+export { createApiMiddleware, generateApiRouteModule } from './api-routes'
+
+// ─── CORS ────────────────────────────────────────────────────────────────────
+
+export type { CorsConfig } from './cors'
+export { corsMiddleware } from './cors'
+
+// ─── Rate limiting ──────────────────────────────────────────────────────────
+
+export type { RateLimitConfig } from './rate-limit'
+export { rateLimitMiddleware } from './rate-limit'
+
 // ─── Actions ─────────────────────────────────────────────────────────────────
 
 export type { Action, ActionContext, ActionHandler } from './actions'
