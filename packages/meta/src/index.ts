@@ -74,6 +74,14 @@ export { createI18n, I18nProvider, Trans, useI18n } from '@pyreon/i18n'
 export type { Feature, FeatureConfig } from '@pyreon/feature'
 export { defineFeature, reference } from '@pyreon/feature'
 
+// ─── Machine ─────────────────────────────────────────────────────────────────
+
+export { createMachine } from '@pyreon/machine'
+
+// ─── Permissions ─────────────────────────────────────────────────────────────
+
+export { createPermissions, PermissionsProvider, usePermissions } from '@pyreon/permissions'
+
 // ─── Styler ──────────────────────────────────────────────────────────────────
 
 export { css, styled, createGlobalStyle, keyframes } from '@pyreon/styler'

@@ -15,6 +15,8 @@ describe('@pyreon/meta exports', () => {
     'useVirtualizer', 'useWindowVirtualizer',
     'createI18n', 'I18nProvider', 'useI18n', 'Trans',
     'defineFeature', 'reference',
+    'createMachine',
+    'createPermissions', 'PermissionsProvider', 'usePermissions',
   ]
 
   for (const name of fundamentals) {
