@@ -1,4 +1,5 @@
 import type { Plugin } from 'vite'
+import { generateApiRouteModule } from './api-routes'
 import { resolveConfig } from './config'
 import { renderErrorOverlay } from './error-overlay'
 import {
@@ -13,6 +14,9 @@ const RESOLVED_VIRTUAL_ROUTES_ID = `\0${VIRTUAL_ROUTES_ID}`
 
 const VIRTUAL_MIDDLEWARE_ID = 'virtual:zero/route-middleware'
 const RESOLVED_VIRTUAL_MIDDLEWARE_ID = `\0${VIRTUAL_MIDDLEWARE_ID}`
+
+const VIRTUAL_API_ROUTES_ID = 'virtual:zero/api-routes'
+const RESOLVED_VIRTUAL_API_ROUTES_ID = `\0${VIRTUAL_API_ROUTES_ID}`
 
 /**
  * Zero Vite plugin — adds file-based routing and zero-config conventions
@@ -45,6 +49,7 @@ export function zeroPlugin(userConfig: ZeroConfig = {}): Plugin {
     resolveId(id) {
       if (id === VIRTUAL_ROUTES_ID) return RESOLVED_VIRTUAL_ROUTES_ID
       if (id === VIRTUAL_MIDDLEWARE_ID) return RESOLVED_VIRTUAL_MIDDLEWARE_ID
+      if (id === VIRTUAL_API_ROUTES_ID) return RESOLVED_VIRTUAL_API_ROUTES_ID
     },
 
     async load(id) {
@@ -63,6 +68,15 @@ export function zeroPlugin(userConfig: ZeroConfig = {}): Plugin {
           return generateMiddlewareModule(files, routesDir)
         } catch (_err) {
           return `export const routeMiddleware = []`
+        }
+      }
+
+      if (id === RESOLVED_VIRTUAL_API_ROUTES_ID) {
+        try {
+          const files = await scanRouteFiles(routesDir)
+          return generateApiRouteModule(files, routesDir)
+        } catch (_err) {
+          return `export const apiRoutes = []`
         }
       }
     },
@@ -93,6 +107,7 @@ export function zeroPlugin(userConfig: ZeroConfig = {}): Plugin {
           for (const resolvedId of [
             RESOLVED_VIRTUAL_ROUTES_ID,
             RESOLVED_VIRTUAL_MIDDLEWARE_ID,
+            RESOLVED_VIRTUAL_API_ROUTES_ID,
           ]) {
             const mod = server.moduleGraph.getModuleById(resolvedId)
             if (mod) server.moduleGraph.invalidateModule(mod)

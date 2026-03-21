@@ -1,6 +1,8 @@
 import type { RouteRecord } from '@pyreon/router'
 import type { Middleware, MiddlewareContext } from '@pyreon/server'
 import { createHandler } from '@pyreon/server'
+import type { ApiRouteEntry } from './api-routes'
+import { createApiMiddleware } from './api-routes'
 import { createApp } from './app'
 import type { RouteMiddlewareEntry, ZeroConfig } from './types'
 
@@ -15,6 +17,8 @@ export interface CreateServerOptions {
   middleware?: Middleware[]
   /** Per-route middleware from virtual:zero/route-middleware. */
   routeMiddleware?: RouteMiddlewareEntry[]
+  /** API route entries from virtual:zero/api-routes. */
+  apiRoutes?: ApiRouteEntry[]
   /** HTML template override. */
   template?: string
   /** Client entry path. */
@@ -65,14 +69,19 @@ export function matchPattern(pattern: string, path: string): boolean {
  * import { routeMiddleware } from "virtual:zero/route-middleware"
  * import { createServer } from "@pyreon/zero"
  *
- * export default createServer({ routes, routeMiddleware })
+ * export default createServer({ routes, routeMiddleware, apiRoutes })
  */
 export function createServer(options: CreateServerOptions) {
   const config = options.config ?? {}
 
   const allMiddleware: Middleware[] = []
 
-  // Per-route middleware runs first
+  // API routes run first — they short-circuit before SSR
+  if (options.apiRoutes?.length) {
+    allMiddleware.push(createApiMiddleware(options.apiRoutes))
+  }
+
+  // Per-route middleware runs next
   if (options.routeMiddleware?.length) {
     allMiddleware.push(createRouteMiddlewareDispatcher(options.routeMiddleware))
   }

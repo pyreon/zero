@@ -81,6 +81,21 @@
       "bun": "./src/actions.ts",
       "import": "./lib/actions.js",
       "types": "./lib/types/actions.d.ts"
+    },
+    "./api-routes": {
+      "bun": "./src/api-routes.ts",
+      "import": "./lib/api-routes.js",
+      "types": "./lib/types/api-routes.d.ts"
+    },
+    "./cors": {
+      "bun": "./src/cors.ts",
+      "import": "./lib/cors.js",
+      "types": "./lib/types/cors.d.ts"
+    },
+    "./rate-limit": {
+      "bun": "./src/rate-limit.ts",
+      "import": "./lib/rate-limit.js",
+      "types": "./lib/types/rate-limit.d.ts"
     }
   },
   "scripts": {

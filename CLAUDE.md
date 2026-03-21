@@ -109,6 +109,18 @@ Route files can `export const middleware` — the Vite plugin generates a virtua
 
 Dev-only styled HTML overlay for SSR errors with source-mapped stack traces. Injected via Vite plugin's `configureServer` hook.
 
+### API Routes (`api-routes.ts`)
+
+File-based API routes: `.ts` files in `src/routes/api/` export HTTP method handlers (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`). Auto-generated via `virtual:zero/api-routes`. Handlers receive `ApiContext` with `request`, `url`, `params`, `headers`. Matched by URL pattern with dynamic params.
+
+### CORS (`cors.ts`)
+
+`corsMiddleware(config)` — configurable origins (string, array, function), methods, credentials, preflight handling. Handles `OPTIONS` automatically.
+
+### Rate Limiting (`rate-limit.ts`)
+
+`rateLimitMiddleware(config)` — in-memory per-client limiting with `X-RateLimit-*` headers. Configurable `max`, `window`, `include`/`exclude` patterns, custom key function.
+
 ### Shared Utilities (`utils/`)
 
 - `use-intersection-observer.ts` — reusable observer composable (used by Image, Link)
@@ -116,7 +128,7 @@ Dev-only styled HTML overlay for SSR errors with source-mapped stack traces. Inj
 
 ## Package Exports
 
-`.` (core), `./client`, `./config`, `./image`, `./link`, `./script`, `./font`, `./cache`, `./seo`, `./theme`, `./image-plugin`, `./actions`
+`.` (core), `./client`, `./config`, `./image`, `./link`, `./script`, `./font`, `./cache`, `./seo`, `./theme`, `./image-plugin`, `./actions`, `./api-routes`, `./cors`, `./rate-limit`
 
 ## Starter Template (`packages/create-zero/templates/default/`)
 
