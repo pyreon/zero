@@ -126,6 +126,11 @@ export { corsMiddleware } from './cors'
 export type { RateLimitConfig } from './rate-limit'
 export { rateLimitMiddleware } from './rate-limit'
 
+// ─── Compression ────────────────────────────────────────────────────────────
+
+export type { CompressionConfig } from './compression'
+export { compressionMiddleware, compressResponse } from './compression'
+
 // ─── Actions ─────────────────────────────────────────────────────────────────
 
 export type { Action, ActionContext, ActionHandler } from './actions'
