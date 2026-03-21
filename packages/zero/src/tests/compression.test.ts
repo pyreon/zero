@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { compressResponse } from '../compression'
+import { compressResponse, isCompressible } from '../compression'
 
 describe('compressResponse', () => {
   it('compresses text/html above threshold', async () => {
@@ -69,5 +69,29 @@ describe('compressResponse', () => {
     const compressed = await compressResponse(response, 'gzip', 1024)
     expect(compressed.status).toBe(201)
     expect(compressed.statusText).toBe('Created')
+  })
+})
+
+describe('isCompressible', () => {
+  it('returns true for text types', () => {
+    expect(isCompressible('text/html')).toBe(true)
+    expect(isCompressible('text/css')).toBe(true)
+    expect(isCompressible('text/plain')).toBe(true)
+  })
+
+  it('returns true for application types', () => {
+    expect(isCompressible('application/json')).toBe(true)
+    expect(isCompressible('application/javascript')).toBe(true)
+    expect(isCompressible('application/xml')).toBe(true)
+  })
+
+  it('returns true for SVG', () => {
+    expect(isCompressible('image/svg+xml')).toBe(true)
+  })
+
+  it('returns false for binary types', () => {
+    expect(isCompressible('image/png')).toBe(false)
+    expect(isCompressible('image/jpeg')).toBe(false)
+    expect(isCompressible('application/octet-stream')).toBe(false)
   })
 })
