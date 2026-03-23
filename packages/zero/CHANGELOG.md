@@ -1,5 +1,27 @@
 # @pyreon/zero
 
+## 0.3.0
+
+### Minor Changes
+
+- Bump Pyreon ecosystem to 0.7.0 core, add charts/hotkeys/storage/flow/code
+
+  - Bump all core @pyreon/\* deps to ^0.7.0
+  - Bump fundamentals to ^0.6.0, UI system to ^0.2.0
+  - Add @pyreon/charts, @pyreon/hotkeys, @pyreon/storage to meta re-exports
+  - Add @pyreon/flow and @pyreon/code to meta re-exports
+  - Add package strategy choice in create-zero (meta barrel vs individual packages)
+  - Add charts, hotkeys, storage, flow, code as create-zero feature options
+  - Use pinned version ranges instead of 'latest' in scaffolded projects
+  - Fix signal setter API for Pyreon 0.7.0 (count.set/count.update)
+  - Document provide() helper and onCleanup() in anti-patterns
+  - Add Pyreon MCP server config (.mcp.json)
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @pyreon/meta@0.3.0
+
 ## 0.2.0
 
 ### Minor Changes
