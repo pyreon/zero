@@ -24,6 +24,8 @@ Zero re-exports and integrates the full Pyreon stack:
 - `@pyreon/virtual` — `useVirtualizer`, `useWindowVirtualizer`
 - `@pyreon/i18n` — `createI18n`, `I18nProvider`, `useI18n`, `Trans`
 - `@pyreon/feature` — `defineFeature`, `reference` (schema-driven CRUD features)
+- `@pyreon/flow` — `createFlow`, `Flow`, `Background`, `MiniMap`, `Controls`, `Handle`, `computeLayout`
+- `@pyreon/code` — `createEditor`, `CodeEditor`, `DiffEditor`, `TabbedEditor`
 
 **UI System (re-exported from `@pyreon/meta`):**
 

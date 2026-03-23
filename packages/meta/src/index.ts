@@ -74,6 +74,40 @@ export { createI18n, I18nProvider, Trans, useI18n } from '@pyreon/i18n'
 export type { Feature, FeatureConfig } from '@pyreon/feature'
 export { defineFeature, reference } from '@pyreon/feature'
 
+// ─── Flow ────────────────────────────────────────────────────────────────────
+
+export type {
+  FlowConfig,
+  FlowEdge,
+  FlowInstance,
+  FlowNode,
+  NodeComponentProps,
+} from '@pyreon/flow'
+export {
+  Background,
+  Controls,
+  computeLayout,
+  createFlow,
+  Flow,
+  flowStyles,
+  Handle,
+  MiniMap,
+  NodeResizer,
+  NodeToolbar,
+  Panel,
+  Position,
+} from '@pyreon/flow'
+
+// ─── Code ────────────────────────────────────────────────────────────────────
+
+export type { EditorInstance, EditorOptions } from '@pyreon/code'
+export {
+  CodeEditor,
+  createEditor,
+  DiffEditor,
+  TabbedEditor,
+} from '@pyreon/code'
+
 // ─── Machine ─────────────────────────────────────────────────────────────────
 
 export { createMachine } from '@pyreon/machine'

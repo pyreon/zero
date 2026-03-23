@@ -43,6 +43,22 @@ describe('@pyreon/meta exports', () => {
     'createPermissions',
     'PermissionsProvider',
     'usePermissions',
+    'createFlow',
+    'Flow',
+    'Background',
+    'Controls',
+    'MiniMap',
+    'Handle',
+    'Position',
+    'computeLayout',
+    'flowStyles',
+    'NodeResizer',
+    'NodeToolbar',
+    'Panel',
+    'createEditor',
+    'CodeEditor',
+    'DiffEditor',
+    'TabbedEditor',
   ]
 
   for (const name of fundamentals) {

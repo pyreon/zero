@@ -49,6 +49,8 @@ The interactive CLI lets you pick your rendering mode, features, and AI toolchai
 - i18n: `@pyreon/i18n` — translations, plurals, rich text
 - State machines: `@pyreon/machine` — reactive FSM
 - Permissions: `@pyreon/permissions` — reactive RBAC/ABAC
+- Flow diagrams: `@pyreon/flow` — reactive node graphs with auto-layout
+- Code editor: `@pyreon/code` — CodeMirror 6 with signals, diff, tabs, minimap
 - Styling: `@pyreon/styler` — CSS-in-JS
 - UI: `@pyreon/elements`, `@pyreon/coolgrid`, `@pyreon/hooks`
 - Animations: `@pyreon/kinetic` + 120 presets
