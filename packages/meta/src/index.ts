@@ -100,7 +100,7 @@ export {
 
 // ─── Code ────────────────────────────────────────────────────────────────────
 
-export type { EditorInstance, EditorOptions } from '@pyreon/code'
+export type { EditorConfig, EditorInstance } from '@pyreon/code'
 export {
   CodeEditor,
   createEditor,

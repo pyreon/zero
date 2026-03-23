@@ -12,42 +12,18 @@
     "doctor:ci": "zero doctor --ci"
   },
   "dependencies": {
-    "@pyreon/attrs": "latest",
-    "@pyreon/coolgrid": "latest",
-    "@pyreon/core": "latest",
-    "@pyreon/elements": "latest",
-    "@pyreon/feature": "latest",
-    "@pyreon/form": "latest",
-    "@pyreon/head": "latest",
-    "@pyreon/hooks": "latest",
-    "@pyreon/i18n": "latest",
-    "@pyreon/kinetic": "latest",
-    "@pyreon/kinetic-presets": "latest",
-    "@pyreon/query": "latest",
-    "@pyreon/reactivity": "latest",
-    "@pyreon/rocketstyle": "latest",
-    "@pyreon/router": "latest",
-    "@pyreon/runtime-dom": "latest",
-    "@pyreon/runtime-server": "latest",
-    "@pyreon/server": "latest",
-    "@pyreon/store": "latest",
-    "@pyreon/styler": "latest",
-    "@pyreon/table": "latest",
-    "@pyreon/ui-core": "latest",
-    "@pyreon/unistyle": "latest",
-    "@pyreon/validation": "latest",
-    "@pyreon/virtual": "latest",
-    "@pyreon/zero": "latest",
+    "@pyreon/meta": "^0.2.0",
+    "@pyreon/zero": "^0.2.0",
     "@tanstack/query-core": "^5.90.0",
     "@tanstack/table-core": "^8.21.0",
     "@tanstack/virtual-core": "^3.13.0",
     "zod": "^4.0.0"
   },
   "devDependencies": {
-    "@pyreon/mcp": "latest",
-    "@pyreon/vite-plugin": "latest",
-    "@pyreon/zero-cli": "latest",
+    "@pyreon/mcp": "^0.7.0",
+    "@pyreon/vite-plugin": "^0.7.0",
+    "@pyreon/zero-cli": "^0.2.0",
     "typescript": "^5.9.3",
-    "vite": "^7.0.0"
+    "vite": "^8.0.0"
   }
 }
