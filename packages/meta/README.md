@@ -24,6 +24,13 @@ bun add @pyreon/meta
 | `@pyreon/virtual` | `useVirtualizer`, `useWindowVirtualizer` |
 | `@pyreon/i18n` | `createI18n`, `I18nProvider`, `useI18n`, `Trans` |
 | `@pyreon/feature` | `defineFeature`, `reference` |
+| `@pyreon/machine` | `createMachine` |
+| `@pyreon/permissions` | `createPermissions`, `usePermissions`, `PermissionsProvider` |
+| `@pyreon/hotkeys` | `useHotkey`, `useHotkeyScope` |
+| `@pyreon/storage` | `useStorage`, `useCookie`, `useIndexedDB` |
+| `@pyreon/charts` | `Chart` (reactive ECharts with lazy loading) |
+| `@pyreon/flow` | `createFlow`, `Flow`, `Background`, `MiniMap`, `Controls` |
+| `@pyreon/code` | `createEditor`, `CodeEditor`, `DiffEditor`, `TabbedEditor` |
 
 ### UI System
 
@@ -42,7 +49,10 @@ bun add @pyreon/meta
 ## Usage
 
 ```ts
-import { defineStore, signal, useQuery, useForm, styled, useHover } from "@pyreon/meta"
+import {
+  defineStore, signal, useQuery, useForm, useHotkey,
+  useStorage, Chart, createFlow, styled, useHover,
+} from "@pyreon/meta"
 ```
 
 ## License

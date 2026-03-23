@@ -20,6 +20,12 @@
 ## Effect cleanup
 - `effect()` returns an `Effect` object with `.dispose()` — not a raw function
 - Use `onUnmount(() => dispose.dispose())` for cleanup, not `onUnmount(dispose)`
+- Prefer `onCleanup()` inside effects for inline cleanup (available since @pyreon/reactivity 0.7.0)
+
+## Context mistakes
+- **Never** use `<Context.Provider value={...}>` JSX — Pyreon contexts don't have a `.Provider` component
+- Use `provide(context, value)` from `@pyreon/core` (available since 0.6.0) — it calls `pushContext` + `onUnmount(popContext)` automatically
+- For manual control: `pushContext(new Map([[ctx.id, value]]))` + `onUnmount(() => popContext())`
 
 ## Store mistakes
 - **Never** import `signal`/`computed`/`effect` from `@pyreon/reactivity` in app code — use `@pyreon/store` re-exports

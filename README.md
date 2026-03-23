@@ -41,12 +41,19 @@ The interactive CLI lets you pick your rendering mode, features, and AI toolchai
 - Node.js, Bun, and static deploy adapters
 
 **Ecosystem (via @pyreon/meta)**
-- State: `@pyreon/store` — signal-based stores
+- State: `@pyreon/store` — signal-based stores with `onCleanup` for effect cleanup
 - Data: `@pyreon/query` — TanStack Query adapter
 - Forms: `@pyreon/form` + `@pyreon/validation` — Zod/Valibot/ArkType
 - CRUD: `@pyreon/feature` — schema-driven features
 - Tables: `@pyreon/table`, Virtual lists: `@pyreon/virtual`
 - i18n: `@pyreon/i18n` — translations, plurals, rich text
+- State machines: `@pyreon/machine` — reactive FSM
+- Permissions: `@pyreon/permissions` — reactive RBAC/ABAC
+- Flow diagrams: `@pyreon/flow` — reactive node graphs with auto-layout
+- Code editor: `@pyreon/code` — CodeMirror 6 with signals, diff, tabs, minimap (optional)
+- Charts: `@pyreon/charts` — reactive ECharts with auto lazy loading (optional)
+- Hotkeys: `@pyreon/hotkeys` — keyboard shortcuts with scoping
+- Storage: `@pyreon/storage` — reactive localStorage, cookies, IndexedDB
 - Styling: `@pyreon/styler` — CSS-in-JS
 - UI: `@pyreon/elements`, `@pyreon/coolgrid`, `@pyreon/hooks`
 - Animations: `@pyreon/kinetic` + 120 presets
@@ -64,7 +71,7 @@ The interactive CLI lets you pick your rendering mode, features, and AI toolchai
 bun install
 bun run dev           # Dev mode
 bun run build         # Build all packages
-bun run test          # Run tests (309 tests)
+bun run test          # Run tests (388 tests)
 bun run typecheck     # Type check all packages
 bun run test:template # Validate starter template
 ```

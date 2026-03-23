@@ -10,6 +10,7 @@ interface ProjectConfig {
   targetDir: string
   renderMode: 'ssr-stream' | 'ssr-string' | 'ssg' | 'spa'
   features: string[]
+  packageStrategy: 'meta' | 'individual'
   aiToolchain: boolean
 }
 
@@ -67,6 +68,26 @@ const FEATURES = {
   hooks: {
     label: 'Hooks (@pyreon/hooks — 25+ signal-based utilities)',
     deps: ['@pyreon/hooks'],
+  },
+  charts: {
+    label: 'Charts (@pyreon/charts — reactive ECharts)',
+    deps: ['@pyreon/charts'],
+  },
+  hotkeys: {
+    label: 'Hotkeys (@pyreon/hotkeys — keyboard shortcuts)',
+    deps: ['@pyreon/hotkeys'],
+  },
+  storage: {
+    label: 'Storage (@pyreon/storage — localStorage, cookies, IndexedDB)',
+    deps: ['@pyreon/storage'],
+  },
+  flow: {
+    label: 'Flow Diagrams (@pyreon/flow — reactive node graphs)',
+    deps: ['@pyreon/flow'],
+  },
+  code: {
+    label: 'Code Editor (@pyreon/code — CodeMirror 6)',
+    deps: ['@pyreon/code'],
   },
 } as const
 
@@ -142,6 +163,20 @@ async function main() {
     process.exit(0)
   }
 
+  // Package strategy
+  const packageStrategy = await p.select({
+    message: 'Package imports',
+    options: [
+      { value: 'meta', label: '@pyreon/meta (single barrel)', hint: 'one import for everything — simpler, tree-shaken at build' },
+      { value: 'individual', label: 'Individual packages', hint: 'only install what you selected — smaller node_modules' },
+    ],
+  })
+
+  if (p.isCancel(packageStrategy)) {
+    p.cancel('Cancelled.')
+    process.exit(0)
+  }
+
   // AI toolchain
   const aiToolchain = await p.confirm({
     message: 'Include AI toolchain? (MCP server, CLAUDE.md, doctor)',
@@ -158,6 +193,7 @@ async function main() {
     targetDir,
     renderMode: renderMode as ProjectConfig['renderMode'],
     features: features as string[],
+    packageStrategy: packageStrategy as ProjectConfig['packageStrategy'],
     aiToolchain: aiToolchain as boolean,
   }
 
@@ -266,45 +302,79 @@ async function scaffold(config: ProjectConfig) {
 
 // ─── File generators ────────────────────────────────────────────────────────
 
+// Resolve the correct version range for a @pyreon/* package
+function pyreonVersion(pkg: string): string {
+  // Core packages
+  const core = ['core', 'reactivity', 'runtime-dom', 'runtime-server', 'server', 'head', 'router', 'vite-plugin', 'compiler', 'cli', 'mcp']
+  if (core.some((c) => pkg === `@pyreon/${c}`)) return '^0.7.0'
+  // Zero framework packages
+  if (pkg === '@pyreon/zero' || pkg === '@pyreon/meta' || pkg === '@pyreon/zero-cli' || pkg === '@pyreon/create-zero') return '^0.2.0'
+  // Fundamentals
+  const fundamentals = ['store', 'form', 'validation', 'query', 'table', 'virtual', 'i18n', 'feature', 'machine', 'permissions', 'flow', 'code']
+  if (fundamentals.some((f) => pkg === `@pyreon/${f}`)) return '^0.6.0'
+  // UI system
+  return '^0.2.0'
+}
+
 function generatePackageJson(config: ProjectConfig): string {
   const deps: Record<string, string> = {
-    '@pyreon/core': 'latest',
-    '@pyreon/head': 'latest',
-    '@pyreon/reactivity': 'latest',
-    '@pyreon/router': 'latest',
-    '@pyreon/runtime-dom': 'latest',
-    '@pyreon/runtime-server': 'latest',
-    '@pyreon/server': 'latest',
-    '@pyreon/zero': 'latest',
+    '@pyreon/core': pyreonVersion('@pyreon/core'),
+    '@pyreon/head': pyreonVersion('@pyreon/head'),
+    '@pyreon/reactivity': pyreonVersion('@pyreon/reactivity'),
+    '@pyreon/router': pyreonVersion('@pyreon/router'),
+    '@pyreon/runtime-dom': pyreonVersion('@pyreon/runtime-dom'),
+    '@pyreon/runtime-server': pyreonVersion('@pyreon/runtime-server'),
+    '@pyreon/server': pyreonVersion('@pyreon/server'),
+    '@pyreon/zero': pyreonVersion('@pyreon/zero'),
   }
 
-  // Add feature-specific deps
-  const allDeps = new Set<string>()
-  for (const key of config.features) {
-    const feature = FEATURES[key as FeatureKey]
-    if (feature) {
-      for (const dep of feature.deps) allDeps.add(dep)
+  if (config.packageStrategy === 'meta') {
+    // Single barrel — includes all fundamentals + UI system
+    deps['@pyreon/meta'] = pyreonVersion('@pyreon/meta')
+    // Still need non-pyreon deps for selected features
+    for (const key of config.features) {
+      const feature = FEATURES[key as FeatureKey]
+      if (feature) {
+        for (const dep of feature.deps) {
+          if (!dep.startsWith('@pyreon/')) {
+            if (dep.startsWith('@tanstack/')) {
+              deps[dep] = dep.includes('query') ? '^5.90.0' : dep.includes('table') ? '^8.21.0' : '^3.13.0'
+            } else if (dep === 'zod') {
+              deps[dep] = '^4.0.0'
+            }
+          }
+        }
+      }
     }
-  }
-  for (const dep of allDeps) {
-    if (dep.startsWith('@pyreon/')) {
-      deps[dep] = 'latest'
-    } else if (dep.startsWith('@tanstack/')) {
-      deps[dep] = dep.includes('query') ? '^5.90.0' : dep.includes('table') ? '^8.21.0' : '^3.13.0'
-    } else if (dep === 'zod') {
-      deps[dep] = '^4.0.0'
+  } else {
+    // Individual packages — only install what's selected
+    const allDeps = new Set<string>()
+    for (const key of config.features) {
+      const feature = FEATURES[key as FeatureKey]
+      if (feature) {
+        for (const dep of feature.deps) allDeps.add(dep)
+      }
+    }
+    for (const dep of allDeps) {
+      if (dep.startsWith('@pyreon/')) {
+        deps[dep] = pyreonVersion(dep)
+      } else if (dep.startsWith('@tanstack/')) {
+        deps[dep] = dep.includes('query') ? '^5.90.0' : dep.includes('table') ? '^8.21.0' : '^3.13.0'
+      } else if (dep === 'zod') {
+        deps[dep] = '^4.0.0'
+      }
     }
   }
 
   const devDeps: Record<string, string> = {
-    '@pyreon/vite-plugin': 'latest',
-    '@pyreon/zero-cli': 'latest',
+    '@pyreon/vite-plugin': pyreonVersion('@pyreon/vite-plugin'),
+    '@pyreon/zero-cli': pyreonVersion('@pyreon/zero-cli'),
     'typescript': '^5.9.3',
     'vite': '^7.0.0',
   }
 
   if (config.aiToolchain) {
-    devDeps['@pyreon/mcp'] = 'latest'
+    devDeps['@pyreon/mcp'] = pyreonVersion('@pyreon/mcp')
   }
 
   const scripts: Record<string, string> = {
