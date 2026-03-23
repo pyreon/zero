@@ -313,7 +313,7 @@ function pyreonVersion(pkg: string): string {
   const fundamentals = ['store', 'form', 'validation', 'query', 'table', 'virtual', 'i18n', 'feature', 'machine', 'permissions', 'flow', 'code']
   if (fundamentals.some((f) => pkg === `@pyreon/${f}`)) return '^0.6.0'
   // UI system
-  return '^0.1.2'
+  return '^0.2.0'
 }
 
 function generatePackageJson(config: ProjectConfig): string {
