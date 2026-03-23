@@ -16,7 +16,7 @@ Zero re-exports and integrates the full Pyreon stack:
 
 **Fundamentals (re-exported from `@pyreon/meta`):**
 
-- `@pyreon/store` — `defineStore`, `signal`, `computed`, `effect`, `batch`
+- `@pyreon/store` — `defineStore`, `signal`, `computed`, `effect`, `batch`, `onCleanup`
 - `@pyreon/form` — `useForm`, `useField`, `useFieldArray`, `FormProvider`
 - `@pyreon/validation` — `zodSchema`, `zodField` (+ valibot, arktype adapters)
 - `@pyreon/query` — `useQuery`, `useMutation`, `QueryClient`, `QueryClientProvider`
