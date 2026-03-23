@@ -33,11 +33,11 @@ export default function NewPostPage() {
       <form onSubmit={(e: Event) => form.handleSubmit(e)}>
         <div class="form-field">
           <label for="title">Title</label>
-          <input id="title" {...form.register('title')} />
+          <input id="title" {...form.register('title', {})} />
         </div>
         <div class="form-field">
           <label for="body">Body</label>
-          <textarea id="body" rows={6} {...form.register('body')} />
+          <textarea id="body" rows={6} {...form.register('body', {})} />
         </div>
         <div class="form-field">
           <label class="checkbox-label">
