@@ -69,6 +69,26 @@ const FEATURES = {
     label: 'Hooks (@pyreon/hooks — 25+ signal-based utilities)',
     deps: ['@pyreon/hooks'],
   },
+  charts: {
+    label: 'Charts (@pyreon/charts — reactive ECharts)',
+    deps: ['@pyreon/charts'],
+  },
+  hotkeys: {
+    label: 'Hotkeys (@pyreon/hotkeys — keyboard shortcuts)',
+    deps: ['@pyreon/hotkeys'],
+  },
+  storage: {
+    label: 'Storage (@pyreon/storage — localStorage, cookies, IndexedDB)',
+    deps: ['@pyreon/storage'],
+  },
+  flow: {
+    label: 'Flow Diagrams (@pyreon/flow — reactive node graphs)',
+    deps: ['@pyreon/flow'],
+  },
+  code: {
+    label: 'Code Editor (@pyreon/code — CodeMirror 6)',
+    deps: ['@pyreon/code'],
+  },
 } as const
 
 type FeatureKey = keyof typeof FEATURES

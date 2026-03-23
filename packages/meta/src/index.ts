@@ -108,6 +108,27 @@ export {
   TabbedEditor,
 } from '@pyreon/code'
 
+// ─── Charts ──────────────────────────────────────────────────────────────────
+
+export { Chart } from '@pyreon/charts'
+
+// ─── Hotkeys ─────────────────────────────────────────────────────────────────
+
+export {
+  useHotkey,
+  useHotkeyScope,
+} from '@pyreon/hotkeys'
+
+// ─── Storage ─────────────────────────────────────────────────────────────────
+
+export {
+  createStorage,
+  useCookie,
+  useIndexedDB,
+  useMemoryStorage,
+  useStorage,
+} from '@pyreon/storage'
+
 // ─── Machine ─────────────────────────────────────────────────────────────────
 
 export { createMachine } from '@pyreon/machine'

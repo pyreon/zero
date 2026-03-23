@@ -50,7 +50,10 @@ The interactive CLI lets you pick your rendering mode, features, and AI toolchai
 - State machines: `@pyreon/machine` — reactive FSM
 - Permissions: `@pyreon/permissions` — reactive RBAC/ABAC
 - Flow diagrams: `@pyreon/flow` — reactive node graphs with auto-layout
-- Code editor: `@pyreon/code` — CodeMirror 6 with signals, diff, tabs, minimap
+- Code editor: `@pyreon/code` — CodeMirror 6 with signals, diff, tabs, minimap (optional)
+- Charts: `@pyreon/charts` — reactive ECharts with auto lazy loading (optional)
+- Hotkeys: `@pyreon/hotkeys` — keyboard shortcuts with scoping
+- Storage: `@pyreon/storage` — reactive localStorage, cookies, IndexedDB
 - Styling: `@pyreon/styler` — CSS-in-JS
 - UI: `@pyreon/elements`, `@pyreon/coolgrid`, `@pyreon/hooks`
 - Animations: `@pyreon/kinetic` + 120 presets
