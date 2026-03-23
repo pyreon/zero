@@ -284,18 +284,15 @@ async function scaffold(config: ProjectConfig) {
 
 // Resolve the correct version range for a @pyreon/* package
 function pyreonVersion(pkg: string): string {
-  // Core packages — 0.7.x
+  // Core packages
   const core = ['core', 'reactivity', 'runtime-dom', 'runtime-server', 'server', 'head', 'router', 'vite-plugin', 'compiler', 'cli', 'mcp']
   if (core.some((c) => pkg === `@pyreon/${c}`)) return '^0.7.0'
   // Zero framework packages
   if (pkg === '@pyreon/zero' || pkg === '@pyreon/meta' || pkg === '@pyreon/zero-cli' || pkg === '@pyreon/create-zero') return '^0.2.0'
-  // Fundamentals with 0.5.x
-  const fund5 = ['query', 'virtual', 'machine', 'permissions', 'flow', 'code']
-  if (fund5.some((f) => pkg === `@pyreon/${f}`)) return '^0.5.0'
-  // Fundamentals with 0.3.x
-  const fund3 = ['store', 'form', 'validation', 'table', 'i18n', 'feature']
-  if (fund3.some((f) => pkg === `@pyreon/${f}`)) return '^0.3.0'
-  // UI system — 0.1.x
+  // Fundamentals
+  const fundamentals = ['store', 'form', 'validation', 'query', 'table', 'virtual', 'i18n', 'feature', 'machine', 'permissions', 'flow', 'code']
+  if (fundamentals.some((f) => pkg === `@pyreon/${f}`)) return '^0.6.0'
+  // UI system
   return '^0.1.2'
 }
 
