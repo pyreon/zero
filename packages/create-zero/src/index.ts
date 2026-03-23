@@ -10,6 +10,7 @@ interface ProjectConfig {
   targetDir: string
   renderMode: 'ssr-stream' | 'ssr-string' | 'ssg' | 'spa'
   features: string[]
+  packageStrategy: 'meta' | 'individual'
   aiToolchain: boolean
 }
 
@@ -142,6 +143,20 @@ async function main() {
     process.exit(0)
   }
 
+  // Package strategy
+  const packageStrategy = await p.select({
+    message: 'Package imports',
+    options: [
+      { value: 'meta', label: '@pyreon/meta (single barrel)', hint: 'one import for everything — simpler, tree-shaken at build' },
+      { value: 'individual', label: 'Individual packages', hint: 'only install what you selected — smaller node_modules' },
+    ],
+  })
+
+  if (p.isCancel(packageStrategy)) {
+    p.cancel('Cancelled.')
+    process.exit(0)
+  }
+
   // AI toolchain
   const aiToolchain = await p.confirm({
     message: 'Include AI toolchain? (MCP server, CLAUDE.md, doctor)',
@@ -158,6 +173,7 @@ async function main() {
     targetDir,
     renderMode: renderMode as ProjectConfig['renderMode'],
     features: features as string[],
+    packageStrategy: packageStrategy as ProjectConfig['packageStrategy'],
     aiToolchain: aiToolchain as boolean,
   }
 
@@ -278,21 +294,41 @@ function generatePackageJson(config: ProjectConfig): string {
     '@pyreon/zero': 'latest',
   }
 
-  // Add feature-specific deps
-  const allDeps = new Set<string>()
-  for (const key of config.features) {
-    const feature = FEATURES[key as FeatureKey]
-    if (feature) {
-      for (const dep of feature.deps) allDeps.add(dep)
+  if (config.packageStrategy === 'meta') {
+    // Single barrel — includes all fundamentals + UI system
+    deps['@pyreon/meta'] = 'latest'
+    // Still need non-pyreon deps for selected features
+    for (const key of config.features) {
+      const feature = FEATURES[key as FeatureKey]
+      if (feature) {
+        for (const dep of feature.deps) {
+          if (!dep.startsWith('@pyreon/')) {
+            if (dep.startsWith('@tanstack/')) {
+              deps[dep] = dep.includes('query') ? '^5.90.0' : dep.includes('table') ? '^8.21.0' : '^3.13.0'
+            } else if (dep === 'zod') {
+              deps[dep] = '^4.0.0'
+            }
+          }
+        }
+      }
     }
-  }
-  for (const dep of allDeps) {
-    if (dep.startsWith('@pyreon/')) {
-      deps[dep] = 'latest'
-    } else if (dep.startsWith('@tanstack/')) {
-      deps[dep] = dep.includes('query') ? '^5.90.0' : dep.includes('table') ? '^8.21.0' : '^3.13.0'
-    } else if (dep === 'zod') {
-      deps[dep] = '^4.0.0'
+  } else {
+    // Individual packages — only install what's selected
+    const allDeps = new Set<string>()
+    for (const key of config.features) {
+      const feature = FEATURES[key as FeatureKey]
+      if (feature) {
+        for (const dep of feature.deps) allDeps.add(dep)
+      }
+    }
+    for (const dep of allDeps) {
+      if (dep.startsWith('@pyreon/')) {
+        deps[dep] = 'latest'
+      } else if (dep.startsWith('@tanstack/')) {
+        deps[dep] = dep.includes('query') ? '^5.90.0' : dep.includes('table') ? '^8.21.0' : '^3.13.0'
+      } else if (dep === 'zod') {
+        deps[dep] = '^4.0.0'
+      }
     }
   }
 
