@@ -282,21 +282,38 @@ async function scaffold(config: ProjectConfig) {
 
 // ─── File generators ────────────────────────────────────────────────────────
 
+// Resolve the correct version range for a @pyreon/* package
+function pyreonVersion(pkg: string): string {
+  // Core packages — 0.7.x
+  const core = ['core', 'reactivity', 'runtime-dom', 'runtime-server', 'server', 'head', 'router', 'vite-plugin', 'compiler', 'cli', 'mcp']
+  if (core.some((c) => pkg === `@pyreon/${c}`)) return '^0.7.0'
+  // Zero framework packages
+  if (pkg === '@pyreon/zero' || pkg === '@pyreon/meta' || pkg === '@pyreon/zero-cli' || pkg === '@pyreon/create-zero') return '^0.2.0'
+  // Fundamentals with 0.5.x
+  const fund5 = ['query', 'virtual', 'machine', 'permissions', 'flow', 'code']
+  if (fund5.some((f) => pkg === `@pyreon/${f}`)) return '^0.5.0'
+  // Fundamentals with 0.3.x
+  const fund3 = ['store', 'form', 'validation', 'table', 'i18n', 'feature']
+  if (fund3.some((f) => pkg === `@pyreon/${f}`)) return '^0.3.0'
+  // UI system — 0.1.x
+  return '^0.1.2'
+}
+
 function generatePackageJson(config: ProjectConfig): string {
   const deps: Record<string, string> = {
-    '@pyreon/core': 'latest',
-    '@pyreon/head': 'latest',
-    '@pyreon/reactivity': 'latest',
-    '@pyreon/router': 'latest',
-    '@pyreon/runtime-dom': 'latest',
-    '@pyreon/runtime-server': 'latest',
-    '@pyreon/server': 'latest',
-    '@pyreon/zero': 'latest',
+    '@pyreon/core': pyreonVersion('@pyreon/core'),
+    '@pyreon/head': pyreonVersion('@pyreon/head'),
+    '@pyreon/reactivity': pyreonVersion('@pyreon/reactivity'),
+    '@pyreon/router': pyreonVersion('@pyreon/router'),
+    '@pyreon/runtime-dom': pyreonVersion('@pyreon/runtime-dom'),
+    '@pyreon/runtime-server': pyreonVersion('@pyreon/runtime-server'),
+    '@pyreon/server': pyreonVersion('@pyreon/server'),
+    '@pyreon/zero': pyreonVersion('@pyreon/zero'),
   }
 
   if (config.packageStrategy === 'meta') {
     // Single barrel — includes all fundamentals + UI system
-    deps['@pyreon/meta'] = 'latest'
+    deps['@pyreon/meta'] = pyreonVersion('@pyreon/meta')
     // Still need non-pyreon deps for selected features
     for (const key of config.features) {
       const feature = FEATURES[key as FeatureKey]
@@ -323,7 +340,7 @@ function generatePackageJson(config: ProjectConfig): string {
     }
     for (const dep of allDeps) {
       if (dep.startsWith('@pyreon/')) {
-        deps[dep] = 'latest'
+        deps[dep] = pyreonVersion(dep)
       } else if (dep.startsWith('@tanstack/')) {
         deps[dep] = dep.includes('query') ? '^5.90.0' : dep.includes('table') ? '^8.21.0' : '^3.13.0'
       } else if (dep === 'zod') {
@@ -333,14 +350,14 @@ function generatePackageJson(config: ProjectConfig): string {
   }
 
   const devDeps: Record<string, string> = {
-    '@pyreon/vite-plugin': 'latest',
-    '@pyreon/zero-cli': 'latest',
+    '@pyreon/vite-plugin': pyreonVersion('@pyreon/vite-plugin'),
+    '@pyreon/zero-cli': pyreonVersion('@pyreon/zero-cli'),
     'typescript': '^5.9.3',
     'vite': '^7.0.0',
   }
 
   if (config.aiToolchain) {
-    devDeps['@pyreon/mcp'] = 'latest'
+    devDeps['@pyreon/mcp'] = pyreonVersion('@pyreon/mcp')
   }
 
   const scripts: Record<string, string> = {
