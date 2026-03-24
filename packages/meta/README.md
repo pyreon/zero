@@ -24,6 +24,7 @@ bun add @pyreon/meta
 | `@pyreon/virtual` | `useVirtualizer`, `useWindowVirtualizer` |
 | `@pyreon/i18n` | `createI18n`, `I18nProvider`, `useI18n`, `Trans` |
 | `@pyreon/feature` | `defineFeature`, `reference` |
+| `@pyreon/state-tree` | `model`, `getSnapshot`, `applySnapshot`, `applyPatch`, `onPatch` |
 | `@pyreon/machine` | `createMachine` |
 | `@pyreon/permissions` | `createPermissions`, `usePermissions`, `PermissionsProvider` |
 | `@pyreon/hotkeys` | `useHotkey`, `useHotkeyScope` |
