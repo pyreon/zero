@@ -1,5 +1,25 @@
 # @pyreon/zero
 
+## 0.4.0
+
+### Minor Changes
+
+- Bump to Pyreon 0.7.5 core + 0.9.0 fundamentals, add state-tree, strict types
+
+  - Bump core @pyreon/\* to ^0.7.5, fundamentals to ^0.9.0, UI system ^0.2.0
+  - Use @pyreon/typescript preset for strict type checking
+  - Add @pyreon/state-tree to meta re-exports
+  - Fix all noUncheckedIndexedAccess and exactOptionalPropertyTypes errors
+  - Add VNodeChild return types to JSX components
+  - Fix integration tests with pyreon() compiler plugin
+  - Bump TypeScript to 6.0.2, vitest to 4.1.1
+  - Add explicit jsxImportSource + customConditions to root tsconfig (bun compat)
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @pyreon/meta@0.4.0
+
 ## 0.3.0
 
 ### Minor Changes
