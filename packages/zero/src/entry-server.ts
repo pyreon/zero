@@ -53,6 +53,7 @@ export function matchPattern(pattern: string, path: string): boolean {
 
   for (let i = 0; i < patternParts.length; i++) {
     const pp = patternParts[i]
+    if (!pp) continue
     if (pp.endsWith('*')) return true // catch-all matches everything after
     if (pp.startsWith(':')) continue // dynamic segment matches anything
     if (pp !== pathParts[i]) return false
@@ -100,7 +101,7 @@ export function createServer(options: CreateServerOptions) {
     routes: options.routes,
     middleware: allMiddleware,
     mode: config.ssr?.mode ?? 'string',
-    template: options.template,
-    clientEntry: options.clientEntry,
+    ...(options.template ? { template: options.template } : {}),
+    ...(options.clientEntry ? { clientEntry: options.clientEntry } : {}),
   })
 }

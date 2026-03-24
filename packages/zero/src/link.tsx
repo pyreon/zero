@@ -230,10 +230,9 @@ export function createLink(
         isActive={link.isActive}
         isExactActive={link.isExactActive}
         class={link.classes}
-        style={props.style}
-        target={props.external ? '_blank' : undefined}
-        rel={props.external ? 'noopener noreferrer' : undefined}
-        aria-label={props['aria-label']}
+        {...(props.style ? { style: props.style } : {})}
+        {...(props.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+        {...(props['aria-label'] ? { 'aria-label': props['aria-label'] } : {})}
         children={props.children}
       />
     )
@@ -251,12 +250,12 @@ export const Link = createLink((props: LinkRenderProps) => (
   <a
     ref={props.ref as any}
     href={props.href}
-    class={props.class}
-    style={props.style}
-    target={props.target}
-    rel={props.rel}
-    aria-label={props['aria-label']}
-    aria-current={props.isExactActive() ? 'page' : undefined}
+    {...(props.class ? { class: props.class } : {})}
+    {...(props.style ? { style: props.style } : {})}
+    {...(props.target ? { target: props.target } : {})}
+    {...(props.rel ? { rel: props.rel } : {})}
+    {...(props['aria-label'] ? { 'aria-label': props['aria-label'] } : {})}
+    {...(props.isExactActive() ? { 'aria-current': 'page' as const } : {})}
     onclick={props.onClick}
     onmouseenter={props.onMouseEnter}
     ontouchstart={props.onTouchStart}

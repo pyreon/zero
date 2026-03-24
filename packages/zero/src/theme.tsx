@@ -1,3 +1,4 @@
+import type { VNodeChild } from '@pyreon/core'
 import { onMount, onUnmount } from '@pyreon/core'
 import { effect, signal } from '@pyreon/reactivity'
 
@@ -93,7 +94,7 @@ export function initTheme() {
  * import { ThemeToggle } from "@pyreon/zero/theme"
  * <ThemeToggle />
  */
-export function ThemeToggle(props: { class?: string; style?: string }) {
+export function ThemeToggle(props: { class?: string; style?: string }): VNodeChild {
   initTheme()
 
   return (
