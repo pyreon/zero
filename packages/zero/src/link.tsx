@@ -35,7 +35,7 @@ export interface LinkProps {
 /** Props passed to a custom component via createLink. */
 export interface LinkRenderProps {
   href: string
-  ref: import('@pyreon/core').Ref<HTMLElement>
+  ref: import('@pyreon/core').Ref<HTMLAnchorElement>
   onClick: (e: MouseEvent) => void
   onMouseEnter: () => void
   onTouchStart: () => void
@@ -43,17 +43,17 @@ export interface LinkRenderProps {
   isExactActive: () => boolean
   /** Reactive class string — pass directly to element for auto-updates on route change. */
   class: (() => string) | string | undefined
-  style?: string
-  target?: string
-  rel?: string
-  'aria-label'?: string
+  style?: string | undefined
+  target?: string | undefined
+  rel?: string | undefined
+  'aria-label'?: string | undefined
   children?: any
 }
 
 /** Return type of useLink. */
 export interface UseLinkReturn {
   /** Ref object — attach to the root element for viewport-based prefetch. */
-  ref: import('@pyreon/core').Ref<HTMLElement>
+  ref: import('@pyreon/core').Ref<HTMLAnchorElement>
   /** Click handler — performs client-side navigation. */
   handleClick: (e: MouseEvent) => void
   /** Mouse enter handler — triggers hover prefetch. */
