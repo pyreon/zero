@@ -1,11 +1,11 @@
 {
   "extends": "@pyreon/typescript/lib",
   "compilerOptions": {
+    "jsxImportSource": "@pyreon/core",
+    "customConditions": ["bun"],
     "outDir": "./lib",
     "rootDir": "./src",
-    "types": ["vitest/globals", "node"],
-    "jsx": "react-jsx",
-    "jsxImportSource": "@pyreon/core"
+    "types": ["vitest/globals", "node"]
   },
   "include": [],
   "exclude": ["node_modules", "lib", "dist"]

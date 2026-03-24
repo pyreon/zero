@@ -3,8 +3,7 @@
   "compilerOptions": {
     "outDir": "./lib",
     "rootDir": "./src",
-    "types": ["node"],
-    "customConditions": ["bun"]
+    "types": ["node"]
   },
   "include": ["src", "../zero/src/sharp.d.ts"]
 }
