@@ -32,11 +32,9 @@ export function createTestContext(
     requestBody = JSON.stringify(body)
   }
 
-  const req = new Request(url.toString(), {
-    method,
-    headers: requestHeaders,
-    body: requestBody,
-  })
+  const init: RequestInit = { method, headers: requestHeaders }
+  if (requestBody !== undefined) init.body = requestBody
+  const req = new Request(url.toString(), init)
 
   return {
     req,

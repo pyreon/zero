@@ -108,7 +108,7 @@ function doPrefetch(href: string) {
  */
 export function useLink(props: LinkProps): UseLinkReturn {
   const router = useRouter()
-  const elementRef = createRef<HTMLElement>()
+  const elementRef = createRef<HTMLAnchorElement>()
   const strategy = props.prefetch ?? 'hover'
 
   function handleClick(e: MouseEvent) {
