@@ -66,6 +66,7 @@
         "@pyreon/permissions": "^0.9.0",
         "@pyreon/query": "^0.9.0",
         "@pyreon/rocketstyle": "^0.2.0",
+        "@pyreon/state-tree": "^0.9.0",
         "@pyreon/storage": "^0.9.0",
         "@pyreon/store": "^0.9.0",
         "@pyreon/styler": "^0.2.0",
@@ -356,6 +357,8 @@
     "@pyreon/runtime-server": ["@pyreon/runtime-server@0.7.5", "", { "dependencies": { "@pyreon/core": "^0.7.5", "@pyreon/reactivity": "^0.7.5" } }, "sha512-BLGs9YSDkLy59K/hhcpI8NNJ929I9/V1oLrxo656TsYzYYRF8j8kQw9kwUdj2B7pUbFEh2QIOCMOBopWgF/0vw=="],
 
     "@pyreon/server": ["@pyreon/server@0.7.5", "", { "dependencies": { "@pyreon/core": "^0.7.5", "@pyreon/head": "^0.7.5", "@pyreon/reactivity": "^0.7.5", "@pyreon/router": "^0.7.5", "@pyreon/runtime-dom": "^0.7.5", "@pyreon/runtime-server": "^0.7.5" } }, "sha512-zNJtyVjtwxeuNZaWU/o++XRHVXUlZQ4Km/5pgxSEGy795oEy5Uugjd6eDab8tj7MvbM6ULeiF+XcQY2TpcQA5A=="],
+
+    "@pyreon/state-tree": ["@pyreon/state-tree@0.9.0", "", { "peerDependencies": { "@pyreon/reactivity": ">=0.7.0 <0.8.0" } }, "sha512-nD22s5nMVnmBpDOnhrA+TlIyJ/qlZI5tG7xDzGcfgOw+9QCluDRy+59wpNl0HbABNwJ5F8VbYa/PHcfZziwXFA=="],
 
     "@pyreon/storage": ["@pyreon/storage@0.9.0", "", { "peerDependencies": { "@pyreon/reactivity": ">=0.7.0 <0.8.0" } }, "sha512-utUR10R4x0bsFU+BZNJ082r4gNFTKgHS/PvFXFha1YA+zqVclc26348Qoqq4xaK9gWffOpBemABDzKWzgRsfIg=="],
 

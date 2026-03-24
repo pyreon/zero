@@ -44,6 +44,7 @@
     "@pyreon/machine": "^0.9.0",
     "@pyreon/permissions": "^0.9.0",
     "@pyreon/query": "^0.9.0",
+    "@pyreon/state-tree": "^0.9.0",
     "@pyreon/storage": "^0.9.0",
     "@pyreon/store": "^0.9.0",
     "@pyreon/table": "^0.9.0",
