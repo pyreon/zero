@@ -1,3 +1,4 @@
+import type { VNodeChild } from '@pyreon/core'
 import { createRef } from '@pyreon/core'
 import { signal } from '@pyreon/reactivity'
 import type { FormatSource } from './image-plugin'
@@ -62,7 +63,7 @@ export interface ImageSource {
  * // Manual usage
  * <Image src="/hero.jpg" alt="Hero" width={1200} height={630} />
  */
-export function Image(props: ImageProps) {
+export function Image(props: ImageProps): VNodeChild {
   const isEager = props.priority || props.loading === 'eager'
   const loaded = signal(isEager)
   const inView = signal(isEager)

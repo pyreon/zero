@@ -1,4 +1,5 @@
 import { resolve } from 'node:path'
+import pyreon from '@pyreon/vite-plugin'
 import { createServer, type ViteDevServer } from 'vite'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { zeroPlugin } from '../../vite-plugin'
@@ -12,7 +13,7 @@ beforeAll(async () => {
   server = await createServer({
     root: FIXTURE_DIR,
     configFile: false, // Don't load vite.config.ts — configure inline
-    plugins: [zeroPlugin({ mode: 'ssr' })],
+    plugins: [pyreon(), zeroPlugin({ mode: 'ssr' })],
     server: { port: 0 },
     logLevel: 'silent',
   })

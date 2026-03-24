@@ -127,8 +127,9 @@ export function resolveGoogleFont(input: GoogleFontInput): ResolvedFont {
  * Variable with italic: "Inter:ital,wght@100..900"
  */
 export function parseGoogleFamily(input: string): ResolvedFont {
-  const [familyPart, spec] = input.split(':')
-  const family = familyPart?.trim()
+  const parts = input.split(':')
+  const family = (parts[0] ?? '').trim()
+  const spec = parts[1]
   let italic = false
 
   if (spec) {
@@ -136,7 +137,7 @@ export function parseGoogleFamily(input: string): ResolvedFont {
 
     // Variable font range syntax: wght@100..900
     const rangeMatch = spec.match(/wght@(\d+)\.\.(\d+)/)
-    if (rangeMatch) {
+    if (rangeMatch && rangeMatch[1] && rangeMatch[2]) {
       return {
         family,
         italic,
@@ -147,12 +148,12 @@ export function parseGoogleFamily(input: string): ResolvedFont {
 
     // Static weights: wght@400;500;700
     const weightMatch = spec.match(/wght@([\d;]+)/)
-    if (weightMatch) {
+    if (weightMatch && weightMatch[1]) {
       return {
         family,
         italic,
         variable: false,
-        weights: weightMatch[1]?.split(';').map(Number),
+        weights: weightMatch[1].split(';').map(Number),
       }
     }
   }

@@ -64,6 +64,7 @@ export function matchApiRoute(
 
   for (let i = 0; i < patternParts.length; i++) {
     const pp = patternParts[i]
+    if (!pp) continue
 
     // Catch-all: :param*
     if (pp.endsWith('*')) {
@@ -73,11 +74,12 @@ export function matchApiRoute(
     }
 
     // No more path segments
-    if (i >= pathParts.length) return null
+    const pathPart = pathParts[i]
+    if (i >= pathParts.length || pathPart === undefined) return null
 
     // Dynamic segment: :param
     if (pp.startsWith(':')) {
-      params[pp.slice(1)] = pathParts[i]
+      params[pp.slice(1)] = pathPart
       continue
     }
 
@@ -216,8 +218,10 @@ export function generateApiRouteModule(
 
   for (let i = 0; i < apiFiles.length; i++) {
     const name = `_api${i}`
-    const fullPath = `${routesDir}/${apiFiles[i]}`
-    const pattern = apiFilePathToPattern(apiFiles[i])
+    const file = apiFiles[i]
+    if (!file) continue
+    const fullPath = `${routesDir}/${file}`
+    const pattern = apiFilePathToPattern(file)
 
     imports.push(`import * as ${name} from "${fullPath}"`)
     entries.push(`  { pattern: ${JSON.stringify(pattern)}, module: ${name} }`)

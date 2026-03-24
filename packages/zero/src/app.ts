@@ -32,8 +32,8 @@ export function createApp(options: CreateAppOptions) {
   const router = createRouter({
     routes: options.routes,
     mode: options.routerMode ?? 'history',
-    url: options.url,
     scrollBehavior: 'top',
+    ...(options.url ? { url: options.url } : {}),
   })
 
   const Layout = options.layout ?? DefaultLayout

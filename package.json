@@ -22,6 +22,7 @@
     "@types/node": "^25.5.0",
     "@vitus-labs/tools-lint": "latest",
     "@vitus-labs/tools-rolldown": "latest",
+    "@pyreon/typescript": "^0.7.2",
     "@vitus-labs/tools-typescript": "latest",
     "@vitus-labs/tools-vitest": "latest",
     "typescript": "^5.9.3",
