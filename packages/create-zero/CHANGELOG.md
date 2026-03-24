@@ -1,5 +1,11 @@
 # create-zero
 
+## 0.4.1
+
+### Patch Changes
+
+- Pin GitHub Actions to SHA hashes, add security policy
+
 ## 0.4.0
 
 ### Minor Changes

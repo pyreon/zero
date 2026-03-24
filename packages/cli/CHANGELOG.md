@@ -1,5 +1,15 @@
 # zero-cli
 
+## 0.4.1
+
+### Patch Changes
+
+- Pin GitHub Actions to SHA hashes, add security policy
+
+- Updated dependencies []:
+  - @pyreon/zero@0.4.1
+  - @pyreon/create-zero@0.4.1
+
 ## 0.4.0
 
 ### Minor Changes
