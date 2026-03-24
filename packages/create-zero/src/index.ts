@@ -306,14 +306,14 @@ async function scaffold(config: ProjectConfig) {
 function pyreonVersion(pkg: string): string {
   // Core packages
   const core = ['core', 'reactivity', 'runtime-dom', 'runtime-server', 'server', 'head', 'router', 'vite-plugin', 'compiler', 'cli', 'mcp']
-  if (core.some((c) => pkg === `@pyreon/${c}`)) return '^0.7.0'
+  if (core.some((c) => pkg === `@pyreon/${c}`)) return '^0.7.5'
   // Zero framework packages
-  if (pkg === '@pyreon/zero' || pkg === '@pyreon/meta' || pkg === '@pyreon/zero-cli' || pkg === '@pyreon/create-zero') return '^0.2.0'
+  if (pkg === '@pyreon/zero' || pkg === '@pyreon/meta' || pkg === '@pyreon/zero-cli' || pkg === '@pyreon/create-zero') return '^0.3.0'
   // Fundamentals
   const fundamentals = ['store', 'form', 'validation', 'query', 'table', 'virtual', 'i18n', 'feature', 'machine', 'permissions', 'flow', 'code']
-  if (fundamentals.some((f) => pkg === `@pyreon/${f}`)) return '^0.6.0'
+  if (fundamentals.some((f) => pkg === `@pyreon/${f}`)) return '^0.9.0'
   // UI system
-  return '^0.2.0'
+  return '^0.3.0'
 }
 
 function generatePackageJson(config: ProjectConfig): string {

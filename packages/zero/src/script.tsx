@@ -1,3 +1,4 @@
+import type { VNodeChild } from '@pyreon/core'
 import { createRef, onMount, onUnmount } from '@pyreon/core'
 import { useIntersectionObserver } from './utils/use-intersection-observer'
 
@@ -49,7 +50,7 @@ export type ScriptStrategy =
  *   {`console.log("App hydrated!")`}
  * </Script>
  */
-export function Script(props: ScriptProps) {
+export function Script(props: ScriptProps): VNodeChild {
   function loadScript() {
     // Deduplication
     if (props.id && document.getElementById(props.id)) return

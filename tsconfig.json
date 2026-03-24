@@ -1,19 +1,8 @@
 {
+  "extends": "@pyreon/typescript/lib",
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "customConditions": ["bun"],
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "jsx": "react-jsx",
     "jsxImportSource": "@pyreon/core",
+    "customConditions": ["bun"],
     "outDir": "./lib",
     "rootDir": "./src",
     "types": ["vitest/globals", "node"]

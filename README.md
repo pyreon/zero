@@ -47,6 +47,7 @@ The interactive CLI lets you pick your rendering mode, features, and AI toolchai
 - CRUD: `@pyreon/feature` — schema-driven features
 - Tables: `@pyreon/table`, Virtual lists: `@pyreon/virtual`
 - i18n: `@pyreon/i18n` — translations, plurals, rich text
+- State tree: `@pyreon/state-tree` — MobX-State-Tree-like models with snapshots/patches
 - State machines: `@pyreon/machine` — reactive FSM
 - Permissions: `@pyreon/permissions` — reactive RBAC/ABAC
 - Flow diagrams: `@pyreon/flow` — reactive node graphs with auto-layout

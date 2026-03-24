@@ -16,8 +16,8 @@ export async function dev(root: string | undefined, options: DevOptions) {
       root: projectRoot,
       server: {
         port: options.port ?? 3000,
-        host: options.host === true ? '0.0.0.0' : options.host,
-        open: options.open,
+        host: options.host === true ? '0.0.0.0' : (options.host || false),
+        ...(options.open != null ? { open: options.open } : {}),
       },
     })
 

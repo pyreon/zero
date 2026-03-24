@@ -17,7 +17,7 @@ export async function preview(
       root: projectRoot,
       preview: {
         port: options.port ?? 3000,
-        host: options.host === true ? '0.0.0.0' : options.host,
+        host: options.host === true ? '0.0.0.0' : (options.host || false),
       },
     })
 

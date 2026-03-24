@@ -129,6 +129,20 @@ export {
   useStorage,
 } from '@pyreon/storage'
 
+// ─── State Tree ──────────────────────────────────────────────────────────────
+
+export type { ModelDefinition, ModelInstance, Snapshot } from '@pyreon/state-tree'
+export {
+  addMiddleware,
+  applyPatch,
+  applySnapshot,
+  getSnapshot,
+  model,
+  onPatch,
+  resetAllHooks,
+  resetHook,
+} from '@pyreon/state-tree'
+
 // ─── Machine ─────────────────────────────────────────────────────────────────
 
 export { createMachine } from '@pyreon/machine'

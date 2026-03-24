@@ -29,7 +29,7 @@ export function startClient(options: StartClientOptions) {
   const { App } = createApp({
     routes: options.routes,
     routerMode: 'history',
-    layout: options.layout,
+    ...(options.layout ? { layout: options.layout } : {}),
   })
 
   const vnode = h(App, null)

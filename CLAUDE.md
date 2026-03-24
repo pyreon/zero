@@ -24,8 +24,14 @@ Zero re-exports and integrates the full Pyreon stack:
 - `@pyreon/virtual` — `useVirtualizer`, `useWindowVirtualizer`
 - `@pyreon/i18n` — `createI18n`, `I18nProvider`, `useI18n`, `Trans`
 - `@pyreon/feature` — `defineFeature`, `reference` (schema-driven CRUD features)
+- `@pyreon/state-tree` — `model`, `getSnapshot`, `applySnapshot`, `applyPatch`, `onPatch`
 - `@pyreon/flow` — `createFlow`, `Flow`, `Background`, `MiniMap`, `Controls`, `Handle`, `computeLayout`
 - `@pyreon/code` — `createEditor`, `CodeEditor`, `DiffEditor`, `TabbedEditor`
+- `@pyreon/charts` — `Chart` reactive ECharts with auto lazy loading
+- `@pyreon/machine` — `createMachine` reactive finite state machines
+- `@pyreon/permissions` — `createPermissions`, `usePermissions`, `PermissionsProvider`
+- `@pyreon/hotkeys` — `useHotkey`, `useHotkeyScope` keyboard shortcuts
+- `@pyreon/storage` — `useStorage`, `useCookie`, `useIndexedDB` reactive persistence
 
 **UI System (re-exported from `@pyreon/meta`):**
 
