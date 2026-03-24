@@ -31,7 +31,7 @@ export interface ImageProps {
   formats?: FormatSource[]
   /** Loading strategy. "lazy" uses IntersectionObserver, "eager" loads immediately. Default: "lazy" */
   loading?: 'lazy' | 'eager'
-  /** Mark as priority (LCP image). Disables lazy loading, adds fetchpriority="high". */
+  /** Mark as priority (LCP image). Disables lazy loading, adds fetchPriority="high". */
   priority?: boolean
   /** Low-quality placeholder image URL or base64 data URI for blur-up effect. */
   placeholder?: string
@@ -102,7 +102,7 @@ export function Image(props: ImageProps): VNodeChild {
   const imgEl = (
     <img
       src={() => (inView() ? props.src : '')}
-      srcset={() =>
+      srcSet={
         !hasFormats && inView() && resolvedSrcset ? resolvedSrcset : ''
       }
       sizes={resolvedSrcset ? sizes : undefined}
@@ -111,8 +111,8 @@ export function Image(props: ImageProps): VNodeChild {
       height={props.height}
       loading={isEager ? 'eager' : 'lazy'}
       decoding={props.decoding ?? 'async'}
-      fetchpriority={props.priority ? 'high' : undefined}
-      onload={() => loaded.set(true)}
+      fetchPriority={props.priority ? 'high' : undefined}
+      onLoad={() => loaded.set(true)}
       style={() =>
         [
           'display: block',
@@ -154,7 +154,7 @@ export function Image(props: ImageProps): VNodeChild {
           {props.formats?.map((fmt) => (
             <source
               type={fmt.type}
-              srcset={() => (inView() ? fmt.srcset : undefined)}
+              srcSet={inView() ? fmt.srcset ?? "" : ""}
               sizes={sizes}
             />
           ))}

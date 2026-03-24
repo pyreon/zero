@@ -101,7 +101,7 @@ export function ThemeToggle(props: { class?: string; style?: string }): VNodeChi
     <button
       class={props.class}
       style={props.style}
-      onclick={toggleTheme}
+      onClick={toggleTheme}
       aria-label="Toggle theme"
       title="Toggle theme"
       type="button"
