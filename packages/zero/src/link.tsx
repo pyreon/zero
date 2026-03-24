@@ -249,7 +249,7 @@ export function createLink(
  */
 export const Link = createLink((props: LinkRenderProps) => (
   <a
-    ref={props.ref}
+    ref={props.ref as any}
     href={props.href}
     class={props.class}
     style={props.style}

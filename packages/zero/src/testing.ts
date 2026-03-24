@@ -35,7 +35,7 @@ export function createTestContext(
   const req = new Request(url.toString(), {
     method,
     headers: requestHeaders,
-    body: requestBody,
+    ...(requestBody != null ? { body: requestBody } : {}),
   })
 
   return {
