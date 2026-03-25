@@ -102,7 +102,7 @@ export function Image(props: ImageProps): VNodeChild {
   const imgEl = (
     <img
       src={() => (inView() ? props.src : '')}
-      srcSet={
+      srcSet={() =>
         !hasFormats && inView() && resolvedSrcset ? resolvedSrcset : ''
       }
       sizes={resolvedSrcset ? sizes : undefined}
@@ -154,7 +154,7 @@ export function Image(props: ImageProps): VNodeChild {
           {props.formats?.map((fmt) => (
             <source
               type={fmt.type}
-              srcSet={inView() ? fmt.srcset ?? "" : ""}
+              srcSet={() => inView() ? fmt.srcset ?? '' : ''}
               sizes={sizes}
             />
           ))}
