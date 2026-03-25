@@ -12,6 +12,12 @@
 - **Never** call `signal(value)` to set — use `signal.set(value)` or `signal.update(fn)`
 - **Never** forget to call signal as function to read: use `count()` not `count`
 
+## JSX attribute casing
+- **Always** use camelCase for JSX attributes: `onClick`, `onMouseEnter`, `onTouchStart`, `onLoad`
+- **Never** use lowercase DOM event names: `onclick`, `onmouseenter`, `ontouchstart`, `onload`
+- **Always** use `srcSet` not `srcset`, `fetchPriority` not `fetchpriority`
+- **Always** use `className` → `class`, `htmlFor` → `for` (Pyreon uses HTML names, not React names)
+
 ## JSX reactive expressions
 - **Never** use bare signal reads in JSX text — wrap in arrow: `{() => count()}` not `{count()}`
 - **Never** return `undefined` from reactive JSX attributes — return empty string `''` instead

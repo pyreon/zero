@@ -110,7 +110,7 @@ export default function Dashboard() {
         <button
           type="button"
           class="btn btn-secondary"
-          onclick={() => {
+          onClick={() => {
             localStorage.removeItem('zero-demo-auth')
             window.location.href = '/about'
           }}
