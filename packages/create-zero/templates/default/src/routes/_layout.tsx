@@ -8,7 +8,8 @@ const queryClient = new QueryClient({
 })
 
 export function layout(props: { children: any }) {
-  const { sidebarOpen, toggleSidebar } = useAppStore()
+  const { store } = useAppStore()
+  const { sidebarOpen, toggleSidebar } = store
 
   return (
     <QueryClientProvider client={queryClient}>
