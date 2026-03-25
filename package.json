@@ -9,6 +9,8 @@
     "dev": "bun run --filter='*' dev",
     "test": "bun run --filter='*' test",
     "typecheck": "bun run --filter='*' typecheck",
+    "lint": "bunx biome check .",
+    "format": "bunx biome format ./packages/",
     "test:template": "bash scripts/test-template.sh",
     "version-packages": "changeset version",
     "release": "bun run build && bun run scripts/publish.ts"
