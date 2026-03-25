@@ -306,7 +306,7 @@ async function scaffold(config: ProjectConfig) {
 function pyreonVersion(pkg: string): string {
   // Core packages
   const core = ['core', 'reactivity', 'runtime-dom', 'runtime-server', 'server', 'head', 'router', 'vite-plugin', 'compiler', 'cli', 'mcp']
-  if (core.some((c) => pkg === `@pyreon/${c}`)) return '^0.7.11'
+  if (core.some((c) => pkg === `@pyreon/${c}`)) return '^0.7.12'
   // Zero framework packages
   if (pkg === '@pyreon/zero' || pkg === '@pyreon/meta' || pkg === '@pyreon/zero-cli' || pkg === '@pyreon/create-zero') return '^0.3.0'
   // Fundamentals
