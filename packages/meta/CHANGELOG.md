@@ -1,5 +1,17 @@
 # @pyreon/meta
 
+## 0.5.0
+
+### Minor Changes
+
+- Bump ecosystem to latest, UI system ^0.3.0, Dependabot, template fixes
+
+  - Bump UI system to ^0.3.0, core ^0.7.12, fundamentals ^0.10.0
+  - Add Dependabot for automated dependency updates
+  - Fix template for @pyreon/store 0.10.0 API (useAppStore returns { store })
+  - Use `latest` in static template to prevent version drift
+  - Fix camelCase JSX attributes in templates (onClick, srcSet)
+
 ## 0.4.1
 
 ### Patch Changes
