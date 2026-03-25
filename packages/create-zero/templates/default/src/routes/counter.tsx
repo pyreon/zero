@@ -31,21 +31,21 @@ export default function Counter() {
           <button
             type="button"
             class="btn btn-secondary"
-            onclick={() => count.update((n) => n - 1)}
+            onClick={() => count.update((n) => n - 1)}
           >
             -
           </button>
           <button
             type="button"
             class="btn btn-primary"
-            onclick={() => count.set(0)}
+            onClick={() => count.set(0)}
           >
             Reset
           </button>
           <button
             type="button"
             class="btn btn-secondary"
-            onclick={() => count.update((n) => n + 1)}
+            onClick={() => count.update((n) => n + 1)}
           >
             +
           </button>

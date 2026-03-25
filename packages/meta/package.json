@@ -34,22 +34,22 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@pyreon/charts": "^0.9.0",
-    "@pyreon/code": "^0.9.0",
-    "@pyreon/feature": "^0.9.0",
-    "@pyreon/flow": "^0.9.0",
-    "@pyreon/form": "^0.9.0",
-    "@pyreon/hotkeys": "^0.9.0",
-    "@pyreon/i18n": "^0.9.0",
-    "@pyreon/machine": "^0.9.0",
-    "@pyreon/permissions": "^0.9.0",
-    "@pyreon/query": "^0.9.0",
-    "@pyreon/state-tree": "^0.9.0",
-    "@pyreon/storage": "^0.9.0",
-    "@pyreon/store": "^0.9.0",
-    "@pyreon/table": "^0.9.0",
-    "@pyreon/validation": "^0.9.0",
-    "@pyreon/virtual": "^0.9.0",
+    "@pyreon/charts": "^0.10.0",
+    "@pyreon/code": "^0.10.0",
+    "@pyreon/feature": "^0.10.0",
+    "@pyreon/flow": "^0.10.0",
+    "@pyreon/form": "^0.10.0",
+    "@pyreon/hotkeys": "^0.10.0",
+    "@pyreon/i18n": "^0.10.0",
+    "@pyreon/machine": "^0.10.0",
+    "@pyreon/permissions": "^0.10.0",
+    "@pyreon/query": "^0.10.0",
+    "@pyreon/state-tree": "^0.10.0",
+    "@pyreon/storage": "^0.10.0",
+    "@pyreon/store": "^0.10.0",
+    "@pyreon/table": "^0.10.0",
+    "@pyreon/validation": "^0.10.0",
+    "@pyreon/virtual": "^0.10.0",
     "@pyreon/attrs": "^0.2.0",
     "@pyreon/coolgrid": "^0.2.0",
     "@pyreon/elements": "^0.2.0",
@@ -62,6 +62,6 @@
     "@pyreon/unistyle": "^0.2.0"
   },
   "peerDependencies": {
-    "@pyreon/reactivity": "^0.7.5"
+    "@pyreon/reactivity": "^0.7.11"
   }
 }

@@ -100,7 +100,7 @@ function doPrefetch(href: string) {
  * function MyLink(props: LinkProps) {
  *   const link = useLink(props)
  *   return (
- *     <button ref={link.ref} class={link.classes()} onclick={link.handleClick}>
+ *     <button ref={link.ref} class={link.classes()} onClick={link.handleClick}>
  *       {props.children}
  *     </button>
  *   )
@@ -191,8 +191,8 @@ export function useLink(props: LinkProps): UseLinkReturn {
  *   <button
  *     ref={props.ref}
  *     class={props.class}
- *     onclick={props.onClick}
- *     onmouseenter={props.onMouseEnter}
+ *     onClick={props.onClick}
+ *     onMouseEnter={props.onMouseEnter}
  *   >
  *     {props.children}
  *   </button>
@@ -203,8 +203,8 @@ export function useLink(props: LinkProps): UseLinkReturn {
  *   <div
  *     ref={props.ref}
  *     class={`card ${props.isActive() ? "card--active" : ""}`}
- *     onclick={props.onClick}
- *     onmouseenter={props.onMouseEnter}
+ *     onClick={props.onClick}
+ *     onMouseEnter={props.onMouseEnter}
  *   >
  *     {props.children}
  *   </div>
@@ -256,9 +256,9 @@ export const Link = createLink((props: LinkRenderProps) => (
     {...(props.rel ? { rel: props.rel } : {})}
     {...(props['aria-label'] ? { 'aria-label': props['aria-label'] } : {})}
     {...(props.isExactActive() ? { 'aria-current': 'page' as const } : {})}
-    onclick={props.onClick}
-    onmouseenter={props.onMouseEnter}
-    ontouchstart={props.onTouchStart}
+    onClick={props.onClick}
+    onMouseEnter={props.onMouseEnter}
+    onTouchStart={props.onTouchStart}
   >
     {props.children}
   </a>

@@ -15,10 +15,12 @@ This project uses Pyreon Zero, a signal-based full-stack meta-framework. Do NOT 
 
 - Use `class=` not `className`
 - Use `for=` not `htmlFor`
+- Use camelCase events: `onClick`, `onMouseEnter`, `onLoad` (not `onclick`, `onmouseenter`)
+- Use `srcSet` not `srcset`, `fetchPriority` not `fetchpriority`
 - Reactive text: `{() => count()}`
 - Conditional: `{() => show() ? <A /> : null}`
 - Lists: `{() => items().map(item => <Item />)}`
-- Events: `onClick={() => ...}` (standard DOM events)
+- Events: `onClick={() => ...}`
 - JSX import source is `@pyreon/core` (auto-configured, no manual import needed)
 
 ## File-Based Routing
