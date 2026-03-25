@@ -25,7 +25,7 @@ export default function Counter() {
       </div>
 
       <div class="counter-demo">
-        <div class="counter-display">{count}</div>
+        <div class="counter-display">{() => count()}</div>
 
         <div class="counter-controls">
           <button
@@ -53,10 +53,10 @@ export default function Counter() {
 
         <div class="counter-meta">
           <div>
-            count() → <strong>{count}</strong>
+            count() → <strong>{() => count()}</strong>
           </div>
           <div>
-            doubled() → <strong>{doubled}</strong>
+            doubled() → <strong>{() => doubled()}</strong>
           </div>
           <div>
             isEven() → <strong>{() => (isEven() ? 'true' : 'false')}</strong>

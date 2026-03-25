@@ -35,7 +35,7 @@ export interface LinkProps {
 /** Props passed to a custom component via createLink. */
 export interface LinkRenderProps {
   href: string
-  ref: import('@pyreon/core').Ref<HTMLElement>
+  ref: import('@pyreon/core').Ref<HTMLAnchorElement>
   onClick: (e: MouseEvent) => void
   onMouseEnter: () => void
   onTouchStart: () => void
@@ -53,7 +53,7 @@ export interface LinkRenderProps {
 /** Return type of useLink. */
 export interface UseLinkReturn {
   /** Ref object — attach to the root element for viewport-based prefetch. */
-  ref: import('@pyreon/core').Ref<HTMLElement>
+  ref: import('@pyreon/core').Ref<HTMLAnchorElement>
   /** Click handler — performs client-side navigation. */
   handleClick: (e: MouseEvent) => void
   /** Mouse enter handler — triggers hover prefetch. */
@@ -108,7 +108,7 @@ function doPrefetch(href: string) {
  */
 export function useLink(props: LinkProps): UseLinkReturn {
   const router = useRouter()
-  const elementRef = createRef<HTMLElement>()
+  const elementRef = createRef<HTMLAnchorElement>()
   const strategy = props.prefetch ?? 'hover'
 
   function handleClick(e: MouseEvent) {
@@ -248,7 +248,7 @@ export function createLink(
  */
 export const Link = createLink((props: LinkRenderProps) => (
   <a
-    ref={props.ref as any}
+    ref={props.ref}
     href={props.href}
     {...(props.class ? { class: props.class } : {})}
     {...(props.style ? { style: props.style } : {})}
