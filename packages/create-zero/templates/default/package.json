@@ -12,17 +12,17 @@
     "doctor:ci": "zero doctor --ci"
   },
   "dependencies": {
-    "@pyreon/meta": "^0.4.1",
-    "@pyreon/zero": "^0.4.1",
+    "@pyreon/meta": "latest",
+    "@pyreon/zero": "latest",
     "@tanstack/query-core": "^5.90.0",
     "@tanstack/table-core": "^8.21.0",
     "@tanstack/virtual-core": "^3.13.0",
     "zod": "^4.0.0"
   },
   "devDependencies": {
-    "@pyreon/mcp": "^0.7.12",
-    "@pyreon/vite-plugin": "^0.7.12",
-    "@pyreon/zero-cli": "^0.4.1",
+    "@pyreon/mcp": "latest",
+    "@pyreon/vite-plugin": "latest",
+    "@pyreon/zero-cli": "latest",
     "typescript": "^6.0.2",
     "vite": "^8.0.0"
   }
