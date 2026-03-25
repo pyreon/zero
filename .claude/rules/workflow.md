@@ -75,14 +75,19 @@ If any step fails, fix it before pushing. Do not push broken code.
 
 ## Before Considering Work Complete
 
+Every PR must be self-contained — code + docs + rules all in one:
+
 1. All validation checklist steps pass
 2. Exports updated: new APIs in `src/index.ts` with type exports
-3. CLAUDE.md updated if API surface changed
-4. READMEs updated if user-facing features changed
-5. Template updated if new patterns introduced
-6. Anti-patterns rules updated if new gotchas discovered
-7. No breaking changes without discussion
-8. Honest quality assessment
+3. **CLAUDE.md** updated if API surface or ecosystem changed
+4. **READMEs** updated (root, package, meta) if user-facing features changed
+5. **Template** updated (package.json, CLAUDE.md, source) if new patterns introduced
+6. **Anti-patterns/development rules** updated if new gotchas or patterns discovered
+7. **Building rules** updated if new "how to use" patterns for AI agents
+8. **.mcp.json** verified still correct
+9. **create-zero `pyreonVersion()`** updated if versions changed
+10. No breaking changes without discussion
+11. Honest quality assessment
 
 ## Debugging
 
