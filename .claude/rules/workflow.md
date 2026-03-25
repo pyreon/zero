@@ -97,6 +97,18 @@ If any step fails, fix it before pushing. Do not push broken code.
 - Fixed versioning: all packages share the same version.
 - New packages need manual first publish before CI can handle OIDC.
 
+## Continuous Learning — MANDATORY
+
+After every PR, review what happened and update the rules:
+
+- **New anti-pattern discovered?** Add it to `anti-patterns.md` with the "why" so future sessions avoid it.
+- **New development pattern established?** Add it to `development.md` so future sessions follow it consistently.
+- **API changed upstream?** Update `CLAUDE.md`, template `CLAUDE.md`, and `building.md` with the new API.
+- **Bun/TypeScript quirk found?** Document it in `development.md` under "Bun Quirks" so it's not rediscovered.
+- **Workaround added?** Document WHY in a code comment AND add to anti-patterns so it gets removed when the upstream fix lands.
+
+The rules files are your institutional memory. If you learn something in this session that would help a future session, write it down NOW — not later. Every PR is an opportunity to make the next PR better.
+
 ## Context Management
 
 - Use `/compact` at ~50% context usage for long sessions.
